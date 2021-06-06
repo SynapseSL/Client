@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text;
 using HarmonyLib;
 using Il2CppSystem;
+using LiteNetLib.Utils;
 using MelonLoader;
+using Mirror;
+using Newtonsoft.Json;
 using UnityEngine;
 using String = Il2CppSystem.String;
 
@@ -11,6 +16,10 @@ namespace SynapseClient.Patches
 {
     public class ServerListPatches
     {
+
+        public static List<SynapseServerEntry> Servers { get; set; } = new List<SynapseServerEntry>();
+        public static ServerFilter ListSingleton { get; set; }
+
         [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.Refresh))]
         [HarmonyPrefix]
         public static bool OnServerListRefresh(NewServerBrowser __instance)
@@ -22,6 +31,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnReapply(ServerFilter __instance, bool forceCleanup)
         {
+            ListSingleton = __instance;
             Composite(__instance);
             return false;
         }
@@ -30,6 +40,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnReapply(ServerFilter __instance, int tab)
         {
+            ListSingleton = __instance;
             Composite(__instance);
             return false;
         }
@@ -38,6 +49,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnReapply(ServerFilter __instance, ServerTab tab)
         {
+            ListSingleton = __instance;
             Composite(__instance);
             return false;
         }
@@ -48,6 +60,7 @@ namespace SynapseClient.Patches
         public static bool OnServerListEnable(NewServerBrowser __instance)
         {
             var filter = __instance.GetComponent<ServerFilter>();
+            ListSingleton = filter;
             Composite(filter);
             return true;
         }
@@ -55,21 +68,7 @@ namespace SynapseClient.Patches
         private static void Composite(ServerFilter filter)
         {
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
-            var servers = new List<SynapseServerEntry>();
-            servers.Add(new SynapseServerEntry
-            {
-                ip = "localhost",
-                port = 7777,
-                players = "9/10",
-                info = "Tm9yZGhvbHouZGU=",
-                pastebin = "PsRbh1yR",
-                version = "1.0",
-                whitelist = false,
-                modded = true,
-                friendlyFire = true,
-                officialCode = byte.MinValue
-            });
-            foreach (var serverEntry in servers)
+            foreach (var serverEntry in Servers)
             {
                 AddServer(filter, serverEntry);
             }
@@ -86,9 +85,9 @@ namespace SynapseClient.Patches
             var leakingObject = new LeakingObject<ServerListItem>();
             leakingObject.decorated = new ServerListItem
             {
-                ip = (String) entry.ip,
-                port = entry.port,
-                players = (String) entry.players,
+                ip = (String) entry.address,
+                port = 0000,
+                players = (String) (entry.onlinePlayers + "/" + entry.maxPlayers),
                 info = (String) entry.info,
                 pastebin = (String) entry.pastebin,
                 version = (String) entry.version,
@@ -106,14 +105,32 @@ namespace SynapseClient.Patches
         public static bool OnServerListAwake()
         {
             Logger.Info("Download Servers");
+            var webClient = new WebClient();
+            var response = webClient.DownloadString("https://servers.synapsesl.xyz/serverlist");
+            Servers = JsonConvert.DeserializeObject<List<SynapseServerEntry>>(response);
+            Composite(ListSingleton);
             return false;
         }
+        
+        [HarmonyPatch(typeof(ServerElementButton), nameof(ServerElementButton.PlayButton))]
+        [HarmonyPrefix]
+        public static bool OnPlayButton(ServerElementButton __instance)
+        {
+            Logger.Info("Pressed Play Button");
+            Logger.Info("Should connect to: " + __instance.IpAddress);
+            var msg = SynapseClientPlugin.GetConnection(__instance.IpAddress.Replace(":0", ""));
+            Logger.Info("Final: " + msg);
+            SynapseClientPlugin.Connect(msg);
+            return false;
+        }
+        
 
         public class SynapseServerEntry
         {
-            public string ip { get; set; }
-            public ushort port { get; set; } = 7777;
-            public string players { get; set; }
+            public string id { get; set; }
+            public string address { get; set; }
+            public int onlinePlayers { get; set; }
+            public int maxPlayers { get; set; }
             public string info { get; set; }
             public string pastebin { get; set; }
             public string version { get; set; }

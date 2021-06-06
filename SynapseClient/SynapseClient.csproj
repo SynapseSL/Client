@@ -61,6 +61,10 @@
         <Reference Include="DissonanceVoip, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Refs\unhollowed\DissonanceVoip.dll</HintPath>
         </Reference>
+        <Reference Include="DnsClient, Version=1.5.0.0, Culture=neutral, PublicKeyToken=4574bb5573c51424">
+          <HintPath>..\packages\DnsClient.1.5.0-beta-20210522.7\lib\net471\DnsClient.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="Facepunch.Steamworks.Win64, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Refs\unhollowed\Facepunch.Steamworks.Win64.dll</HintPath>
         </Reference>
@@ -140,6 +144,10 @@
           <HintPath>..\packages\JsonWebTokens.4.0.0\lib\netstandard2.0\JsonWebTokens.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="Mirror, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Refs\unhollowed\Mirror.dll</HintPath>
         </Reference>
@@ -158,6 +166,10 @@
           <HintPath>..\Refs\unhollowed\NorthwoodLib.dll</HintPath>
         </Reference>
         <Reference Include="System" />
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System.ComponentModel.Composition" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -184,6 +196,10 @@
           <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Security.AccessControl, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.AccessControl.5.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
           <Private>True</Private>
@@ -198,6 +214,10 @@
         </Reference>
         <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Xml" />
@@ -541,6 +561,8 @@
             <InputAssemblies Include="$(OutputPath)/BouncyCastle.Crypto.dll" />
             <InputAssemblies Include="$(OutputPath)/Newtonsoft.Json.dll" />
             <InputAssemblies Include="$(OutputPath)/JsonWebTokens.dll" />
+            <InputAssemblies Include="$(OutputPath)/DnsClient.dll" />
+            <InputAssemblies Include="$(OutputPath)/System.Buffers.dll" />
             <IlRepackLibs Include="$(OutputPath)" />
         </ItemGroup>
         <Message Text="MERGING: @(InputAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />

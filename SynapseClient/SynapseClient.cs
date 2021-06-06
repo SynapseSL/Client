@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Authenticator;
 using BepInEx;
 using BepInEx.IL2CPP;
 using BepInEx.Logging;
+using DnsClient;
+using DnsClient.Protocol;
 using GameCore;
 using HarmonyLib;
+using Il2CppMono.Unity;
 using Il2CppSystem;
 using Il2CppSystem.Collections;
 using Jwt;
@@ -24,6 +29,7 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
 using RemoteAdmin;
 using Steamworks;
+using Steamworks.Data;
 using SynapseClient.Patches;
 using SynapseClient.Pipeline;
 using UnhollowerBaseLib;
@@ -33,6 +39,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils.ConfigHandler;
+using Action = System.Action;
 using Activator = Il2CppSystem.Activator;
 using Byte = System.Byte;
 using Console = GameCore.Console;
@@ -58,6 +65,10 @@ namespace SynapseClient
 
         public static bool isLoggedIn = false;
 
+        private static Action _redirectCallback;
+        public static Queue<Action> CallbackQueue { get; } = new Queue<Action>();
+        public static string currentScene;
+
         public override void Load()
         {
             Logger._logger = Log;
@@ -69,7 +80,6 @@ namespace SynapseClient
             var bytes = File.ReadAllBytes("firstaid.bundle");
             aidkit = Il2CppAssetBundleManager.LoadFromMemory(bytes).LoadAsset<GameObject>("FirstAidKit_Green.prefab");
             aidkit.AddComponent<Rigidbody>();
-
             Logger.Info("Patching client...");
             Harmony.CreateAndPatchAll(typeof(SynapseClientPlugin));
             Harmony.CreateAndPatchAll(typeof(AuthPatches));
@@ -84,6 +94,56 @@ namespace SynapseClient
             Logger.Info("Registered Settings Refresh Listener");
             */
             ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
+        }
+
+        internal static void DoQueueTick()
+        {
+            for (int i = 0; i < CallbackQueue.Count; i++)
+            {
+                CallbackQueue.Dequeue().Invoke();
+            }
+        }
+
+        public static string GetConnection(string address)
+        {
+            var possibleSrv = ResolveSrvDomainOrNull($"_syn._udp.{address}").GetAwaiter().GetResult();
+            if (possibleSrv == null)
+            {
+                Logger.Info("No SRV Records found");
+                return address;
+            }
+
+            var target = possibleSrv.Target.Value;
+            var targetAddress = target.Substring(0, target.Length - 1);
+            return $"{targetAddress}:{possibleSrv.Port}";
+        }
+        
+        public static async Task<SrvRecord> ResolveSrvDomainOrNull(string s)
+        {
+            try
+            {
+                var lookup = new LookupClient();
+                var result = await lookup.QueryAsync(s, QueryType.SRV);
+                var srvRecords = result.Answers.SrvRecords().ToArray();
+                var sumWeight = srvRecords.Sum(x => x.Weight);
+                var cur = new Random().Next(1, sumWeight + 1);
+                foreach (var srv in srvRecords)
+                {
+                    if (cur <= srv.Weight)
+                    {
+                        return srv;
+                    }
+
+                    cur -= srv.Weight;
+                }
+
+                return srvRecords.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Logger.Info(e.ToString());
+                return null;
+            }
         }
         
         public void MainReceivePipelineData(byte[] data)
@@ -105,14 +165,45 @@ namespace SynapseClient
             Logger.Info("Initialised QueryAuth");
         }
 
+        public static void Connect(String address)
+        {
+            GameCore.Console.singleton.TypeCommand("connect " + address);
+        }
+
+        public static void Redirect(String address)
+        {
+            GameCore.Console.singleton.TypeCommand("disconnect");
+            _redirectCallback = delegate
+            {
+                CallbackQueue.Enqueue(
+                    delegate
+                    {
+                        Logger.Info("Trying to connect again");
+                        Thread.Sleep(500);
+                        Console.singleton.TypeCommand("connect " + address);
+                    });
+            };
+   
+        }
+        
         [HarmonyPatch(typeof(NewMainMenu), nameof(NewMainMenu.Start))]
         [HarmonyPrefix]
         public static bool OnMainMenuStart(NewMainMenu __instance)
         {
             Logger.Info("Main Menu hooked!");
+            var obj = new GameObject();
+            obj.AddComponent<SynapseBackgroundWorker>();
+            
             var texture = new Texture2D(256, 256);
             ImageConversion.LoadImage(texture, File.ReadAllBytes("synapse.png"), false);
             GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
+
+            if (_redirectCallback != null)
+            {
+                SynapseClientPlugin._redirectCallback.Invoke();
+                SynapseClientPlugin._redirectCallback = null;
+            }
+            
             return true;
         }
         
@@ -127,11 +218,11 @@ namespace SynapseClient
             }
             return true;
         }
-
         
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            currentScene = scene.name;
             Logger.Info($"Scene changed to {scene.name}");
             try
             {

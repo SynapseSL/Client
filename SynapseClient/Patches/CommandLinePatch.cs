@@ -19,7 +19,19 @@ namespace SynapseClient.Patches
             {
                 var go = GameObject.Instantiate(SynapseClientPlugin.aidkit, ReferenceHub.LocalHub.playerMovementSync.GetRealPosition(), Quaternion.identity);
                 return false;
+            } else if (cmd.StartsWith("redirect "))
+            {
+                var target = cmd.Replace("redirect ", " ");
+                SynapseClientPlugin.Redirect(target);
             }
+            return true;
+        }
+        
+        [HarmonyPatch(typeof(GameCore.Console), nameof(GameCore.Console.Awake))]
+        [HarmonyPrefix]
+        public static bool OnStart(GameCore.Console __instance)
+        {
+            Logger.Info("Starting GameConsole");
             return true;
         }
         

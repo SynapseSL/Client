@@ -10,7 +10,7 @@ namespace SynapseClient
         //ReferenceHub.LocalHub.nicknameSync.UpdateNickname("Helight");
         public void Update()
         {
-           
+            SynapseClientPlugin.DoQueueTick();
         }
 
         public void OnEnable()
