@@ -32,6 +32,7 @@ using Steamworks;
 using Steamworks.Data;
 using SynapseClient.Patches;
 using SynapseClient.Pipeline;
+using SynapseClient.Pipeline.Packets;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
@@ -51,6 +52,7 @@ using Process = Il2CppSystem.Diagnostics.Process;
 using Random = System.Random;
 using String = Il2CppSystem.String;
 using Exception = System.Exception;
+using Object = UnityEngine.Object;
 
 namespace SynapseClient
 {
@@ -60,7 +62,8 @@ namespace SynapseClient
 
         public static string name = "SynapsePlayer";
 
-        public static GameObject aidkit;
+        public static MedkitBundle medkitBundle = new MedkitBundle();
+        public static EnvironmentBundle environmentBundle = new EnvironmentBundle();
         public static Texture2D synapseLogo;
 
         public static bool isLoggedIn = false;
@@ -69,17 +72,53 @@ namespace SynapseClient
         public static Queue<Action> CallbackQueue { get; } = new Queue<Action>();
         public static string currentScene;
 
+        [BundleDescriptor(Bundle = "firstaid.bundle", Source = "firstaid.bundle")]
+        public class MedkitBundle : BundleEntity
+        {
+            [AssetDescriptor(Asset = "FirstAidKit_Green.prefab")]
+            public GameObject aidKitPrefab;
+        }
+        
+        [BundleDescriptor(Bundle = "environment.bundle", Source = "environment.bundle")]
+        public class EnvironmentBundle : BundleEntity
+        {
+            [AssetDescriptor(Asset = "ExampleEnvironment.prefab")]
+            public GameObject environmentPrefab;
+        }
+
         public override void Load()
         {
             Logger._logger = Log;
+            
+            var p = new Vector3(0.5f, 0.3f, 0.7f);
+            var r = Quaternion.EulerAngles(0.5f, 0.5f, 0.7f);
+            var n = "TestEntity";
+            var packet = PositionPacket.Encode(p, r, n);
+            Logger.Info(p.ToString());
+            Logger.Info(r.ToString());
+            Logger.Info(n.ToString());
+            PositionPacket.Decode(packet, out var p1, out var r1, out var n1);
+            Logger.Info(p1.ToString());
+            Logger.Info(r1.ToString());
+            Logger.Info(n1.ToString());
+
+            var testPacket = PipelinePacket.from(12, "Test Content");
+            Logger.Info(testPacket.ToString());
+            Logger.Info(testPacket.AsString());
+            var encoded = DataUtils.pack(testPacket);
+            Logger.Info(Base64.ToBase64String(encoded));
+            var decoded = DataUtils.unpack(encoded);
+            Logger.Info(decoded.ToString());
+            Logger.Info(decoded.AsString());
+            
             Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseBackgroundWorker>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapsePlayerHook>();
             Logger.Info("Loading Prefabs");
-            var bytes = File.ReadAllBytes("firstaid.bundle");
-            aidkit = Il2CppAssetBundleManager.LoadFromMemory(bytes).LoadAsset<GameObject>("FirstAidKit_Green.prefab");
-            aidkit.AddComponent<Rigidbody>();
+            if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
+            medkitBundle.LoadBundle();
+            environmentBundle.LoadBundle();
             Logger.Info("Patching client...");
             Harmony.CreateAndPatchAll(typeof(SynapseClientPlugin));
             Harmony.CreateAndPatchAll(typeof(AuthPatches));
@@ -146,23 +185,46 @@ namespace SynapseClient
             }
         }
         
-        public void MainReceivePipelineData(byte[] data)
+        public void MainReceivePipelineData(PipelinePacket packet)
         {
-            Logger.Info("Initialising after Spawn");
-            var salt = new byte[32];
-            for (var i = 0; i < 32; i++) salt[i] = 0x00;
-            var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
-            var sessionBytes = Encoding.UTF8.GetBytes(jwt.session);
-            var key = new byte[32];
-            for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
-            for (var i = 24; i < 32; i++) key[i] = 0x00;
+            if (packet.PacketId == 0)
+            {
+                Logger.Info("WelcomePacket: " + packet.AsString());
+                var salt = new byte[32];
+                for (var i = 0; i < 32; i++) salt[i] = 0x00;
+                var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
+                var sessionBytes = Encoding.UTF8.GetBytes(jwt.session);
+                var key = new byte[32];
+                for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
+                for (var i = 24; i < 32; i++) key[i] = 0x00;
 
-            QueryProcessor.Localplayer.Key = key;
-            QueryProcessor.Localplayer.CryptoManager.ExchangeRequested = true;
-            QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
-            QueryProcessor.Localplayer.Salt = salt;
-            QueryProcessor.Localplayer.ClientSalt = salt;
-            Logger.Info("Initialised QueryAuth");
+                QueryProcessor.Localplayer.Key = key;
+                QueryProcessor.Localplayer.CryptoManager.ExchangeRequested = true;
+                QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
+                QueryProcessor.Localplayer.Salt = salt;
+                QueryProcessor.Localplayer.ClientSalt = salt;
+                Logger.Info("Init done");   
+                ClientPipeline.invoke(PipelinePacket.from(1, "Client connected successfully"));
+                medkitBundle.LoadPrefabs();
+                environmentBundle.LoadPrefabs();
+                Logger.Info("Loaded Runtime Prefabs");
+            } else if (packet.PacketId == 10)
+            {
+                SpawnPacket.Decode(packet, out var pos, out var rot, out var name, out var blueprint);
+                if (blueprint == "FirstAid")
+                {
+                    Logger.Info(medkitBundle.aidKitPrefab.ToString());
+                    Logger.Error("Spawning KIT at " + pos.ToString() + ", " + rot.ToString());
+                    var obj = Object.Instantiate(medkitBundle.aidKitPrefab, pos, rot);
+                    obj.name = name;
+                } else if (blueprint == "Environment")
+                {
+                    Logger.Info(environmentBundle.environmentPrefab.ToString());
+                    Logger.Error("Spawning ENV at " + pos.ToString() + ", " + rot.ToString());
+                    var obj = Object.Instantiate(environmentBundle.environmentPrefab, pos, rot);
+                    obj.name = name;
+                }
+            }
         }
 
         public static void Connect(String address)
