@@ -16,13 +16,14 @@ namespace SynapseClient.Patches
         public static bool OnStart(GameCore.Console __instance, string cmd, CommandSender sender)
         {
             if (cmd == "abtest")
-            {
-                var go = GameObject.Instantiate(SynapseClientPlugin.aidkit, ReferenceHub.LocalHub.playerMovementSync.GetRealPosition(), Quaternion.identity);
+            { 
+                //var go = GameObject.Instantiate(SynapseClientPlugin.aidkit, ReferenceHub.LocalHub.playerMovementSync.GetRealPosition(), Quaternion.identity);
                 return false;
             } else if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
                 SynapseClientPlugin.Redirect(target);
+                return false;
             }
             return true;
         }

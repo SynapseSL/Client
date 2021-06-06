@@ -523,6 +523,7 @@
     <ItemGroup>
         <Compile Include="API\LeakingObject.cs" />
         <Compile Include="API\UnhollowerSupport.cs" />
+        <Compile Include="Bundle\BundleEntity.cs" />
         <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
         <Compile Include="Logger.cs" />
         <Compile Include="Models\CertificateRequest.cs" />
@@ -533,7 +534,7 @@
         <Compile Include="Patches\PipelinePatches.cs" />
         <Compile Include="Patches\ServerListPatches.cs" />
         <Compile Include="Pipeline\ClientPipeline.cs" />
-        <Compile Include="Pipeline\DataUtils.cs" />
+        <Compile Include="Pipeline\Packets.cs" />
         <Compile Include="SynapseBackgroundWorker.cs" />
         <Compile Include="SynapseCentralAuth.cs" />
         <Compile Include="SynapseClient.cs" />
