@@ -521,7 +521,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\ClientMod.cs" />
+        <Compile Include="API\Events.cs" />
         <Compile Include="API\LeakingObject.cs" />
+        <Compile Include="API\SpawnController.cs" />
         <Compile Include="API\UnhollowerSupport.cs" />
         <Compile Include="Bundle\BundleEntity.cs" />
         <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
@@ -540,6 +543,7 @@
         <Compile Include="SynapseClient.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SynapsePlayerHook.cs" />
+        <Compile Include="SynapseServerList.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

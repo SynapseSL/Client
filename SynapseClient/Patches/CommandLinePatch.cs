@@ -1,30 +1,60 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using HarmonyLib;
 using RemoteAdmin;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using File = Il2CppSystem.IO.File;
+using Object = System.Object;
 using String = Il2CppSystem.String;
 
 namespace SynapseClient.Patches
 {
     public class CommandLinePatch
     {
+        public static Dictionary<string, Il2CppAssetBundle> AssetBundles = new Dictionary<string, Il2CppAssetBundle>();
+        
         [HarmonyPatch(typeof(GameCore.Console), nameof(GameCore.Console.TypeCommand))]
         [HarmonyPrefix]
         public static bool OnStart(GameCore.Console __instance, string cmd, CommandSender sender)
         {
-            if (cmd == "abtest")
-            { 
-                //var go = GameObject.Instantiate(SynapseClientPlugin.aidkit, ReferenceHub.LocalHub.playerMovementSync.GetRealPosition(), Quaternion.identity);
-                return false;
-            } else if (cmd.StartsWith("redirect "))
+            if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
                 SynapseClientPlugin.Redirect(target);
                 return false;
+            } else if (cmd.StartsWith("bundle load "))
+            {
+                var target = cmd.Replace("bundle load ", "");
+                var stream = File.OpenRead(target);
+                AssetBundles[target] = Il2CppAssetBundleManager.LoadFromStream(stream);
+                return false;
+            } else if (cmd.StartsWith("bundle spawn "))
+            {
+                var target = cmd.Replace("bundle spawn ", "");
+                var split = target.Split(':');
+                var prefab = AssetBundles[split[0]].LoadAsset<GameObject>(split[1]);
+                UnityEngine.Object.Instantiate(prefab, SynapsePlayerHook.Singleton.transform.position, Quaternion.identity);
+                return false;
+            }  else if (cmd.StartsWith("bundle rigidbody "))
+            {
+                var target = cmd.Replace("bundle rigidbody ", "");
+                var split = target.Split(':');
+                var prefab = AssetBundles[split[0]].LoadAsset<GameObject>(split[1]);
+                Logger.Info(prefab.ToString());
+                var obj = UnityEngine.Object.Instantiate(prefab, SynapsePlayerHook.Singleton.transform.position, Quaternion.identity);
+                Logger.Info(obj.ToString());
+                var mesh = obj.GetComponentInChildren<MeshFilter>().mesh;
+                var collider = obj.AddComponent<BoxCollider>();
+                collider.center = mesh.bounds.center;
+                collider.size = mesh.bounds.size;
+                collider.extents = mesh.bounds.extents;
+                obj.AddComponent<Rigidbody>();
+                return false;
             }
+            
             return true;
         }
         

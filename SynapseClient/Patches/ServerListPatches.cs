@@ -9,6 +9,7 @@ using LiteNetLib.Utils;
 using MelonLoader;
 using Mirror;
 using Newtonsoft.Json;
+using SynapseClient.API;
 using UnityEngine;
 using String = Il2CppSystem.String;
 
@@ -16,8 +17,6 @@ namespace SynapseClient.Patches
 {
     public class ServerListPatches
     {
-
-        public static List<SynapseServerEntry> Servers { get; set; } = new List<SynapseServerEntry>();
         public static ServerFilter ListSingleton { get; set; }
 
         [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.Refresh))]
@@ -68,9 +67,9 @@ namespace SynapseClient.Patches
         private static void Composite(ServerFilter filter)
         {
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
-            foreach (var serverEntry in Servers)
+            foreach (var serverEntry in SynapseClientPlugin.Singleton.SynapseServerList.ServerCache)
             {
-                AddServer(filter, serverEntry);
+                SynapseServerList.AddServer(filter, serverEntry);
             }
             filter.DisplayServers();
             try
@@ -80,34 +79,12 @@ namespace SynapseClient.Patches
             Logger.Info("Servers displayed");
         }
 
-        public static void AddServer(ServerFilter filter, SynapseServerEntry entry)
-        {
-            var leakingObject = new LeakingObject<ServerListItem>();
-            leakingObject.decorated = new ServerListItem
-            {
-                ip = (String) entry.address,
-                port = 0000,
-                players = (String) (entry.onlinePlayers + "/" + entry.maxPlayers),
-                info = (String) entry.info,
-                pastebin = (String) entry.pastebin,
-                version = (String) entry.version,
-                whitelist = entry.whitelist,
-                modded = entry.modded,
-                friendlyFire = entry.friendlyFire,
-                officialCode = entry.officialCode
-            };
-            filter.FilteredListItems.Add(leakingObject.decorated);
-            leakingObject.Dispose();
-        }
-        
         [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.DownloadList))]
         [HarmonyPrefix]
         public static bool OnServerListAwake()
         {
             Logger.Info("Download Servers");
-            var webClient = new WebClient();
-            var response = webClient.DownloadString("https://servers.synapsesl.xyz/serverlist");
-            Servers = JsonConvert.DeserializeObject<List<SynapseServerEntry>>(response);
+            SynapseClientPlugin.Singleton.SynapseServerList.Download();
             Composite(ListSingleton);
             return false;
         }
@@ -116,29 +93,12 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnPlayButton(ServerElementButton __instance)
         {
-            Logger.Info("Pressed Play Button");
-            Logger.Info("Should connect to: " + __instance.IpAddress);
-            var msg = SynapseClientPlugin.GetConnection(__instance.IpAddress.Replace(":0", ""));
-            Logger.Info("Final: " + msg);
-            SynapseClientPlugin.Connect(msg);
+            var entry = SynapseClientPlugin.Singleton.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
+            var resolved = SynapseClientPlugin.GetConnection(entry.address);
+            var allow = Events.InvokeServerConnect(resolved);
+            if (!allow) return false;
+            SynapseClientPlugin.Connect(resolved);
             return false;
-        }
-        
-
-        public class SynapseServerEntry
-        {
-            public string id { get; set; }
-            public string address { get; set; }
-            public int onlinePlayers { get; set; }
-            public int maxPlayers { get; set; }
-            public string info { get; set; }
-            public string pastebin { get; set; }
-            public string version { get; set; }
-            public bool whitelist { get; set; } = false;
-            public bool modded { get; set; } = true;
-            public bool friendlyFire { get; set; } = true;
-            public byte officialCode { get; set; } = Byte.MinValue;
-            
         }
     }
 }

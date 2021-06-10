@@ -5,8 +5,21 @@ using UnityEngine;
 
 namespace SynapseClient.Pipeline.Packets
 {
+
+    public static class ConnectionSuccessfulPacket
+    {
+        public const uint ID = 0;
+    }
+    
+    public static class RoundStartPacket
+    {
+        public const uint ID = 30;
+    }
+
     public static class PositionPacket
     {
+        public const uint ID = 12;
+        
         public static PipelinePacket Encode(Vector3 pos, Quaternion rot, string name)
         {
             var bytes = new byte[(4 * 3) + (4 * 4) + 4 + (4 + name.Length)];
@@ -28,7 +41,7 @@ namespace SynapseClient.Pipeline.Packets
             for (var i = 0; i < 4; i++) bytes[i + (4 * 6)] = rzb[i];
             for (var i = 0; i < 4; i++) bytes[i + (4 * 7)] = nlb[i];
             for (var i = 0; i < name.Length; i++) bytes[i + (4 * 8)] = nb[i];
-            return PipelinePacket.from(12, bytes);
+            return PipelinePacket.from(ID, bytes);
         }
 
         public static void Decode(PipelinePacket packet, out Vector3 pos, out Quaternion rot, out string name)
@@ -51,10 +64,10 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class SpawnPacket
     {
-
+        public const uint ID = 10;
         public static PipelinePacket Encode(Vector3 pos, Quaternion rot, string name, string blueprint)
         {
-            return PipelinePacket.from(10, new Pack
+            return PipelinePacket.from(ID, new Pack
             {
                 Blueprint = blueprint,
                 Name = name,
@@ -93,10 +106,10 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class DestroyPacket
     {
-
+        public const uint ID = 11;
         public static PipelinePacket Encode(string name, string blueprint)
         {
-            return PipelinePacket.from(11, new Pack
+            return PipelinePacket.from(ID, new Pack
             {
                 Name = name,
                 Blueprint = blueprint
@@ -114,6 +127,60 @@ namespace SynapseClient.Pipeline.Packets
         {
             public string Blueprint { get; set; }
             public string Name { get; set; }
+        }
+    }
+
+    public static class RedirectPacket
+    {
+        public const uint ID = 20;
+        public static PipelinePacket Encode(string target)
+        {
+            return PipelinePacket.from(ID, new Pack
+            {
+                Target = target
+            });
+        }
+
+        public static void Decode(PipelinePacket packet, out string target)
+        {
+            var pack = packet.As<Pack>();
+            target = pack.Target;
+        }
+  
+        private class Pack
+        {
+            public string Target { get; set; }
+        }
+    }
+
+    public static class PlaySoundPacket
+    {
+
+        public const uint ID = 21;
+        public static PipelinePacket Encode(string name, Vector3 pos, string blueprint)
+        {
+            return PipelinePacket.from(ID, new Pack
+            {
+                Name = name,
+                X = pos.x,
+                Y = pos.y,
+                Z = pos.z
+            });
+        }
+
+        public static void Decode(PipelinePacket packet, out string name, out Vector3 pos)
+        {
+            var pack = packet.As<Pack>();
+            name = pack.Name;
+            pos = new Vector3(pack.X, pack.Y, pack.Z);
+        }
+
+        private class Pack
+        {
+            public string Name { get; set; }
+            public float X { get; set; }
+            public float Y { get; set; }
+            public float Z { get; set; }
         }
     }
 }

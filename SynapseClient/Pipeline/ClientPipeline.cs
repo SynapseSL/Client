@@ -72,7 +72,7 @@ public static class DataUtils
      
      BaseMisc:
      0: Welcome Packet
-     1: Message Packet
+     1: Message Packet -PLANNED-
      
      Object Packets
      10: Object Spawn
@@ -83,8 +83,11 @@ public static class DataUtils
      20: Client Redirect
      21: Client PlaySound
      
+     Round Packets
+     30: Round Start
+     
      Streaming Packets
-     30: Streamed AssetBundle
+     30: Streamed AssetBundle -PLANNED-
     
      */
     

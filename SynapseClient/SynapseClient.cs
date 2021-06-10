@@ -1,54 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Authenticator;
 using BepInEx;
 using BepInEx.IL2CPP;
-using BepInEx.Logging;
 using DnsClient;
 using DnsClient.Protocol;
-using GameCore;
 using HarmonyLib;
-using Il2CppMono.Unity;
-using Il2CppSystem;
-using Il2CppSystem.Collections;
 using Jwt;
-using LiteNetLib.Utils;
-using MEC;
 using MelonLoader;
-using Mirror;
-using Mirror.LiteNetLib4Mirror;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities.Encoders;
 using RemoteAdmin;
 using Steamworks;
-using Steamworks.Data;
+using Synapse.Client;
+using SynapseClient.API;
 using SynapseClient.Patches;
 using SynapseClient.Pipeline;
 using SynapseClient.Pipeline.Packets;
-using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Utils.ConfigHandler;
 using Action = System.Action;
-using Activator = Il2CppSystem.Activator;
-using Byte = System.Byte;
 using Console = GameCore.Console;
-using DateTimeOffset = System.DateTimeOffset;
 using Encoding = Il2CppSystem.Text.Encoding;
-using IntPtr = Il2CppSystem.IntPtr;
-using Logger = UnityEngine.Logger;
-using Process = Il2CppSystem.Diagnostics.Process;
 using Random = System.Random;
 using String = Il2CppSystem.String;
 using Exception = System.Exception;
@@ -62,15 +37,18 @@ namespace SynapseClient
 
         public static string name = "SynapsePlayer";
 
-        public static MedkitBundle medkitBundle = new MedkitBundle();
-        public static EnvironmentBundle environmentBundle = new EnvironmentBundle();
+        public MedkitBundle medkitBundle = new MedkitBundle();
+        public EnvironmentBundle environmentBundle = new EnvironmentBundle();
+        public SynapseServerList SynapseServerList = new SynapseServerList();
+        
         public static Texture2D synapseLogo;
+
+        public static SynapseClientPlugin Singleton;
 
         public static bool isLoggedIn = false;
 
         private static Action _redirectCallback;
         public static Queue<Action> CallbackQueue { get; } = new Queue<Action>();
-        public static string currentScene;
 
         [BundleDescriptor(Bundle = "firstaid.bundle", Source = "firstaid.bundle")]
         public class MedkitBundle : BundleEntity
@@ -86,35 +64,53 @@ namespace SynapseClient
             public GameObject environmentPrefab;
         }
 
+        [Blueprint(Name = "FirstAid")]
+        public class MedkitSpawnHandler : SpawnHandler
+        {
+            public override GameObject Spawn(Vector3 pos, Quaternion rot, string name)
+            {
+                var obj = GameObject.Instantiate(Singleton.medkitBundle.aidKitPrefab, pos, rot);
+                obj.name = name;
+                return obj;
+            }
+
+            public override void Destroy(GameObject gameObject)
+            {
+                Object.Destroy(gameObject);
+            }
+        }
+
+        [Blueprint(Name = "Environment")]
+        public class EnvironmentSpawnHandler : SpawnHandler
+        {
+            public override GameObject Spawn(Vector3 pos, Quaternion rot, string name)
+            {
+                var obj = GameObject.Instantiate(Singleton.environmentBundle.environmentPrefab, pos, rot);
+                obj.name = name;
+                return obj;
+            }
+
+            public override void Destroy(GameObject gameObject)
+            {
+                Object.Destroy(gameObject);
+            }
+        }
+        
+        public SpawnController SpawnController { get; internal set; } = new SpawnController();
+
         public override void Load()
         {
+            Singleton = this;
             Logger._logger = Log;
-            
-            var p = new Vector3(0.5f, 0.3f, 0.7f);
-            var r = Quaternion.EulerAngles(0.5f, 0.5f, 0.7f);
-            var n = "TestEntity";
-            var packet = PositionPacket.Encode(p, r, n);
-            Logger.Info(p.ToString());
-            Logger.Info(r.ToString());
-            Logger.Info(n.ToString());
-            PositionPacket.Decode(packet, out var p1, out var r1, out var n1);
-            Logger.Info(p1.ToString());
-            Logger.Info(r1.ToString());
-            Logger.Info(n1.ToString());
-
-            var testPacket = PipelinePacket.from(12, "Test Content");
-            Logger.Info(testPacket.ToString());
-            Logger.Info(testPacket.AsString());
-            var encoded = DataUtils.pack(testPacket);
-            Logger.Info(Base64.ToBase64String(encoded));
-            var decoded = DataUtils.unpack(encoded);
-            Logger.Info(decoded.ToString());
-            Logger.Info(decoded.AsString());
+            Logger.Info("1");
+            new ClientModLoader().LoadAll();
+            Logger.Info("2");
             
             Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseBackgroundWorker>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapsePlayerHook>();
+            ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
             medkitBundle.LoadBundle();
@@ -133,6 +129,9 @@ namespace SynapseClient
             Logger.Info("Registered Settings Refresh Listener");
             */
             ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
+            SpawnController.Subscribe();
+            SpawnController.Register(new MedkitSpawnHandler());
+            SpawnController.Register(new EnvironmentSpawnHandler());
         }
 
         internal static void DoQueueTick()
@@ -187,43 +186,35 @@ namespace SynapseClient
         
         public void MainReceivePipelineData(PipelinePacket packet)
         {
-            if (packet.PacketId == 0)
+            switch (packet.PacketId)
             {
-                Logger.Info("WelcomePacket: " + packet.AsString());
-                var salt = new byte[32];
-                for (var i = 0; i < 32; i++) salt[i] = 0x00;
-                var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
-                var sessionBytes = Encoding.UTF8.GetBytes(jwt.session);
-                var key = new byte[32];
-                for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
-                for (var i = 24; i < 32; i++) key[i] = 0x00;
+                case ConnectionSuccessfulPacket.ID:
+                {
+                    Logger.Info("WelcomePacket: " + packet.AsString());
+                    var salt = new byte[32];
+                    for (var i = 0; i < 32; i++) salt[i] = 0x00;
+                    var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
+                    var sessionBytes = Encoding.UTF8.GetBytes(jwt.session);
+                    var key = new byte[32];
+                    for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
+                    for (var i = 24; i < 32; i++) key[i] = 0x00;
 
-                QueryProcessor.Localplayer.Key = key;
-                QueryProcessor.Localplayer.CryptoManager.ExchangeRequested = true;
-                QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
-                QueryProcessor.Localplayer.Salt = salt;
-                QueryProcessor.Localplayer.ClientSalt = salt;
-                Logger.Info("Init done");   
-                ClientPipeline.invoke(PipelinePacket.from(1, "Client connected successfully"));
-                medkitBundle.LoadPrefabs();
-                environmentBundle.LoadPrefabs();
-                Logger.Info("Loaded Runtime Prefabs");
-            } else if (packet.PacketId == 10)
-            {
-                SpawnPacket.Decode(packet, out var pos, out var rot, out var name, out var blueprint);
-                if (blueprint == "FirstAid")
-                {
-                    Logger.Info(medkitBundle.aidKitPrefab.ToString());
-                    Logger.Error("Spawning KIT at " + pos.ToString() + ", " + rot.ToString());
-                    var obj = Object.Instantiate(medkitBundle.aidKitPrefab, pos, rot);
-                    obj.name = name;
-                } else if (blueprint == "Environment")
-                {
-                    Logger.Info(environmentBundle.environmentPrefab.ToString());
-                    Logger.Error("Spawning ENV at " + pos.ToString() + ", " + rot.ToString());
-                    var obj = Object.Instantiate(environmentBundle.environmentPrefab, pos, rot);
-                    obj.name = name;
+                    QueryProcessor.Localplayer.Key = key;
+                    QueryProcessor.Localplayer.CryptoManager.ExchangeRequested = true;
+                    QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
+                    QueryProcessor.Localplayer.Salt = salt;
+                    QueryProcessor.Localplayer.ClientSalt = salt;
+                    Logger.Info("Init done");   
+                    ClientPipeline.invoke(PipelinePacket.@from(1, "Client connected successfully"));
+                    medkitBundle.LoadPrefabs();
+                    environmentBundle.LoadPrefabs();
+                    Logger.Info("Loaded Runtime Prefabs");
+                    Events.InvokeConnectionSuccessful();
+                    break;
                 }
+                case RoundStartPacket.ID:
+                    Events.InvokeRoundStart();
+                    break;
             }
         }
 
@@ -262,8 +253,8 @@ namespace SynapseClient
 
             if (_redirectCallback != null)
             {
-                SynapseClientPlugin._redirectCallback.Invoke();
-                SynapseClientPlugin._redirectCallback = null;
+                _redirectCallback.Invoke();
+                _redirectCallback = null;
             }
             
             return true;
@@ -284,7 +275,6 @@ namespace SynapseClient
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            currentScene = scene.name;
             Logger.Info($"Scene changed to {scene.name}");
             try
             {
@@ -292,8 +282,8 @@ namespace SynapseClient
                 {
                     case "Facility":
                     {
-                        var gameObject = new GameObject();
-                        gameObject.AddComponent<SynapseBackgroundWorker>();
+                        //var gameObject = new GameObject();
+                        //gameObject.AddComponent<SynapseBackgroundWorker>();
                         break;
                     }
                     
@@ -324,6 +314,8 @@ namespace SynapseClient
             {
                 Logger.Error(e.ToString());
             }
+            
+            Events.InvokeSceneLoad(scene);
         }
 
         private void ConnectCentralServer()

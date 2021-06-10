@@ -7,13 +7,15 @@ namespace SynapseClient
     
     public class SynapsePlayerHook : MonoBehaviour
     {
-        public static int IncrementalCounter = 0; 
+        public static int IncrementalCounter = 0;
+        public static SynapsePlayerHook Singleton;
         
         public SynapsePlayerHook(IntPtr intPtr) : base(intPtr) {}
 
 
         public void Awake()
         {
+            Singleton = this;
             IncrementalCounter += 1;
             
             Logger.Info("1");
