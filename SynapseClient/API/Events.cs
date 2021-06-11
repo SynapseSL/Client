@@ -7,6 +7,7 @@ namespace SynapseClient.API
     {
         public static event NoArgsClientEvent OnRoundStart;
         public static event NoArgsClientEvent OnConnectionSuccessful;
+        public static event NoArgsClientEvent OnRoundEnd;
         public static event ClientEvent<ServerConnectArgs> OnServerConnect;
         public static event ClientEvent<Scene> OnSceneLoad;
 
@@ -36,6 +37,10 @@ namespace SynapseClient.API
             OnSceneLoad?.Invoke(scene);
         }
 
+        internal static void InvokeRoundEnd()
+        {
+            OnRoundEnd?.Invoke();
+        }
         
         public delegate void ClientEvent<in TEvent>(TEvent ev);
         public delegate void NoArgsClientEvent();

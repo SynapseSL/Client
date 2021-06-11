@@ -529,6 +529,7 @@
         <Compile Include="Bundle\BundleEntity.cs" />
         <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
         <Compile Include="Logger.cs" />
+        <Compile Include="LookReceiver.cs" />
         <Compile Include="Models\CertificateRequest.cs" />
         <Compile Include="Models\RegistrationRequest.cs" />
         <Compile Include="Models\RegistrationResponse.cs" />

@@ -71,6 +71,11 @@ namespace SynapseClient
             {
                 var obj = GameObject.Instantiate(Singleton.medkitBundle.aidKitPrefab, pos, rot);
                 obj.name = name;
+                var lookReceiver = obj.AddComponent<LookReceiver>();
+                lookReceiver.LookReceiveAction = delegate(Vector3 pos1)
+                {
+                    Logger.Info($"Medikit looked: {pos1}");
+                };
                 return obj;
             }
 
@@ -111,6 +116,7 @@ namespace SynapseClient
             ClassInjector.RegisterTypeInIl2Cpp<SynapseBackgroundWorker>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapsePlayerHook>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
+            ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
             medkitBundle.LoadBundle();
@@ -264,9 +270,10 @@ namespace SynapseClient
         [HarmonyPrefix]
         public static bool StartNicknameSync(ServerRoles __instance)
         {
-            Logger.Info("Loaded Player!!");
-            if (__instance.gameObject.GetComponent<SynapsePlayerHook>() == null)
+            var ns = __instance.GetComponent<NicknameSync>();
+            if (ns.isLocalPlayer)
             {
+                Logger.Info("Loaded Player!!");
                 __instance.gameObject.AddComponent<SynapsePlayerHook>();
             }
             return true;
