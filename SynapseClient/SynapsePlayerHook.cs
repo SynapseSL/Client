@@ -37,8 +37,9 @@ namespace SynapseClient
 
         public void Update()
         {
-            if (Camera == null) ResetCamera();
             
+            SynapseClient.DoQueueTick();
+            if (Camera == null) ResetCamera();
             RaycastHit hit;
             var mousePos = Input.mousePosition;
             var ray = Camera.ScreenPointToRay(mousePos);
@@ -46,8 +47,7 @@ namespace SynapseClient
                 if (Input.GetKey(KeyCode.Keypad0)) _lookingAtCube.transform.position = hit.point;
                 _lookingAt = hit.transform.gameObject;
                 if (_lookingAt.GetInstanceID() != lastInvalidTraceId)
-                {
-                    Logger.Info($"Looking at object {_lookingAt.ToString()}");
+                { 
                     var receiver = _lookingAt.GetComponent<LookReceiver>();
                     if (receiver == null)
                     {
@@ -80,7 +80,7 @@ namespace SynapseClient
 
         public void OnDisable()
         {
-            Logger.Error("Disable!!!");
+            Logger.Info("Round has ended");
             Events.InvokeRoundEnd();
         }
 

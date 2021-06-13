@@ -74,7 +74,7 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
-                        name = SynapseClientPlugin.name,
+                        name = SynapseClient.name,
                         publicKey = read()[0],
                         mac = GetMac(),
                         pcName = GetPcName()
@@ -93,7 +93,7 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
-                        name = SynapseClientPlugin.name,
+                        name = SynapseClient.name,
                         uuid = File.ReadAllText("user.dat"),
                         publicKey = read()[0],
                         privateKey = read()[1],

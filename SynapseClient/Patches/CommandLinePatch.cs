@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
+using CommandSystem;
+using GameCore;
 using HarmonyLib;
 using RemoteAdmin;
 using UnhollowerBaseLib;
-using UnhollowerRuntimeLib;
 using UnityEngine;
 using File = Il2CppSystem.IO.File;
-using Object = System.Object;
-using String = Il2CppSystem.String;
 
 namespace SynapseClient.Patches
 {
@@ -23,7 +20,7 @@ namespace SynapseClient.Patches
             if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
-                SynapseClientPlugin.Redirect(target);
+                SynapseClient.Redirect(target);
                 return false;
             } else if (cmd.StartsWith("bundle load "))
             {
@@ -52,6 +49,7 @@ namespace SynapseClient.Patches
                 collider.size = mesh.bounds.size;
                 collider.extents = mesh.bounds.extents;
                 obj.AddComponent<Rigidbody>();
+                
                 return false;
             }
             

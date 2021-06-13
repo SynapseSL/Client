@@ -32,75 +32,23 @@ using Object = UnityEngine.Object;
 namespace SynapseClient
 {
     [BepInPlugin("xyz.synapse.client.plugin", "SynapseClient", "0.0.0.1")]
-    public class SynapseClientPlugin : BasePlugin
+    public class SynapseClient : BasePlugin
     {
 
         public static string name = "SynapsePlayer";
-
-        public MedkitBundle medkitBundle = new MedkitBundle();
-        public EnvironmentBundle environmentBundle = new EnvironmentBundle();
-        public SynapseServerList SynapseServerList = new SynapseServerList();
         
-        public static Texture2D synapseLogo;
-
-        public static SynapseClientPlugin Singleton;
-
+        public static SynapseClient Singleton;
+        
         public static bool isLoggedIn = false;
+        
+        internal static Texture2D synapseLogo;
 
         private static Action _redirectCallback;
+        
+        public SynapseServerList SynapseServerList = new SynapseServerList();
+
         public static Queue<Action> CallbackQueue { get; } = new Queue<Action>();
 
-        [BundleDescriptor(Bundle = "firstaid.bundle", Source = "firstaid.bundle")]
-        public class MedkitBundle : BundleEntity
-        {
-            [AssetDescriptor(Asset = "FirstAidKit_Green.prefab")]
-            public GameObject aidKitPrefab;
-        }
-        
-        [BundleDescriptor(Bundle = "environment.bundle", Source = "environment.bundle")]
-        public class EnvironmentBundle : BundleEntity
-        {
-            [AssetDescriptor(Asset = "ExampleEnvironment.prefab")]
-            public GameObject environmentPrefab;
-        }
-
-        [Blueprint(Name = "FirstAid")]
-        public class MedkitSpawnHandler : SpawnHandler
-        {
-            public override GameObject Spawn(Vector3 pos, Quaternion rot, string name)
-            {
-                var obj = GameObject.Instantiate(Singleton.medkitBundle.aidKitPrefab, pos, rot);
-                obj.name = name;
-                var lookReceiver = obj.AddComponent<LookReceiver>();
-                lookReceiver.LookReceiveAction = delegate(Vector3 pos1)
-                {
-                    Logger.Info($"Medikit looked: {pos1}");
-                };
-                return obj;
-            }
-
-            public override void Destroy(GameObject gameObject)
-            {
-                Object.Destroy(gameObject);
-            }
-        }
-
-        [Blueprint(Name = "Environment")]
-        public class EnvironmentSpawnHandler : SpawnHandler
-        {
-            public override GameObject Spawn(Vector3 pos, Quaternion rot, string name)
-            {
-                var obj = GameObject.Instantiate(Singleton.environmentBundle.environmentPrefab, pos, rot);
-                obj.name = name;
-                return obj;
-            }
-
-            public override void Destroy(GameObject gameObject)
-            {
-                Object.Destroy(gameObject);
-            }
-        }
-        
         public SpawnController SpawnController { get; internal set; } = new SpawnController();
 
         public override void Load()
@@ -119,10 +67,8 @@ namespace SynapseClient
             ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
-            medkitBundle.LoadBundle();
-            environmentBundle.LoadBundle();
             Logger.Info("Patching client...");
-            Harmony.CreateAndPatchAll(typeof(SynapseClientPlugin));
+            Harmony.CreateAndPatchAll(typeof(SynapseClient));
             Harmony.CreateAndPatchAll(typeof(AuthPatches));
             Harmony.CreateAndPatchAll(typeof(PipelinePatches));
             Harmony.CreateAndPatchAll(typeof(ServerListPatches));
@@ -136,8 +82,6 @@ namespace SynapseClient
             */
             ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
             SpawnController.Subscribe();
-            SpawnController.Register(new MedkitSpawnHandler());
-            SpawnController.Register(new EnvironmentSpawnHandler());
         }
 
         internal static void DoQueueTick()
@@ -210,11 +154,7 @@ namespace SynapseClient
                     QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
                     QueryProcessor.Localplayer.Salt = salt;
                     QueryProcessor.Localplayer.ClientSalt = salt;
-                    Logger.Info("Init done");   
                     ClientPipeline.invoke(PipelinePacket.@from(1, "Client connected successfully"));
-                    medkitBundle.LoadPrefabs();
-                    environmentBundle.LoadPrefabs();
-                    Logger.Info("Loaded Runtime Prefabs");
                     Events.InvokeConnectionSuccessful();
                     break;
                 }

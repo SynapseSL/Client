@@ -61,7 +61,7 @@ namespace SynapseClient.Patches
             {
                 Logger.Info("Beginning own Body");
                 
-                while (!SynapseClientPlugin.isLoggedIn)
+                while (!SynapseClient.isLoggedIn)
                 {
                     Thread.Sleep(5); //Not pretty but works
                 }
@@ -124,7 +124,7 @@ namespace SynapseClient.Patches
             CentralAuthManager.ApiToken = "";
             CentralAuthManager.Authenticated = true;
             CentralAuthManager.AuthStatusType = AuthStatusType.Success;
-            CentralAuthManager.Nonce = "MyRandomNonceNotGonnaUseThis";
+            CentralAuthManager.Nonce = "MadeByTheAnomalousCoders";
             CentralAuthManager.Platform = DistributionPlatform.Dedicated;
             CentralAuthManager.PreauthToken = new CentralAuthPreauthToken();
             CentralAuthManager.PreauthToken.Country = "";

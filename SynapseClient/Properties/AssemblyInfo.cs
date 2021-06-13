@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SynapseClient")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Modified Client for SCP: Secret Laboratory")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Anomalous Coders")]
 [assembly: AssemblyProduct("SynapseClient")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]

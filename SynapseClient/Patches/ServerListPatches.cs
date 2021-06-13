@@ -1,17 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using HarmonyLib;
-using Il2CppSystem;
-using LiteNetLib.Utils;
-using MelonLoader;
-using Mirror;
-using Newtonsoft.Json;
+﻿using HarmonyLib;
 using SynapseClient.API;
 using UnityEngine;
-using String = Il2CppSystem.String;
 
 namespace SynapseClient.Patches
 {
@@ -67,7 +56,7 @@ namespace SynapseClient.Patches
         private static void Composite(ServerFilter filter)
         {
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
-            foreach (var serverEntry in SynapseClientPlugin.Singleton.SynapseServerList.ServerCache)
+            foreach (var serverEntry in SynapseClient.Singleton.SynapseServerList.ServerCache)
             {
                 SynapseServerList.AddServer(filter, serverEntry);
             }
@@ -76,15 +65,13 @@ namespace SynapseClient.Patches
             {
                 GameObject.Find("New Main Menu/Servers/ServerBrowser/Loading").active = false;
             } catch {}
-            Logger.Info("Servers displayed");
         }
 
         [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.DownloadList))]
         [HarmonyPrefix]
         public static bool OnServerListAwake()
         {
-            Logger.Info("Download Servers");
-            SynapseClientPlugin.Singleton.SynapseServerList.Download();
+            SynapseClient.Singleton.SynapseServerList.Download();
             Composite(ListSingleton);
             return false;
         }
@@ -93,11 +80,11 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnPlayButton(ServerElementButton __instance)
         {
-            var entry = SynapseClientPlugin.Singleton.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
-            var resolved = SynapseClientPlugin.GetConnection(entry.address);
+            var entry = SynapseClient.Singleton.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
+            var resolved = SynapseClient.GetConnection(entry.address);
             var allow = Events.InvokeServerConnect(resolved);
             if (!allow) return false;
-            SynapseClientPlugin.Connect(resolved);
+            SynapseClient.Connect(resolved);
             return false;
         }
     }
