@@ -8,6 +8,7 @@ using BepInEx.IL2CPP;
 using DnsClient;
 using DnsClient.Protocol;
 using HarmonyLib;
+using Il2CppSystem;
 using Jwt;
 using MelonLoader;
 using RemoteAdmin;
@@ -268,15 +269,17 @@ namespace SynapseClient
         private void ConnectCentralServer()
         {
             Logger.Info("Connecting to Synapse Central-Server");
+            var cert = Path.Combine(ApplicationDataDir(), "certificate.pub");
+            var user = Path.Combine(ApplicationDataDir(), "user.dat");
             try
             {
-                if (File.Exists("user.dat") && File.Exists("certificate.dat"))
+                if (File.Exists(user) && File.Exists(cert))
                 {
                     //Logged in
-                    Log.LogInfo(File.ReadAllText("certificate.dat"));
+                    Log.LogInfo(File.ReadAllText(cert));
                     isLoggedIn = true;
                 }
-                else if (File.Exists("user.dat"))
+                else if (File.Exists(user))
                 {
                     SynapseCentralAuth.Certificate();
                     isLoggedIn = true;
@@ -307,6 +310,13 @@ namespace SynapseClient
             {
                 Logger.Error(e.ToString());
             }
+        }
+        
+        public static string ApplicationDataDir()
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Synapse Client");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
         }
     }
 

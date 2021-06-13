@@ -26,7 +26,7 @@ namespace SynapseClient.Pipeline
         public delegate void DataEvent<in TEvent>(TEvent ev);
     }
     
-public static class DataUtils
+    public static class DataUtils
     {
         public static byte[] pack(PipelinePacket packet)
         {
@@ -92,7 +92,7 @@ public static class DataUtils
     
     public class PipelinePacket
     {
-        public uint PacketId { get; set; }
+        public ushort PacketId { get; set; }
         public byte[] Data { get; set; }
 
         public byte StreamStatus { get; set; } = 0x00;
@@ -119,7 +119,7 @@ public static class DataUtils
             return JsonConvert.DeserializeObject<T>(s);
         }
 
-        public static PipelinePacket from(uint id, byte[] payload)
+        public static PipelinePacket from(ushort id, byte[] payload)
         {
             return new PipelinePacket
             {
@@ -128,7 +128,7 @@ public static class DataUtils
             };
         }
         
-        public static PipelinePacket from(uint id, string payload)
+        public static PipelinePacket from(ushort id, string payload)
         {
             return new PipelinePacket
             {
@@ -137,7 +137,7 @@ public static class DataUtils
             };
         }
 
-        public static PipelinePacket from<T>(uint id, T payload)
+        public static PipelinePacket from<T>(ushort id, T payload)
         {
             var encoded = JsonConvert.SerializeObject(payload);
             return from(id, encoded);

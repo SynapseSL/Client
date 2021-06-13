@@ -8,17 +8,17 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class ConnectionSuccessfulPacket
     {
-        public const uint ID = 0;
+        public const ushort ID = 0;
     }
     
     public static class RoundStartPacket
     {
-        public const uint ID = 30;
+        public const ushort ID = 30;
     }
 
     public static class PositionPacket
     {
-        public const uint ID = 12;
+        public const ushort ID = 12;
         
         public static PipelinePacket Encode(Vector3 pos, Quaternion rot, string name)
         {
@@ -64,7 +64,7 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class SpawnPacket
     {
-        public const uint ID = 10;
+        public const ushort ID = 10;
         public static PipelinePacket Encode(Vector3 pos, Quaternion rot, string name, string blueprint)
         {
             return PipelinePacket.from(ID, new Pack
@@ -106,7 +106,7 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class DestroyPacket
     {
-        public const uint ID = 11;
+        public const ushort ID = 11;
         public static PipelinePacket Encode(string name, string blueprint)
         {
             return PipelinePacket.from(ID, new Pack
@@ -132,7 +132,7 @@ namespace SynapseClient.Pipeline.Packets
 
     public static class RedirectPacket
     {
-        public const uint ID = 20;
+        public const ushort ID = 20;
         public static PipelinePacket Encode(string target)
         {
             return PipelinePacket.from(ID, new Pack
@@ -156,7 +156,7 @@ namespace SynapseClient.Pipeline.Packets
     public static class PlaySoundPacket
     {
 
-        public const uint ID = 21;
+        public const ushort ID = 21;
         public static PipelinePacket Encode(string name, Vector3 pos, string blueprint)
         {
             return PipelinePacket.from(ID, new Pack
