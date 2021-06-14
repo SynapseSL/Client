@@ -13,7 +13,6 @@ using Jwt;
 using MelonLoader;
 using RemoteAdmin;
 using Steamworks;
-using Synapse.Client;
 using SynapseClient.API;
 using SynapseClient.Patches;
 using SynapseClient.Pipeline;
@@ -62,8 +61,8 @@ namespace SynapseClient
             
             Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
-            ClassInjector.RegisterTypeInIl2Cpp<SynapseBackgroundWorker>();
-            ClassInjector.RegisterTypeInIl2Cpp<SynapsePlayerHook>();
+            ClassInjector.RegisterTypeInIl2Cpp<SynapseMenuWorker>();
+            ClassInjector.RegisterTypeInIl2Cpp<LocalPlayer>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
             ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
             Logger.Info("Loading Prefabs");
@@ -192,7 +191,7 @@ namespace SynapseClient
         {
             Logger.Info("Main Menu hooked!");
             var obj = new GameObject();
-            obj.AddComponent<SynapseBackgroundWorker>();
+            obj.AddComponent<SynapseMenuWorker>();
             
             var texture = new Texture2D(256, 256);
             ImageConversion.LoadImage(texture, File.ReadAllBytes("synapse.png"), false);
@@ -215,7 +214,7 @@ namespace SynapseClient
             if (ns.isLocalPlayer)
             {
                 Logger.Info("Loaded Player!!");
-                __instance.gameObject.AddComponent<SynapsePlayerHook>();
+                __instance.gameObject.AddComponent<LocalPlayer>();
             }
             return true;
         }

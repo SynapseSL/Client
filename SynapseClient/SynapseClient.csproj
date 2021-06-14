@@ -522,6 +522,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\ClientMod.cs" />
+        <Compile Include="API\Coroutines.cs" />
+        <Compile Include="API\DefaultSpawnHandler.cs" />
         <Compile Include="API\Events.cs" />
         <Compile Include="API\LeakingObject.cs" />
         <Compile Include="API\SpawnController.cs" />
@@ -539,11 +541,11 @@
         <Compile Include="Patches\ServerListPatches.cs" />
         <Compile Include="Pipeline\ClientPipeline.cs" />
         <Compile Include="Pipeline\Packets.cs" />
-        <Compile Include="SynapseBackgroundWorker.cs" />
+        <Compile Include="SynapseMenuWorker.cs" />
         <Compile Include="SynapseCentralAuth.cs" />
         <Compile Include="SynapseClient.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="SynapsePlayerHook.cs" />
+        <Compile Include="LocalPlayer.cs" />
         <Compile Include="SynapseServerList.cs" />
     </ItemGroup>
     <ItemGroup>

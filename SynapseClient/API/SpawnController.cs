@@ -5,7 +5,7 @@ using SynapseClient.Pipeline;
 using SynapseClient.Pipeline.Packets;
 using UnityEngine;
 
-namespace Synapse.Client
+namespace SynapseClient.API
 {
     public class SpawnController
     {
@@ -123,7 +123,7 @@ namespace Synapse.Client
         public abstract GameObject Spawn(Vector3 pos, Quaternion rot, string name);
         public abstract void Destroy(GameObject gameObject);
 
-        public string GetBlueprint()
+        public virtual string GetBlueprint()
         {
             var blueprint = GetType().GetCustomAttribute(typeof(Blueprint)) as Blueprint;
             if (blueprint == null)

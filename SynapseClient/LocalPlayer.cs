@@ -1,4 +1,5 @@
 ﻿using System;
+using MelonLoader.Support;
 using SynapseClient.API;
 using SynapseClient.Patches;
 using UnityEngine;
@@ -6,10 +7,10 @@ using UnityEngine;
 namespace SynapseClient
 { 
     
-    public class SynapsePlayerHook : MonoBehaviour
+    public class LocalPlayer : MonoBehaviour
     {
-        public static SynapsePlayerHook Singleton;
-        public SynapsePlayerHook(IntPtr intPtr) : base(intPtr) {}
+        public static LocalPlayer Singleton;
+        public LocalPlayer(IntPtr intPtr) : base(intPtr) {}
 
         public Camera Camera { get; set; }
 
@@ -37,7 +38,7 @@ namespace SynapseClient
 
         public void Update()
         {
-            
+            Coroutines.Process();
             SynapseClient.DoQueueTick();
             if (Camera == null) ResetCamera();
             RaycastHit hit;
@@ -60,7 +61,17 @@ namespace SynapseClient
                 }
             }
         }
-        
+
+        public void FixedUpdate()
+        {
+            Coroutines.ProcessWaitForFixedUpdate();
+        }
+
+        public void LateUpdate()
+        {
+            Coroutines.ProcessWaitForEndOfFrame();
+        }
+
         void OnGUI()
         {
             GUI.Label(new Rect(100, 10, 100, 100), ((int)(1.0f / Time.smoothDeltaTime) + " FPS").ToString());        

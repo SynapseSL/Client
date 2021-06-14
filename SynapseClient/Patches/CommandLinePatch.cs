@@ -33,7 +33,7 @@ namespace SynapseClient.Patches
                 var target = cmd.Replace("bundle spawn ", "");
                 var split = target.Split(':');
                 var prefab = AssetBundles[split[0]].LoadAsset<GameObject>(split[1]);
-                UnityEngine.Object.Instantiate(prefab, SynapsePlayerHook.Singleton.transform.position, Quaternion.identity);
+                UnityEngine.Object.Instantiate(prefab, LocalPlayer.Singleton.transform.position, Quaternion.identity);
                 return false;
             }  else if (cmd.StartsWith("bundle rigidbody "))
             {
@@ -41,7 +41,7 @@ namespace SynapseClient.Patches
                 var split = target.Split(':');
                 var prefab = AssetBundles[split[0]].LoadAsset<GameObject>(split[1]);
                 Logger.Info(prefab.ToString());
-                var obj = UnityEngine.Object.Instantiate(prefab, SynapsePlayerHook.Singleton.transform.position, Quaternion.identity);
+                var obj = UnityEngine.Object.Instantiate(prefab, LocalPlayer.Singleton.transform.position, Quaternion.identity);
                 Logger.Info(obj.ToString());
                 var mesh = obj.GetComponentInChildren<MeshFilter>().mesh;
                 var collider = obj.AddComponent<BoxCollider>();
