@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,7 @@ using HarmonyLib;
 using Il2CppSystem;
 using Jwt;
 using MelonLoader;
+using MelonLoader.Support;
 using RemoteAdmin;
 using Steamworks;
 using SynapseClient.API;
@@ -80,8 +82,17 @@ namespace SynapseClient
             PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));
             Logger.Info("Registered Settings Refresh Listener");
             */
-            ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
-            SpawnController.Subscribe();
+            
+            Logger.Info("====================");
+            try
+            {
+                ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
+                SpawnController.Subscribe();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         internal static void DoQueueTick()
@@ -164,6 +175,16 @@ namespace SynapseClient
             }
         }
 
+        public static object StartCoroutine(IEnumerator enumerator)
+        {
+            return Coroutines.Start(enumerator);
+        }
+
+        public static void StopCoroutine(object token)
+        {
+            Coroutines.Stop((IEnumerator)token);
+        }
+        
         public static void Connect(String address)
         {
             GameCore.Console.singleton.TypeCommand("connect " + address);

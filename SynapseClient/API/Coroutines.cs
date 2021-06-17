@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
 using UnityEngine;
+using Logger = SynapseClient.Logger;
 
 namespace MelonLoader.Support
 {
@@ -127,7 +128,7 @@ namespace MelonLoader.Support
                         SynapseClient.Logger.Error($"Unknown coroutine yield object of type {il2CppObjectBase} for coroutine {enumerator}");
                     break;
             }
-
+            
             ourCoroutinesStore.Add(new CoroTuple {WaitCondition = next, Coroutine = enumerator});
 
             if (next is IEnumerator nextCoro)
