@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
@@ -30,11 +31,57 @@ namespace SynapseClient
             keyPairGenerator.Init(keyGenerationParameters);
             return keyPairGenerator.GenerateKeyPair();
         }
+        
+        public static void ConnectCentralServer()
+        {
+            Logger.Info("Connecting to Synapse Central-Server");
+            var cert = Path.Combine(Client.ApplicationDataDir(), "certificate.pub");
+            var user = Path.Combine(Client.ApplicationDataDir(), "user.dat");
+            try
+            {
+                if (File.Exists(user) && File.Exists(cert))
+                {
+                    //Logged in
+                    Logger.Info(File.ReadAllText(cert));
+                    Client.isLoggedIn = true;
+                }
+                else if (File.Exists(user))
+                {
+                    SynapseCentralAuth.Certificate();
+                    Client.isLoggedIn = true;
+                }
+                else
+                {
+                    Client.isLoggedIn = false;
+                    var thread = new Thread(DoRegisterAsync);
+                    thread.Start();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+        }
+
+        public static void DoRegisterAsync()
+        {
+            try
+            {
+                SynapseCentralAuth.Register();
+                SynapseCentralAuth.Certificate();
+                Client.isLoggedIn = true;
+                Logger.Info("Central-Authentication / Registration complete");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+        }
 
         private static void generate()
         {    
-            var idf = Path.Combine(SynapseClient.ApplicationDataDir(), "id_rsa");
-            var pubf = Path.Combine(SynapseClient.ApplicationDataDir(), "id_rsa.pub");
+            var idf = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
+            var pubf = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
             var pair = GetKeyPair();
             TextWriter textWriter1 = new StringWriter();
             var pemWriter1 = new PemWriter(textWriter1);
@@ -54,8 +101,8 @@ namespace SynapseClient
 
         private static string[] read()
         {
-            var id = Path.Combine(SynapseClient.ApplicationDataDir(), "id_rsa");
-            var pub = Path.Combine(SynapseClient.ApplicationDataDir(), "id_rsa.pub");
+            var id = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
+            var pub = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
             if (!File.Exists(id) || !File.Exists(pub))
             {
                 generate();
@@ -78,14 +125,14 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
-                        name = SynapseClient.name,
+                        name = Client.name,
                         publicKey = read()[0],
                         mac = GetMac(),
                         pcName = GetPcName()
                     }));
 
             var registrationResponse = JsonConvert.DeserializeObject<RegistrationResponse>(responseString);
-            File.WriteAllText(Path.Combine(SynapseClient.ApplicationDataDir(), "user.dat"), registrationResponse.uuid);
+            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"), registrationResponse.uuid);
         }
 
         public static void Certificate()
@@ -97,19 +144,19 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
-                        name = SynapseClient.name,
-                        uuid = File.ReadAllText(Path.Combine(SynapseClient.ApplicationDataDir(), "user.dat")),
+                        name = Client.name,
+                        uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
                         publicKey = read()[0],
                         privateKey = read()[1],
                         mac = GetMac(),
                         pcName = GetPcName()
                     }));
-            File.WriteAllText(Path.Combine(SynapseClient.ApplicationDataDir(), "certificate.dat"), responseString);
+            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"), responseString);
         }
 
         public static string Session(string targetAddress)
         {
-            var cert = File.ReadAllText(Path.Combine(SynapseClient.ApplicationDataDir(), "certificate.dat"));
+            var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);

@@ -61,7 +61,7 @@ namespace SynapseClient.Patches
             {
                 Logger.Info("Beginning own Body");
 
-                while (!SynapseClient.isLoggedIn)
+                while (!Client.isLoggedIn)
                 {
                     Thread.Sleep(5); //Not pretty but works
                 }
@@ -69,7 +69,7 @@ namespace SynapseClient.Patches
                 Logger.Info("Starting session");
                 synapseSessionToken = SynapseCentralAuth.Session(targetAddress);
                 
-                var str = File.ReadAllText(Path.Combine(SynapseClient.ApplicationDataDir(), "user.dat"));
+                var str = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"));
                 var random = new Random();
                 byte[] bytes = new byte[16];
                 for (int i = 0; i < 16; i++)

@@ -20,7 +20,7 @@ namespace SynapseClient.Patches
             if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
-                SynapseClient.Redirect(target);
+                Client.Redirect(target);
                 return false;
             } else if (cmd.StartsWith("bundle load "))
             {

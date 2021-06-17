@@ -11,7 +11,7 @@ namespace SynapseClient
         //ReferenceHub.LocalHub.nicknameSync.UpdateNickname("Helight");
         public void Update()
         {
-            SynapseClient.DoQueueTick();
+            Client.DoQueueTick();
             Coroutines.Process();
         }
 

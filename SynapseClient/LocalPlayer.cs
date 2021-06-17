@@ -39,7 +39,7 @@ namespace SynapseClient
         public void Update()
         {
             Coroutines.Process();
-            SynapseClient.DoQueueTick();
+            Client.DoQueueTick();
             if (Camera == null) ResetCamera();
             RaycastHit hit;
             var mousePos = Input.mousePosition;

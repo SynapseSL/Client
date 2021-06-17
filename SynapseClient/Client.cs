@@ -34,18 +34,18 @@ using Object = UnityEngine.Object;
 namespace SynapseClient
 {
     [BepInPlugin("xyz.synapse.client.plugin", "SynapseClient", "0.0.0.1")]
-    public class SynapseClient : BasePlugin
+    public class Client : BasePlugin
     {
 
         public static string name = "SynapsePlayer";
         
-        public static SynapseClient Singleton;
+        public static Client Singleton;
         
         public static bool isLoggedIn = false;
         
         internal static Texture2D synapseLogo;
 
-        private static Action _redirectCallback;
+        internal static Action _redirectCallback;
         
         public SynapseServerList SynapseServerList = new SynapseServerList();
 
@@ -70,7 +70,7 @@ namespace SynapseClient
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
             Logger.Info("Patching client...");
-            Harmony.CreateAndPatchAll(typeof(SynapseClient));
+            Harmony.CreateAndPatchAll(typeof(SmallPatches));
             Harmony.CreateAndPatchAll(typeof(AuthPatches));
             Harmony.CreateAndPatchAll(typeof(PipelinePatches));
             Harmony.CreateAndPatchAll(typeof(ServerListPatches));
@@ -192,12 +192,12 @@ namespace SynapseClient
         
         public static void Connect(String address)
         {
-            GameCore.Console.singleton.TypeCommand("connect " + address);
+            Console.singleton.TypeCommand("connect " + address);
         }
 
         public static void Redirect(String address)
         {
-            GameCore.Console.singleton.TypeCommand("disconnect");
+            Console.singleton.TypeCommand("disconnect");
             _redirectCallback = delegate
             {
                 CallbackQueue.Enqueue(
@@ -210,41 +210,6 @@ namespace SynapseClient
             };
    
         }
-        
-        [HarmonyPatch(typeof(NewMainMenu), nameof(NewMainMenu.Start))]
-        [HarmonyPrefix]
-        public static bool OnMainMenuStart(NewMainMenu __instance)
-        {
-            Logger.Info("Main Menu hooked!");
-            var obj = new GameObject();
-            obj.AddComponent<SynapseMenuWorker>();
-            
-            var texture = new Texture2D(256, 256);
-            ImageConversion.LoadImage(texture, File.ReadAllBytes("synapse.png"), false);
-            GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
-
-            if (_redirectCallback != null)
-            {
-                _redirectCallback.Invoke();
-                _redirectCallback = null;
-            }
-            
-            return true;
-        }
-        
-        [HarmonyPatch(typeof(ServerRoles), nameof(ServerRoles.Start))]
-        [HarmonyPrefix]
-        public static bool StartNicknameSync(ServerRoles __instance)
-        {
-            var ns = __instance.GetComponent<NicknameSync>();
-            if (ns.isLocalPlayer)
-            {
-                Logger.Info("Loaded Player!!");
-                __instance.gameObject.AddComponent<LocalPlayer>();
-            }
-            return true;
-        }
-        
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -268,7 +233,7 @@ namespace SynapseClient
                             Logger.Info($"Changed current prefered name to {name}");
                         }
 
-                        ConnectCentralServer();
+                        SynapseCentralAuth.ConnectCentralServer();
                         break;
                     }
 
@@ -291,69 +256,11 @@ namespace SynapseClient
             Events.InvokeSceneLoad(scene);
         }
 
-        private void ConnectCentralServer()
-        {
-            Logger.Info("Connecting to Synapse Central-Server");
-            var cert = Path.Combine(ApplicationDataDir(), "certificate.pub");
-            var user = Path.Combine(ApplicationDataDir(), "user.dat");
-            try
-            {
-                if (File.Exists(user) && File.Exists(cert))
-                {
-                    //Logged in
-                    Log.LogInfo(File.ReadAllText(cert));
-                    isLoggedIn = true;
-                }
-                else if (File.Exists(user))
-                {
-                    SynapseCentralAuth.Certificate();
-                    isLoggedIn = true;
-                }
-                else
-                {
-                    isLoggedIn = false;
-                    var thread = new Thread(DoRegisterAsync);
-                    thread.Start();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
-        }
-
-        public void DoRegisterAsync()
-        {
-            try
-            {
-                SynapseCentralAuth.Register();
-                SynapseCentralAuth.Certificate();
-                isLoggedIn = true;
-                Logger.Info("Central-Authentication / Registration complete");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
-        }
-        
         public static string ApplicationDataDir()
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Synapse Client");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             return path;
         }
-    }
-
-    public class ClientConnectionData
-    {
-        //JWT Subject == Name
-        public string sub { get; set; }
-        //JWT Audience == Connected Server
-        public string aud { get; set; }
-        //JWT Issuer == Most likely Synapse
-        public string iss { get; set; }
-        public string uuid { get; set; }
-        public string session { get; set; }
     }
 }
