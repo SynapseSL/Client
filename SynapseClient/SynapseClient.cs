@@ -116,7 +116,7 @@ namespace SynapseClient
             var targetAddress = target.Substring(0, target.Length - 1);
             return $"{targetAddress}:{possibleSrv.Port}";
         }
-        
+
         public static async Task<SrvRecord> ResolveSrvDomainOrNull(string s)
         {
             try
