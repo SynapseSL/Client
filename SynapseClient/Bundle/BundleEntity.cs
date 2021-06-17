@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using Il2CppSystem.IO;
+using Il2CppSystem.Xml;
+using Swan;
 
 namespace UnityEngine
 {
     public abstract class BundleEntity
     {
         public Il2CppAssetBundle bundle;
+        private List<AssetEntry> _cachedAssetEntries;
 
         public void LoadBundle()
         {
@@ -17,7 +22,7 @@ namespace UnityEngine
                 return;
             }
             var descriptor = GetType().GetCustomAttribute(typeof(BundleDescriptor)) as BundleDescriptor;
-            var loc = Path.Combine("bundles", descriptor.Bundle);
+            var loc = Path.Combine("bundles", descriptor.BundleLocation);
             SynapseClient.Logger.Info(loc);
             if (!File.Exists(loc) && descriptor.Source != null)
             {
@@ -29,15 +34,19 @@ namespace UnityEngine
             }
             else if (!File.Exists(loc))
             {
-                SynapseClient.Logger.Error($"Bundle {descriptor.Bundle} not found!");
+                SynapseClient.Logger.Error($"Bundle {descriptor.BundleLocation} not found!");
                 return;
             }
             var stream = File.OpenRead(loc);
             bundle = Il2CppAssetBundleManager.LoadFromStream(stream);
+            _cachedAssetEntries = new List<AssetEntry>();
+            
+            SharedBundleManager.Singleton.Bundles[descriptor.BundleName] = this;
         }
 
-        public void LoadPrefabs()
+        public virtual void LoadPrefabs()
         {
+            _cachedAssetEntries = new List<AssetEntry>();
             foreach (var field in GetType().GetFields())
             {
                 var ad = field.GetCustomAttribute(typeof(AssetDescriptor)) as AssetDescriptor;
@@ -57,13 +66,56 @@ namespace UnityEngine
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
+            _cachedAssetEntries = _GetEntries();
+        }
+
+        private List<AssetEntry> _GetEntries()
+        {
+            var list = new List<AssetEntry>();
+            var descriptor = GetType().GetCustomAttribute(typeof(BundleDescriptor)) as BundleDescriptor;
+            var bundleName = descriptor.BundleName;
+            foreach (var field in GetType().GetFields())
+            {
+                var ad = field.GetCustomAttribute(typeof(AssetDescriptor)) as AssetDescriptor;
+                if (ad == null) continue;
+                var obj = field.GetValue(this);
+                list.Add(new AssetEntry()
+                {
+                    Bundle = bundleName,
+                    Path = ad.Asset,
+                    Type = ad.Type,
+                    Reference = obj
+                });
+            }
+
+            return list;
+        }
+
+        public IEnumerable<AssetEntry> GetEntries()
+        {
+            return _cachedAssetEntries;
+        }
+    }
+
+    public class AssetEntry
+    {
+        public string Bundle { get; set; }
+        public string Path { get; set; }
+        public AssetType Type { get; set; }
+        public object Reference { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Type}-Asset: {Bundle}:{Path}. Set: {Reference != null}";
         }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
     public class BundleDescriptor : Attribute
     {
-        public string Bundle { get; set; }
+        public string BundleLocation { get; set; }
+        public string BundleName { get; set; }
         public string Source { get; set; }
     }
     

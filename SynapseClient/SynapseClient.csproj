@@ -165,6 +165,10 @@
         <Reference Include="NorthwoodLib, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Refs\unhollowed\NorthwoodLib.dll</HintPath>
         </Reference>
+        <Reference Include="Swan.Lite, Version=3.1.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Unosquare.Swan.Lite.3.1.0\lib\net461\Swan.Lite.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -218,6 +222,10 @@
         </Reference>
         <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+          <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Xml" />
@@ -530,6 +538,7 @@
         <Compile Include="API\UnhollowerSupport.cs" />
         <Compile Include="Bundle\BundleEntity.cs" />
         <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
+        <Compile Include="Bundle\SharedBundleManager.cs" />
         <Compile Include="Logger.cs" />
         <Compile Include="LookReceiver.cs" />
         <Compile Include="Models\CertificateRequest.cs" />
@@ -571,6 +580,8 @@
             <InputAssemblies Include="$(OutputPath)/JsonWebTokens.dll" />
             <InputAssemblies Include="$(OutputPath)/DnsClient.dll" />
             <InputAssemblies Include="$(OutputPath)/System.Buffers.dll" />
+            <InputAssemblies Include="$(OutputPath)/System.ValueTuple.dll" />
+            <InputAssemblies Include="$(OutputPath)/Swan.Lite.dll" />
             <IlRepackLibs Include="$(OutputPath)" />
         </ItemGroup>
         <Message Text="MERGING: @(InputAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />

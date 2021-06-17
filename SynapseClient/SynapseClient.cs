@@ -167,10 +167,15 @@ namespace SynapseClient
                     QueryProcessor.Localplayer.ClientSalt = salt;
                     ClientPipeline.invoke(PipelinePacket.@from(1, "Client connected successfully"));
                     Events.InvokeConnectionSuccessful();
+                    SharedBundleManager.LogLoaded();
                     break;
                 }
                 case RoundStartPacket.ID:
                     Events.InvokeRoundStart();
+                    break;
+                case RedirectPacket.ID:
+                    RedirectPacket.Decode(packet, out var target);
+                    Redirect(target);
                     break;
             }
         }
