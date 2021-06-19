@@ -99,12 +99,12 @@ namespace SynapseClient
             Events.OnCreateCreditsEvent += delegate(CreditsHook ev)
             {
                 ev.CreateCreditsCategory("Synapse Client");
-                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Client", CreditsColor.Red);
-                ev.CreateCreditsEntry("Wholesome", "Developer", "Synapse Client", CreditsColor.Blue);
-                ev.CreateCreditsEntry("Mika", "Developer", "Synapse Client", CreditsColor.Blue);
-                ev.CreateCreditsEntry("Dimenzio", "Developer", "Synapse Client", CreditsColor.Blue);
-                ev.CreateCreditsEntry("Cubuzz", "Developer", "Synapse Client", CreditsColor.Blue);
-                ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", CreditsColor.Blue);
+                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Client", Color.red);
+                ev.CreateCreditsEntry("Wholesome", "Developer", "Synapse Client", Color.blue);
+                ev.CreateCreditsEntry("Mika", "Developer", "Synapse Client", Color.blue);
+                ev.CreateCreditsEntry("Dimenzio", "Developer", "Synapse Client", Color.blue);
+                ev.CreateCreditsEntry("Cubuzz", "Developer", "Synapse Client", Color.blue);
+                ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", Color.blue);
             };
         }
 

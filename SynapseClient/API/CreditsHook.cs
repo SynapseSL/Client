@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SynapseClient.API
 {
@@ -17,12 +18,7 @@ namespace SynapseClient.API
         private static Dictionary<string, CreditsCategoryInfo> _categoryInfos = new Dictionary<string, CreditsCategoryInfo>();
 
         private GameObject _titleGameObject;
-        private GameObject _goldRoleGameObject;
-        private GameObject _grayRoleGameObject;
-        private GameObject _magentaRoleGameObject;
-        private GameObject _orangeRoleGameObject;
-        private GameObject _greenRoleGameObject;
-        private GameObject _blueRoleGameObject;
+        private GameObject _roleGameObject;
         
         private void OnEnable()
         {
@@ -53,12 +49,7 @@ namespace SynapseClient.API
                     if (content.transform.childCount >= 310)
                     {
                         _titleGameObject = GameObject.Find("/New Main Menu/Credits/root/Content/CreditsCategory(Clone)");
-                        _goldRoleGameObject = content.transform.GetChild(3).gameObject;
-                        _grayRoleGameObject = content.transform.GetChild(4).gameObject;
-                        _magentaRoleGameObject = content.transform.GetChild(5).gameObject;
-                        _orangeRoleGameObject = content.transform.GetChild(6).gameObject;
-                        _greenRoleGameObject = content.transform.GetChild(7).gameObject;
-                        _blueRoleGameObject = content.transform.GetChild(8).gameObject;
+                        _roleGameObject = GameObject.Find("/New Main Menu/Credits/root/Content/CreditsElement with Role(Clone)/");
                         _creditsReadyToUse = true;
                         Events.InvokeCreateCreditsEvent(this);
                     }
@@ -127,11 +118,11 @@ namespace SynapseClient.API
         {
             GameObject result = Instantiate(_titleGameObject, _titleGameObject.transform.parent, true);
             result.GetComponent<TMP_Text>().text = catName;
-            
+
             return result;
         }
 
-        public bool CreateCreditsEntry(string username, string role, string category, CreditsColor color)
+        public bool CreateCreditsEntry(string username, string role, string category, Color color)
         {
             if (!_creditsReadyToUse)
                 return false;
@@ -155,40 +146,12 @@ namespace SynapseClient.API
             return true;
         }
         
-        private GameObject GenerateEntryObject(string username, string role, CreditsColor color)
+        private GameObject GenerateEntryObject(string username, string role, Color color)
         {
-            GameObject result = null;
-            switch (color)
-            {
-                case CreditsColor.Gold:
-                    result = Instantiate(_goldRoleGameObject, _goldRoleGameObject.transform.parent, true);
-                    break;
-
-                case CreditsColor.Gray:
-                    result = Instantiate(_grayRoleGameObject, _grayRoleGameObject.transform.parent, true);
-                    break;
-
-                case CreditsColor.Red:
-                    result = Instantiate(_magentaRoleGameObject, _magentaRoleGameObject.transform.parent, true);
-                    break;
-
-                case CreditsColor.Orange:
-                    result = Instantiate(_orangeRoleGameObject, _orangeRoleGameObject.transform.parent, true);
-                    break;
-
-                case CreditsColor.Green:
-                    result = Instantiate(_greenRoleGameObject, _greenRoleGameObject.transform.parent, true);
-                    break;
-
-                case CreditsColor.Blue:
-                    result = Instantiate(_blueRoleGameObject, _blueRoleGameObject.transform.parent, true);
-                    break;
-
-                default:
-                    return null;
-            }
+            GameObject result = Instantiate(_roleGameObject, _roleGameObject.transform.parent, true);
 
             result.transform.GetChild(0).GetComponent<TMP_Text>().text = username;
+            result.transform.GetChild(1).GetComponent<Image>().color = color;
             result.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = role;
 
             return result;
@@ -199,9 +162,9 @@ namespace SynapseClient.API
     {
         public string Username;
         public string Role;
-        public CreditsColor Color;
+        public Color Color;
     }
-    
+
     public class CreditsCategoryGameObjects
     {
         public GameObject CategoryObject;
@@ -214,14 +177,37 @@ namespace SynapseClient.API
         public List<UserInfo> UserEntries = new List<UserInfo>();
         public CreditsCategoryGameObjects GameObjects = new CreditsCategoryGameObjects();
     }
-
-    public enum CreditsColor
+    
+    public class CreditColors
     {
-        Gold = 0,
-        Gray,
-        Red,
-        Orange,
-        Green,
-        Blue
+        public static readonly Color Gold = new Color(1, 0.8431f, 0, 1);
+        public static readonly Color Beige = new Color(0.8392f, 0.8392f, 0.6275f, 1);
+        public static readonly Color Red = new Color(0.8627f, 0.0784f, 0.2353f, 1);
+        public static readonly Color Orange = new Color(1, 0.6314f, 0, 1);
+        public static readonly Color DarkOrange = new Color(0.6588f, 0.2627f, 0, 1);
+        public static readonly Color CactusGreen = new Color(0.0588f, 0.549f, 0.2353f, 1);
+        public static readonly Color Purple50 = new Color(0.6784f, 0.6941f, 1, 1);
+        public static readonly Color Purple100 = new Color(0.3922f, 0.1882f, 0.902f, 1);
+        public static readonly Color Purple200 = new Color(0.3725f, 0.2f, 0.7725f, 1);
+        public static readonly Color Purple300 = new Color(0.1686f, 0.0471f, 0.6667f, 1);
+        public static readonly Color Purple400 = new Color(0.1725f, 0.0235f, 0.549f, 1);
+        public static readonly Color Purple500 = new Color(0.098f, 0.0235f, 0.4275f, 1);
+        public static readonly Color CrabPink = new Color(0.9765f, 0.4078f, 0.3294f, 1);
+        public static readonly Color Blue50 = new Color(0.0588f, 0.8784f, 0.9804f, 1);
+        public static readonly Color Blue100 = new Color(0.2745f, 0.302f, 0.8549f, 1);
+        public static readonly Color Turquoise = new Color(0.1098f, 0.5686f, 0.549f, 1);
+        public static readonly Color LightTurquoise = new Color(0.3137f, 0.7176f, 0.702f, 1);
+        public static readonly Color DarkTurquoise = new Color(0.0157f, 0.4275f, 0.4039f, 1);
+        public static readonly Color Gray = new Color(0.5529f, 0.5333f, 0.5333f, 1);
+        public static readonly Color Pink50 = new Color(0.9412f, 0.6745f, 0.8392f, 1);
+        public static readonly Color Pink100 = new Color(0.7451f, 0.4431f, 0.5686f, 1);
+        public static readonly Color Pink200 = new Color(0.8784f, 0.0667f, 0.3725f, 1);
+        public static readonly Color Pink300 = new Color(0.7922f, 0.1059f, 0.2588f, 1);
+        public static readonly Color Red50 = new Color(0.8588f, 0.2078f, 0.2078f, 1);
+        public static readonly Color Red100 = new Color(0.8196f, 0.1333f, 0.1333f, 1);
+        public static readonly Color Red200 = new Color(0.5294f, 0.0627f, 0.1529f, 1);
+        public static readonly Color Magenta100 = new Color(0.6588f, 0.1216f, 0.7137f, 1);
+        public static readonly Color Magenta200 = new Color(0.5176f, 0.1137f, 0.702f, 1);
+        public static readonly Color SalmonLight = new Color(0.6784f, 0.2196f, 0.2196f, 1);
     }
 }
