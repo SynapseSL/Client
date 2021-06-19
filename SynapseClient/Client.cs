@@ -67,6 +67,7 @@ namespace SynapseClient
             ClassInjector.RegisterTypeInIl2Cpp<LocalPlayer>();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
             ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
+            ClassInjector.RegisterTypeInIl2Cpp<CreditsHook>();
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
             Logger.Info("Patching client...");
@@ -75,6 +76,7 @@ namespace SynapseClient
             Harmony.CreateAndPatchAll(typeof(PipelinePatches));
             Harmony.CreateAndPatchAll(typeof(ServerListPatches));
             Harmony.CreateAndPatchAll(typeof(CommandLinePatch));
+            Harmony.CreateAndPatchAll(typeof(CreditsHookPatch));
             Logger.Info("All patches applied!");
             SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
             Logger.Info("Registered Scene Loaded Listener");
@@ -82,7 +84,7 @@ namespace SynapseClient
             PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));
             Logger.Info("Registered Settings Refresh Listener");
             */
-            
+
             Logger.Info("====================");
             try
             {

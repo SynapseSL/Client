@@ -531,6 +531,7 @@
     <ItemGroup>
         <Compile Include="API\ClientMod.cs" />
         <Compile Include="API\Coroutines.cs" />
+        <Compile Include="API\CreditsHook.cs" />
         <Compile Include="API\DefaultSpawnHandler.cs" />
         <Compile Include="API\Events.cs" />
         <Compile Include="API\LeakingObject.cs" />
@@ -547,6 +548,7 @@
         <Compile Include="Models\RegistrationResponse.cs" />
         <Compile Include="Patches\AuthPatches.cs" />
         <Compile Include="Patches\CommandLinePatch.cs" />
+        <Compile Include="Patches\CreditsHookPatch.cs" />
         <Compile Include="Patches\PipelinePatches.cs" />
         <Compile Include="Patches\ServerListPatches.cs" />
         <Compile Include="Patches\SmallPatches.cs" />
