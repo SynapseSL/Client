@@ -60,6 +60,7 @@ namespace SynapseClient.API
                         _greenRoleGameObject = content.transform.GetChild(7).gameObject;
                         _blueRoleGameObject = content.transform.GetChild(8).gameObject;
                         _creditsReadyToUse = true;
+                        Events.InvokeCreateCreditsEvent(this);
                     }
                 }
             }
@@ -167,7 +168,7 @@ namespace SynapseClient.API
                     result = Instantiate(_grayRoleGameObject, _grayRoleGameObject.transform.parent, true);
                     break;
 
-                case CreditsColor.Magenta:
+                case CreditsColor.Red:
                     result = Instantiate(_magentaRoleGameObject, _magentaRoleGameObject.transform.parent, true);
                     break;
 
@@ -218,7 +219,7 @@ namespace SynapseClient.API
     {
         Gold = 0,
         Gray,
-        Magenta,
+        Red,
         Orange,
         Green,
         Blue

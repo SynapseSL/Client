@@ -11,6 +11,14 @@ namespace SynapseClient.API
         public static event ClientEvent<ServerConnectArgs> OnServerConnect;
         public static event ClientEvent<Scene> OnSceneLoad;
 
+        public static event ClientEvent<CreditsHook> OnCreateCreditsEvent;
+
+
+        internal static void InvokeCreateCreditsEvent(CreditsHook hook)
+        {
+            OnCreateCreditsEvent?.Invoke(hook);
+        }
+        
         internal static void InvokeRoundStart()
         {
             OnRoundStart?.Invoke();
