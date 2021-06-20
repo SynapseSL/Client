@@ -77,6 +77,7 @@ namespace SynapseClient
             Harmony.CreateAndPatchAll(typeof(ServerListPatches));
             Harmony.CreateAndPatchAll(typeof(CommandLinePatch));
             Harmony.CreateAndPatchAll(typeof(CreditsHookPatch));
+            Harmony.CreateAndPatchAll(typeof(GlobalPermissionPatches));
             Logger.Info("All patches applied!");
             SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
             Logger.Info("Registered Scene Loaded Listener");
