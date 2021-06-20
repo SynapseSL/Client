@@ -28,17 +28,22 @@ namespace SynapseClient.Patches
             {
                 __instance._prevBadge = __instance.GlobalBadge;
 
-                //Implement Later to gt
+                //Implement Later to get the group from Synapse Server
                 var group = new GlobalSynapseGroup
                 {
                     Staff = true,
                     Permissions = new System.Collections.Generic.List<string> { "*" },
                     RemoteAdmin = true,
                     Name = "[Synapse Creator]",
-                    Color = "blue"
+                    Color = "blue",
+                    Ban = true,
+                    Bannable = false,
+                    Hidden = true,
+                    Kick = true,
+                    Kickable = false,
                 };
 
-                if (group == null)
+                if (string.IsNullOrEmpty(__instance.GlobalBadge))
                 {
                     __instance._bgc = null;
                     __instance._bgt = null;
