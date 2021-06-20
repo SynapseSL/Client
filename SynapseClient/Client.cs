@@ -98,13 +98,26 @@ namespace SynapseClient
             
             Events.OnCreateCreditsEvent += delegate(CreditsHook ev)
             {
+                // Synapse Client Credits
                 ev.CreateCreditsCategory("Synapse Client");
-                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Client", Color.red);
-                ev.CreateCreditsEntry("Wholesome", "Developer", "Synapse Client", Color.blue);
-                ev.CreateCreditsEntry("Mika", "Developer", "Synapse Client", Color.blue);
-                ev.CreateCreditsEntry("Dimenzio", "Developer", "Synapse Client", Color.blue);
-                ev.CreateCreditsEntry("Cubuzz", "Developer", "Synapse Client", Color.blue);
-                ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", Color.blue);
+                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Client", CreditColors.Red600);
+                ev.CreateCreditsEntry("Wholesome", "Developer", "Synapse Client", CreditColors.Blue100);
+                ev.CreateCreditsEntry("Dimenzio", "Developer", "Synapse Client", CreditColors.Blue100);
+                ev.CreateCreditsEntry("Mika", "Developer", "Synapse Client", CreditColors.Blue100);
+                ev.CreateCreditsEntry("Cubuzz", "Developer", "Synapse Client", CreditColors.Blue100);
+                ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", CreditColors.Blue100);
+                
+                // Synapse Server Credits
+                ev.CreateCreditsCategory(("Synapse Server"));
+                ev.CreateCreditsEntry("Dimenzio", "Creator, Maintainer", "Synapse Server", CreditColors.Red600);
+                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Server", CreditColors.Red600);
+                ev.CreateCreditsEntry("MineTech13", "NuGet-Maintainer", "Synapse Server", CreditColors.Yellow300);
+                ev.CreateCreditsEntry("moelrobi", "Former-Maintainer", "Synapse Server", CreditColors.Gray);
+                ev.CreateCreditsEntry("Mika", "Contributor", "Synapse Server", CreditColors.Blue100);
+                ev.CreateCreditsEntry("AlmightyLks", "Contributor", "Synapse Server", CreditColors.Blue100);
+                ev.CreateCreditsEntry("TheVoidNebula", "Contributor", "Synapse Server", CreditColors.Blue100);
+                ev.CreateCreditsEntry("PintTheDragon", "Contributor", "Synapse Server", CreditColors.Blue100);
+
             };
         }
 

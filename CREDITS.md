@@ -13,6 +13,17 @@
 
 ### Dimenzio ([GrafDimenzio@GitHub](https://github.com/GrafDimenzio))
 - Synapse Maintainer
+- Synapse Developer
+
+### Mika ([Mika-Westphal@GitHub](https://github.com/Mika-Westphal))
+- Synapse Developer
+
+### Cubuzz ([Cubuzz@GitHub]())
+- Synapse Developer
+- Launcher
+
+### Flo0205 ([Flo0205@GitHub](https://github.com/Flo0205))
+- Synapse Developer
 
 ## Individuals (Ext)
 
