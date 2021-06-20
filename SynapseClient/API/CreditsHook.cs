@@ -74,15 +74,13 @@ namespace SynapseClient.API
 
         private void SortElements()
         {
-            int _catCounter = 2;
+            int counter = 2;
             foreach (CreditsCategoryInfo cat in _categoryInfos.Values)
             {
-                int _elementCounter = 0;
-                
-                cat.GameObjects.CategoryObject.transform.SetSiblingIndex(_catCounter++);
+                cat.GameObjects.CategoryObject.transform.SetSiblingIndex(counter++);
                 foreach (GameObject entry in cat.GameObjects.EntryObjects)
                 {
-                    entry.transform.SetSiblingIndex(_catCounter + _elementCounter++);
+                    entry.transform.SetSiblingIndex(counter++);
                 }
             }
         }
