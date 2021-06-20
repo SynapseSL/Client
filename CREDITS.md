@@ -8,7 +8,7 @@
 
 ### Wholesome ([AlmightyLks@GitHub](https://github.com/AlmightyLks))
 - Synapse Developer
-- Client Contributor
+- Synapse Client Contributor
 - PropEdit Tool
 
 ### Dimenzio ([GrafDimenzio@GitHub](https://github.com/GrafDimenzio))
@@ -16,14 +16,13 @@
 - Synapse Developer
 
 ### Mika ([Mika-Westphal@GitHub](https://github.com/Mika-Westphal))
-- Synapse Developer
+- Synapse Client Contributor
 
-### Cubuzz ([Cubuzz@GitHub]())
-- Synapse Developer
-- Launcher
+### Cubuzz ([Cubuzz@GitHub](https://github.com/cubuzz))
+- Synapse Client Contributor
 
 ### Flo0205 ([Flo0205@GitHub](https://github.com/Flo0205))
-- Synapse Developer
+- Synapse Client Contributor
 
 ## Individuals (Ext)
 
