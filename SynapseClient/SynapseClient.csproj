@@ -555,7 +555,7 @@
     <Compile Include="Pipeline\ClientPipeline.cs" />
     <Compile Include="Pipeline\Packets.cs" />
     <Compile Include="SynapseMenuWorker.cs" />
-    <Compile Include="SynapseCentralAuth.cs" />
+    <Compile Include="SynapseCentral.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalPlayer.cs" />

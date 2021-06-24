@@ -17,7 +17,7 @@ namespace SynapseClient
 
         public void Download()
         {
-            var response = _webClient.DownloadString("https://servers.synapsesl.xyz/serverlist");
+            var response = _webClient.DownloadString(Client.ServerListServer + "/serverlist");
             ServerCache = JsonConvert.DeserializeObject<List<SynapseServerEntry>>(response);
         }
 

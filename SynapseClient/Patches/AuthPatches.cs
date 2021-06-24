@@ -67,7 +67,7 @@ namespace SynapseClient.Patches
                 }
                 
                 Logger.Info("Starting session");
-                synapseSessionToken = SynapseCentralAuth.Session(targetAddress);
+                synapseSessionToken = SynapseCentral.Session(targetAddress);
                 
                 var str = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"));
                 var random = new Random();

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using MS.Internal.Xml.XPath;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
@@ -13,14 +15,18 @@ using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
+using Swan.Formatters;
 using SynapseClient.Models;
+using SynapseClient.Patches;
 
 namespace SynapseClient
 {
-    public static class SynapseCentralAuth
+    public static class SynapseCentral
     {
         private const int RsaKeySize = 2048;
 
+        public static string CachedSession { get; internal set; }
+        
         private static AsymmetricCipherKeyPair GetKeyPair()
         {
             var randomGenerator = new CryptoApiRandomGenerator();
@@ -47,7 +53,7 @@ namespace SynapseClient
                 }
                 else if (File.Exists(user))
                 {
-                    SynapseCentralAuth.Certificate();
+                    SynapseCentral.Certificate();
                     Client.isLoggedIn = true;
                 }
                 else
@@ -67,8 +73,8 @@ namespace SynapseClient
         {
             try
             {
-                SynapseCentralAuth.Register();
-                SynapseCentralAuth.Certificate();
+                SynapseCentral.Register();
+                SynapseCentral.Certificate();
                 Client.isLoggedIn = true;
                 Logger.Info("Central-Authentication / Registration complete");
             }
@@ -78,7 +84,7 @@ namespace SynapseClient
             }
         }
 
-        private static void generate()
+        private static void Generate()
         {    
             var idf = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
             var pubf = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
@@ -99,13 +105,13 @@ namespace SynapseClient
             File.WriteAllText(pubf, pub);
         }
 
-        private static string[] read()
+        private static string[] Read()
         {
             var id = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
             var pub = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
             if (!File.Exists(id) || !File.Exists(pub))
             {
-                generate();
+                Generate();
             }
 
             var privatekey = File.ReadAllText(id);
@@ -121,12 +127,12 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = webClient.UploadString("https://central.synapsesl.xyz/user/register",
+            var responseString = webClient.UploadString(Client.CentralServer + "/user/register",
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
                         name = Client.name,
-                        publicKey = read()[0],
+                        publicKey = Read()[0],
                         mac = GetMac(),
                         pcName = GetPcName()
                     }));
@@ -140,14 +146,14 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = webClient.UploadString("https://central.synapsesl.xyz/user/certificate",
+            var responseString = webClient.UploadString(Client.CentralServer + "/user/certificate",
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
                         name = Client.name,
                         uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
-                        publicKey = read()[0],
-                        privateKey = read()[1],
+                        publicKey = Read()[0],
+                        privateKey = Read()[1],
                         mac = GetMac(),
                         pcName = GetPcName()
                     }));
@@ -160,7 +166,8 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);
-            var responseString = webClient.UploadString("https://central.synapsesl.xyz/user/session", cert);
+            var responseString = webClient.UploadString(Client.CentralServer + "/user/session", cert);
+            CachedSession = responseString;
             return responseString;
         }
 
@@ -177,5 +184,62 @@ namespace SynapseClient
         {
             return Environment.MachineName ?? "Unknown";
         }
+
+        public static StrippedUser Resolve(string uid)
+        {
+            var webclient = new WebClient();
+            webclient.Headers["Authorization"] = $"Bearer {CachedSession}";
+            var url = Client.CentralServer + $"/public/{uid}";
+            Logger.Info(url);
+            var response = webclient.DownloadString(url);
+            Logger.Info(response);
+            var user = JsonConvert.DeserializeObject<StrippedUser>(response);
+            return user;
+        }
+    }
+    
+    public class StrippedUser {
+        
+        [Newtonsoft.Json.JsonProperty("id")]
+        public string Id { get; set; }
+        
+        [Newtonsoft.Json.JsonProperty("name")]
+        public string Name { get; set; }
+        
+        [Newtonsoft.Json.JsonProperty("groups")]
+        public List<GlobalSynapseGroup> Groups { get; set; }
+    }
+    
+    public class GlobalSynapseGroup
+    {
+        [Newtonsoft.Json.JsonProperty("name")]
+        public string Name { get; set; } = "";
+
+        [Newtonsoft.Json.JsonProperty("color")]
+        public string Color { get; set; } = "";
+
+        [Newtonsoft.Json.JsonProperty("hidden")]
+        public bool Hidden { get; set; } = false;
+
+        [Newtonsoft.Json.JsonProperty("remoteAdmin")]
+        public bool RemoteAdmin { get; set; } = false;
+
+        [Newtonsoft.Json.JsonProperty("permissions")]
+        public List<string> Permissions { get; set; } = new List<string>() { };
+
+        [Newtonsoft.Json.JsonProperty("kickable")]
+        public bool Kickable { get; set; } = true;
+
+        [Newtonsoft.Json.JsonProperty("bannable")]
+        public bool Bannable { get; set; } = true;
+
+        [Newtonsoft.Json.JsonProperty("kick")]
+        public bool Kick { get; set; } = false;
+
+        [Newtonsoft.Json.JsonProperty("ban")]
+        public bool Ban { get; set; } = false;
+
+        [Newtonsoft.Json.JsonProperty("staff")]
+        public bool Staff { get; set; } = false;
     }
 }

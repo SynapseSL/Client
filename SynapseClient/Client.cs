@@ -53,13 +53,16 @@ namespace SynapseClient
 
         public SpawnController SpawnController { get; internal set; } = new SpawnController();
 
+        public static string CentralServer = "http://localhost:8080";
+        public static string ServerListServer = "https://servers.synapsesl.xyz";
+
         public override void Load()
         {
             Singleton = this;
             Logger._logger = Log;
-            Logger.Info("1");
+            Logger.Info("Loading Mods");
             new ClientModLoader().LoadAll();
-            Logger.Info("2");
+            Logger.Info("Loaded Mods");
             
             Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
@@ -260,7 +263,7 @@ namespace SynapseClient
                             Logger.Info($"Changed current prefered name to {name}");
                         }
 
-                        SynapseCentralAuth.ConnectCentralServer();
+                        SynapseCentral.ConnectCentralServer();
                         break;
                     }
 
