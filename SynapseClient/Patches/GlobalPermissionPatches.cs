@@ -30,29 +30,6 @@ namespace SynapseClient.Patches
             {
                 __instance._prevBadge = __instance.GlobalBadge;
 
-                //TODO Implement Later to get the group from Synapse Server
-                var group = new GlobalSynapseGroup
-                {
-                    Staff = true,
-                    Permissions = new System.Collections.Generic.List<string> {"*"},
-                    RemoteAdmin = true,
-                    Name = "[Synapse Creator]",
-                    Color = "blue",
-                    Ban = true,
-                    Bannable = false,
-                    Hidden = false,
-                    Kick = true,
-                    Kickable = false,
-                };
-                
-                /*
-                Logger.Info(__instance._hub.characterClassManager.UserId);
-                var su = SynapseCentral.Resolve("60d47089a3644022e4392a80@Synapse");
-                Logger.Info(su.Humanize());
-                group = su.Groups[0];
-                group.Hidden = true;
-                */
-
                 if (string.IsNullOrEmpty(__instance.GlobalBadge))
                 {
                     __instance._bgc = null;
@@ -62,6 +39,23 @@ namespace SynapseClient.Patches
                     __instance._prevText += ".";
                     return false;
                 }
+
+                Logger.Info(__instance._hub.characterClassManager.UserId);
+                var su = SynapseCentral.Resolve("60d47089a3644022e4392a80@Synapse");
+
+                if (su.Groups == null || su.Groups.Count < 1)
+                {
+                    __instance._bgc = null;
+                    __instance._bgt = null;
+                    __instance._authorizeBadge = false;
+                    __instance._prevColor += ".";
+                    __instance._prevText += ".";
+                    return false;
+                }
+
+                var group = su.Groups[0];
+                group.Hidden = true;
+
 
                 if (group.Color == "(none)" || group.Name == "(none)")
                 {
