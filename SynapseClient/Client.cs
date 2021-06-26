@@ -42,8 +42,6 @@ namespace SynapseClient
         public static Client Singleton;
         
         public static bool isLoggedIn = false;
-        
-        internal static Texture2D synapseLogo;
 
         internal static Action _redirectCallback;
         
