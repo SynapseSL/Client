@@ -93,6 +93,7 @@ namespace SynapseClient
         {
             Logger.Info("Round has ended");
             Events.InvokeRoundEnd();
+            Client.Singleton.ModLoader.ServerConnectionEnd();
         }
 
         private void ResetCamera()

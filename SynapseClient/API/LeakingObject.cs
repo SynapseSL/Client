@@ -14,7 +14,7 @@ namespace SynapseClient.Patches
         /// Since I'm directly setting a field in an referenced Object, it's normally not collected
         /// ----
         /// You have more knowledge about this topic than me or a better idea?
-        /// => Rant in the commit commit discussions and make a pr with a better solution.
+        /// => Rant in the commit discussions and make a pr with a better solution.
         /// 
         /// Sincerely,
         /// your C++ Noob Helight
