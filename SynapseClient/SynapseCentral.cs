@@ -171,6 +171,26 @@ namespace SynapseClient
             return responseString;
         }
 
+        //Yes, just a session with admin audience which is not cached
+        public static string AdminSession()
+        {
+            var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
+            var webClient = new WebClient();
+            webClient.Headers.Add("User-Agent", "SynapseClient");
+            webClient.Headers.Add("X-Target-Server", "Admin");
+            var responseString = webClient.UploadString(Client.CentralServer + "/user/session", cert);
+            return responseString;
+        }
+
+        public static void Report(string targetId, string reason)
+        {
+            var adminSession = AdminSession();
+            var webClient = new WebClient();
+            webClient.Headers.Add("User-Agent", "SynapseClient");
+            webClient.Headers.Add("Authorization", $"Bearer {adminSession}"); 
+            webClient.UploadString(Client.CentralServer + $"/public/{targetId}/report", reason);
+        }
+        
         private static string GetMac()
         {
             return NetworkInterface
