@@ -3,11 +3,11 @@ using HarmonyLib;
 
 namespace SynapseClient.Patches
 {
-    public class ReportPatches
+    public static class ReportPatches
     {
-        [HarmonyPatch(typeof(CheaterReport),nameof(CheaterReport.CmdReport))]
+        [HarmonyPatch(typeof(CheaterReport),nameof(CheaterReport.Report))]
         [HarmonyPrefix]
-        public bool OnReport(CheaterReport __instance,int playerId, string reason, bool notifyGm)
+        public static bool OnReport(CheaterReport __instance,int playerId, string reason, bool notifyGm)
         {
             if (!notifyGm) return true;
 
