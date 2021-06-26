@@ -53,7 +53,9 @@ namespace SynapseClient
 
         public SpawnController SpawnController { get; internal set; } = new SpawnController();
 
-        public static string CentralServer = "http://localhost:8080";
+        public ClientModLoader ModLoader { get; } = new ClientModLoader();
+
+        public static string CentralServer = "https://central.synapsesl.xyz";
         public static string ServerListServer = "https://servers.synapsesl.xyz";
 
         public override void Load()
@@ -61,8 +63,9 @@ namespace SynapseClient
             Singleton = this;
             Logger._logger = Log;
             Logger.Info("Loading Mods");
-            new ClientModLoader().LoadAll();
-            Logger.Info("Loaded Mods");
+            ModLoader.LoadAll();
+            Logger.Info("Loaded Mods. Enabling mods");
+            ModLoader.EnableAll();
             
             Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
@@ -88,7 +91,7 @@ namespace SynapseClient
             PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));
             Logger.Info("Registered Settings Refresh Listener");
             */
-
+            
             Logger.Info("====================");
             try
             {
@@ -181,6 +184,7 @@ namespace SynapseClient
             {
                 case ConnectionSuccessfulPacket.ID:
                 {
+                    ConnectionSuccessfulPacket.Decode(packet, out var clientMods);
                     Logger.Info("WelcomePacket: " + packet.AsString());
                     var salt = new byte[32];
                     for (var i = 0; i < 32; i++) salt[i] = 0x00;
@@ -195,7 +199,8 @@ namespace SynapseClient
                     QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
                     QueryProcessor.Localplayer.Salt = salt;
                     QueryProcessor.Localplayer.ClientSalt = salt;
-                    ClientPipeline.invoke(PipelinePacket.@from(1, "Client connected successfully"));
+                    ClientPipeline.invoke(PipelinePacket.From(1, "Client connected successfully"));
+                    ModLoader.ActivateForServer(clientMods); // Just activate for all for now
                     Events.InvokeConnectionSuccessful();
                     SharedBundleManager.LogLoaded();
                     break;

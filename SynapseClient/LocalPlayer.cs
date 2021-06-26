@@ -12,7 +12,8 @@ namespace SynapseClient
         public static LocalPlayer Singleton;
         public LocalPlayer(IntPtr intPtr) : base(intPtr) {}
 
-        public Camera Camera { get; set; }
+        public Camera Camera { get; internal set; }
+        public AudioSource PlayerAudioSource { get; internal set; }
 
         private GameObject _lookingAtCube;
 
@@ -25,10 +26,28 @@ namespace SynapseClient
         }
 
         private GameObject _lookingAt;
+        
+        public RaycastHit? Raycast()
+        {
+            RaycastHit hit;
+            var mousePos = Input.mousePosition;
+            var ray = Camera.ScreenPointToRay(mousePos);
+            if (Physics.Raycast(ray, out hit))
+            {
+                return hit;
+            }
+            return null;
+        }
 
-        public void Awake()
+        public void PlayAudio(AudioClip clip)
+        {
+            PlayerAudioSource.PlayOneShot(clip);
+        }
+        
+        private void Awake()
         {
             Singleton = this;
+            PlayerAudioSource = GetComponentInChildren<AudioSource>();
             Logger.Info($"Awake SynapsePlayerHook in {gameObject.name}");
             _lookingAtCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             _lookingAtCube.transform.localScale = Vector3.one * 0.1f;
@@ -36,7 +55,7 @@ namespace SynapseClient
             CompleteAuth();
         }
 
-        public void Update()
+        private void Update()
         {
             Coroutines.Process();
             Client.DoQueueTick();
@@ -62,37 +81,26 @@ namespace SynapseClient
             }
         }
 
-        public void FixedUpdate()
+        private void FixedUpdate()
         {
             Coroutines.ProcessWaitForFixedUpdate();
         }
 
-        public void LateUpdate()
+        private void LateUpdate()
         {
             Coroutines.ProcessWaitForEndOfFrame();
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             GUI.Label(new Rect(100, 10, 100, 100), ((int)(1.0f / Time.smoothDeltaTime) + " FPS").ToString());        
         }
         
-        public RaycastHit? Raycast()
-        {
-            RaycastHit hit;
-            var mousePos = Input.mousePosition;
-            var ray = Camera.ScreenPointToRay(mousePos);
-            if (Physics.Raycast(ray, out hit))
-            {
-                return hit;
-            }
-            return null;
-        }
-
-        public void OnDisable()
+        private void OnDisable()
         {
             Logger.Info("Round has ended");
             Events.InvokeRoundEnd();
+            Client.Singleton.ModLoader.ServerConnectionEnd();
         }
 
         private void ResetCamera()

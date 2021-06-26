@@ -41,7 +41,7 @@ namespace SynapseClient.Patches
                 }
 
                 Logger.Info(__instance._hub.characterClassManager.UserId);
-                var su = SynapseCentral.Resolve("60d47089a3644022e4392a80@Synapse");
+                var su = SynapseCentral.Resolve(__instance._hub.characterClassManager.UserId);
 
                 if (su.Groups == null || su.Groups.Count < 1)
                 {

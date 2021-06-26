@@ -60,6 +60,16 @@ namespace SynapseClient.API
             Blueprints[handler.GetBlueprint()] = handler;
         }
 
+        public void Unregister(SpawnHandler handler)
+        {
+            Blueprints.Remove(handler.GetBlueprint());
+        }
+        
+        public void Unregister(string blueprint)
+        {
+            Blueprints.Remove(blueprint);
+        }
+
         public void Spawn(Vector3 pos, Quaternion rot, string name, string blueprint)
         {
             var handler = Blueprints[blueprint];
