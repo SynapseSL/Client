@@ -15,7 +15,7 @@ namespace SynapseClient.API
         private bool _objectsCreated;
         public bool IsCreditsHookReadyToUse => _creditsReadyToUse;
 
-        private static Dictionary<string, CreditsCategoryInfo> _categoryInfos = new Dictionary<string, CreditsCategoryInfo>();
+        private Dictionary<string, CreditsCategoryInfo> _categoryInfos = new Dictionary<string, CreditsCategoryInfo>();
 
         private GameObject _titleGameObject;
         private GameObject _roleGameObject;
@@ -56,7 +56,7 @@ namespace SynapseClient.API
                 }
             }
             
-            if (!_objectsCreated)
+            if (_creditsReadyToUse && !_objectsCreated)
             {
                 foreach (CreditsCategoryInfo cat in _categoryInfos.Values)
                 {
