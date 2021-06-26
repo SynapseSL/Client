@@ -550,6 +550,7 @@
     <Compile Include="Patches\CreditsHookPatch.cs" />
     <Compile Include="Patches\GlobalPermissionPatches.cs" />
     <Compile Include="Patches\PipelinePatches.cs" />
+    <Compile Include="Patches\ReportPatches.cs" />
     <Compile Include="Patches\ServerListPatches.cs" />
     <Compile Include="Patches\SmallPatches.cs" />
     <Compile Include="Pipeline\ClientPipeline.cs" />
