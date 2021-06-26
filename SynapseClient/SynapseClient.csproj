@@ -535,6 +535,7 @@
     <Compile Include="API\Events.cs" />
     <Compile Include="API\LeakingObject.cs" />
     <Compile Include="API\SpawnController.cs" />
+    <Compile Include="API\SpawnHandlerManager.cs" />
     <Compile Include="API\UnhollowerSupport.cs" />
     <Compile Include="Bundle\BundleEntity.cs" />
     <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
