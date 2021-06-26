@@ -13,7 +13,12 @@ namespace SynapseClient.Patches
 
             try
             {
-                Logger.Info($"Start Report of {playerId} for {reason}");
+                Logger.Info($"Reporting {playerId} for {reason}");
+                var ply = ReferenceHub.GetHub(playerId);
+                SynapseCentral.Report(ply.characterClassManager.UserId, reason);
+
+                //This is blocked but something like this must be implemented so that the Report Window shows that the Report was a success
+                __instance.GetComponent<GameConsoleTransmission>().SendToClient(__instance.connectionToClient, "[REPORT] Report success", "white");
             }
             catch(Exception e)
             {
