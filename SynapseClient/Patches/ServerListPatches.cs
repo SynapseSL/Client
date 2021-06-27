@@ -12,6 +12,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnServerListRefresh(NewServerBrowser __instance)
         {
+            Client.Singleton.SynapseServerList.Download();
             return true;
         }
  

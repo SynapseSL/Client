@@ -105,8 +105,8 @@ namespace SynapseClient
 
         private void ResetCamera()
         {
-            var cameraObj = GameObject.Find($"{gameObject.name}/AllCameras (Recoil)/FirstPersonCharacter");
-            Camera = cameraObj.GetComponent<Camera>();
+            Camera = GetComponentInChildren<Camera>();
+            Logger.Info(Camera.gameObject.name);
         }
         
         private void CompleteAuth()
