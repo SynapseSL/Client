@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Swan.Formatters;
+﻿using System.Threading.Tasks;
 using HarmonyLib;
-using Swan;
 
 namespace SynapseClient.Patches
 {
@@ -41,9 +39,10 @@ namespace SynapseClient.Patches
                 }
 
                 Logger.Info(__instance._hub.characterClassManager.UserId);
-                var su = SynapseCentral.Resolve(__instance._hub.characterClassManager.UserId);
 
-                if (su.Groups == null || su.Groups.Count < 1)
+                var group = GetGlobalBadge(__instance).Result;
+
+                if(group == null)
                 {
                     __instance._bgc = null;
                     __instance._bgt = null;
@@ -52,10 +51,6 @@ namespace SynapseClient.Patches
                     __instance._prevText += ".";
                     return false;
                 }
-
-                var group = su.Groups[0];
-                group.Hidden = true;
-
 
                 if (group.Color == "(none)" || group.Name == "(none)")
                 {
@@ -113,6 +108,18 @@ namespace SynapseClient.Patches
             PlayerList.UpdatePlayerRole(__instance.gameObject);
 
             return false;
+        }
+
+        private static async Task<GlobalSynapseGroup> GetGlobalBadge(ServerRoles ply)
+        {
+            var su = await SynapseCentral.Resolve(ply._hub.characterClassManager.UserId);
+
+            if (su.Groups == null || su.Groups.Count < 1)
+            {
+                return null;
+            }
+
+            return su.Groups[0];
         }
     }
 }

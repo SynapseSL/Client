@@ -15,16 +15,29 @@ namespace SynapseClient.Patches
             {
                 Logger.Info($"Reporting {playerId} for {reason}");
                 var ply = ReferenceHub.GetHub(playerId);
-                SynapseCentral.Report(ply.characterClassManager.UserId, reason);
-
-                //This is blocked but something like this must be implemented so that the Report Window shows that the Report was a success
-                __instance.GetComponent<GameConsoleTransmission>().SendToClient(__instance.connectionToClient, "[REPORT] Report success", "white");
+                Report(ply.characterClassManager.UserId, reason);
             }
             catch(Exception e)
             {
                 Logger.Error("Synapse-Report: Global Report failed:\n" + e);
             }
             return false;
+        }
+
+        public static async void Report(string id,string reason)
+        {
+            await System.Threading.Tasks.Task.Delay(3000);
+            try
+            {
+                await SynapseCentral.Report(id, reason);
+            }
+            catch
+            {
+                //ply.GetComponent<PlayerList>().ShowReportResponse("Report failed");
+            }
+            
+            //This will crash the Client but something like this is needed
+            //ply.GetComponent<PlayerList>().ShowReportResponse("Player Reported to Synapse moderation");
         }
     }
 }

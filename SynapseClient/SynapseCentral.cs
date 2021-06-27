@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MS.Internal.Xml.XPath;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
@@ -182,13 +183,13 @@ namespace SynapseClient
             return responseString;
         }
 
-        public static void Report(string targetId, string reason)
+        public static async System.Threading.Tasks.Task Report(string targetId, string reason)
         {
             var adminSession = AdminSession();
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Authorization", $"Bearer {adminSession}"); 
-            webClient.UploadString(Client.CentralServer + $"/public/{targetId}/report", reason);
+            await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + $"/public/{targetId}/report"), reason);
         }
         
         private static string GetMac()
@@ -205,13 +206,13 @@ namespace SynapseClient
             return Environment.MachineName ?? "Unknown";
         }
 
-        public static StrippedUser Resolve(string uid)
+        public static async Task<StrippedUser> Resolve(string uid)
         {
             var webclient = new WebClient();
             webclient.Headers["Authorization"] = $"Bearer {CachedSession}";
             var url = Client.CentralServer + $"/public/{uid}";
             Logger.Info(url);
-            var response = webclient.DownloadString(url);
+            var response = await webclient.DownloadStringTaskAsync(url);
             Logger.Info(response);
             var user = JsonConvert.DeserializeObject<StrippedUser>(response);
             return user;
