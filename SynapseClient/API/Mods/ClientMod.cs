@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SynapseClient.API.Mods
+namespace SynapseClient.API
 {
     public abstract class ClientMod
     {
