@@ -91,7 +91,7 @@ namespace SynapseClient.Patches
 
         private static async void AsyncGlobalBadge(ServerRoles ply)
         {
-            var su = await SynapseCentral.Resolve(ply._hub.characterClassManager.UserId);
+            var su = await SynapseCentral.Get.Resolve(ply._hub.characterClassManager.UserId);
 
             if (su.Groups == null || su.Groups.Count < 1)
             {

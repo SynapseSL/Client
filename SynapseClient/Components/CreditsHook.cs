@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SynapseClient.API
+namespace SynapseClient.Components
 {
     public class CreditsHook : MonoBehaviour
     {
@@ -51,7 +51,7 @@ namespace SynapseClient.API
                         _titleGameObject = GameObject.Find("/New Main Menu/Credits/root/Content/CreditsCategory(Clone)");
                         _roleGameObject = GameObject.Find("/New Main Menu/Credits/root/Content/CreditsElement with Role(Clone)/");
                         _creditsReadyToUse = true;
-                        Events.InvokeCreateCreditsEvent(this);
+                        SynapseClient.API.Events.SynapseEvents.InvokeCreateCreditsEvent(this);
                     }
                 }
             }

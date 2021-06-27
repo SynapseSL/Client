@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using CommandSystem;
-using GameCore;
 using HarmonyLib;
 using RemoteAdmin;
+using SynapseClient.Components;
 using UnhollowerBaseLib;
 using UnityEngine;
 using File = Il2CppSystem.IO.File;

@@ -2,6 +2,8 @@
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
+using SynapseClient.API;
+using SynapseClient.Components;
 
 namespace SynapseClient.Patches
 {

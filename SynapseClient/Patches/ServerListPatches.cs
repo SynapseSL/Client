@@ -12,7 +12,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnServerListRefresh(NewServerBrowser __instance)
         {
-            Client.Singleton.SynapseServerList.Download();
+            Client.Get.SynapseServerList.Download();
             return true;
         }
  
@@ -57,7 +57,7 @@ namespace SynapseClient.Patches
         private static void Composite(ServerFilter filter)
         {
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
-            foreach (var serverEntry in Client.Singleton.SynapseServerList.ServerCache)
+            foreach (var serverEntry in Client.Get.SynapseServerList.ServerCache)
             {
                 SynapseServerList.AddServer(filter, serverEntry);
             }
@@ -72,7 +72,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnServerListAwake()
         {
-            Client.Singleton.SynapseServerList.Download();
+            Client.Get.SynapseServerList.Download();
             Composite(ListSingleton);
             return false;
         }
@@ -81,9 +81,9 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnPlayButton(ServerElementButton __instance)
         {
-            var entry = Client.Singleton.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
+            var entry = Client.Get.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
             var resolved = Client.GetConnection(entry.address);
-            var allow = Events.InvokeServerConnect(resolved);
+            var allow = API.Events.SynapseEvents.InvokeServerConnect(resolved);
             if (!allow) return false;
             Client.Connect(resolved);
             return false;

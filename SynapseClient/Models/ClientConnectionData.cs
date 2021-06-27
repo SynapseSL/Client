@@ -1,4 +1,4 @@
-﻿namespace SynapseClient
+﻿namespace SynapseClient.Models
 {
     public class ClientConnectionData
     {

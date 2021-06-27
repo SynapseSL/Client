@@ -2,7 +2,7 @@
 using MelonLoader.Support;
 using UnityEngine;
 
-namespace SynapseClient
+namespace SynapseClient.Components
 {
     public class SynapseMenuWorker : MonoBehaviour
     {

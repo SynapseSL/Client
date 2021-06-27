@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using HarmonyLib;
-using MelonLoader.Support;
-using SynapseClient.API;
+﻿using HarmonyLib;
+using SynapseClient.Components;
 using UnityEngine;
 
 namespace SynapseClient.Patches

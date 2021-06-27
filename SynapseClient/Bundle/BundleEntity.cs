@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using Il2CppSystem.IO;
-using Il2CppSystem.Xml;
-using Swan;
 
 namespace UnityEngine
 {
@@ -18,23 +15,23 @@ namespace UnityEngine
         {
             if (bundle != null)
             {
-                SynapseClient.Logger.Error("Bundle already loaded");
+                global::Logger.Error("Bundle already loaded");
                 return;
             }
             var descriptor = GetType().GetCustomAttribute(typeof(BundleDescriptor)) as BundleDescriptor;
             var loc = Path.Combine("bundles", descriptor.BundleLocation);
-            SynapseClient.Logger.Info(loc);
+            global::Logger.Info(loc);
             if (!File.Exists(loc) && descriptor.Source != null)
             {
                 var client = new WebClient();
                 client.Headers.Add("Accept", "*/*");
                 client.Headers.Add("Accept-Encoding", "gzip, deflate, br");
                 client.DownloadFile("https://github.com/SynapseSL/ClientPackages/raw/main/" + descriptor.Source,loc);
-                SynapseClient.Logger.Info($"Downloaded bundle via GitHub {descriptor.Source}");
+                global::Logger.Info($"Downloaded bundle via GitHub {descriptor.Source}");
             }
             else if (!File.Exists(loc))
             {
-                SynapseClient.Logger.Error($"Bundle {descriptor.BundleLocation} not found!");
+                global::Logger.Error($"Bundle {descriptor.BundleLocation} not found!");
                 return;
             }
             var stream = File.OpenRead(loc);

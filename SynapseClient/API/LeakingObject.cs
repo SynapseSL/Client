@@ -1,7 +1,7 @@
 ﻿using Il2CppSystem;
 using Il2CppSystem.Collections.Generic;
 
-namespace SynapseClient.Patches
+namespace SynapseClient.API
 {
     public class LeakingObject<K> : Il2CppSystem.Object
     {

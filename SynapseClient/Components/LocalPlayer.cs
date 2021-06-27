@@ -1,12 +1,10 @@
 ﻿using System;
 using MelonLoader.Support;
-using SynapseClient.API;
 using SynapseClient.Patches;
 using UnityEngine;
 
-namespace SynapseClient
-{ 
-    
+namespace SynapseClient.Components
+{
     public class LocalPlayer : MonoBehaviour
     {
         public static LocalPlayer Singleton;
@@ -99,8 +97,8 @@ namespace SynapseClient
         private void OnDisable()
         {
             Logger.Info("Round has ended");
-            Events.InvokeRoundEnd();
-            Client.Singleton.ModLoader.ServerConnectionEnd();
+            API.Events.SynapseEvents.InvokeRoundEnd();
+            Client.Get.ModLoader.ServerConnectionEnd();
         }
 
         private void ResetCamera()

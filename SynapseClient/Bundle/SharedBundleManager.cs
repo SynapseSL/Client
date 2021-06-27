@@ -42,10 +42,10 @@ namespace UnityEngine
 
         public static void LogLoaded()
         {
-            SynapseClient.Logger.Info("Currently loaded assets: ");
+            global::Logger.Info("Currently loaded assets: ");
             foreach (var asset in Singleton.All())
             {
-                SynapseClient.Logger.Info("» " + asset);
+                global::Logger.Info("» " + asset);
             }
         }
     }

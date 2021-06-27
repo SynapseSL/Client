@@ -528,21 +528,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\ClientMod.cs" />
-    <Compile Include="API\Coroutines.cs" />
-    <Compile Include="API\CreditsHook.cs" />
+    <Compile Include="API\Mods\ClientMod.cs" />
+    <Compile Include="API\Computer.cs" />
+    <Compile Include="MelonLoader\Support\Coroutines.cs" />
+    <Compile Include="API\Mods\ClientModLoader.cs" />
+    <Compile Include="API\Mods\ModRuntimeData.cs" />
+    <Compile Include="Components\CreditsHook.cs" />
     <Compile Include="API\DefaultSpawnHandler.cs" />
-    <Compile Include="API\Events.cs" />
+    <Compile Include="API\Events\ClientEvents.cs" />
+    <Compile Include="API\Events\EventArguments\ServerConnectArgs.cs" />
+    <Compile Include="API\Events\EventHandlers.cs" />
+    <Compile Include="API\Events\Events.cs" />
+    <Compile Include="API\Events\InvokeEvents.cs" />
+    <Compile Include="API\Events\ServerEvent.cs" />
     <Compile Include="API\LeakingObject.cs" />
     <Compile Include="API\SpawnController.cs" />
     <Compile Include="API\SpawnHandlerManager.cs" />
-    <Compile Include="API\UnhollowerSupport.cs" />
+    <Compile Include="MelonLoader\UnhollowerSupport.cs" />
     <Compile Include="Bundle\BundleEntity.cs" />
     <Compile Include="Bundle\Il2CppAssetBundleManager.cs" />
     <Compile Include="Bundle\SharedBundleManager.cs" />
-    <Compile Include="ClientConnectionData.cs" />
+    <Compile Include="Models\ClientConnectionData.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="LookReceiver.cs" />
+    <Compile Include="Components\LookReceiver.cs" />
     <Compile Include="Models\CertificateRequest.cs" />
     <Compile Include="Models\RegistrationRequest.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />
@@ -556,16 +564,17 @@
     <Compile Include="Patches\SmallPatches.cs" />
     <Compile Include="Pipeline\ClientPipeline.cs" />
     <Compile Include="Pipeline\Packets.cs" />
-    <Compile Include="SynapseMenuWorker.cs" />
+    <Compile Include="Components\SynapseMenuWorker.cs" />
     <Compile Include="SynapseCentral.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LocalPlayer.cs" />
+    <Compile Include="Components\LocalPlayer.cs" />
     <Compile Include="SynapseServerList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

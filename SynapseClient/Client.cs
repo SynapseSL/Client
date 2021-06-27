@@ -16,36 +16,47 @@ using MelonLoader.Support;
 using RemoteAdmin;
 using Steamworks;
 using SynapseClient.API;
+using SynapseClient.API.Mods;
+using SynapseClient.Components;
+using SynapseClient.Models;
 using SynapseClient.Patches;
 using SynapseClient.Pipeline;
 using SynapseClient.Pipeline.Packets;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Action = System.Action;
 using Console = GameCore.Console;
 using Encoding = Il2CppSystem.Text.Encoding;
+using Exception = System.Exception;
 using Random = System.Random;
 using String = Il2CppSystem.String;
-using Exception = System.Exception;
-using Object = UnityEngine.Object;
 
 namespace SynapseClient
 {
     [BepInPlugin("xyz.synapse.client.plugin", "SynapseClient", "0.0.0.1")]
     public class Client : BasePlugin
     {
+        public const string ClientVersion = "1.0.0";
+        public const int ClientMajor = 1;
+        public const int ClientMinor = 0;
+        public const int ClientPatch = 0;
 
         public static string name = "SynapsePlayer";
         
-        public static Client Singleton;
-        
-        public static bool isLoggedIn = false;
+        public static Client Get { get; private set; }
+
+        public SynapseServerList SynapseServerList { get; } = new SynapseServerList();
+
+        public SynapseCentral Central { get; } = new SynapseCentral();
+
+        public API.Events.EventHandlers EventHandlers { get; } = new API.Events.EventHandlers();
+
+        public Computer Computer { get; } = new Computer();
+
+        public static bool IsLoggedIn { get; set; } = false;
 
         internal static Action _redirectCallback;
-        
-        public SynapseServerList SynapseServerList = new SynapseServerList();
 
         public static Queue<Action> CallbackQueue { get; } = new Queue<Action>();
 
@@ -58,7 +69,7 @@ namespace SynapseClient
 
         public override void Load()
         {
-            Singleton = this;
+            Get = this;
             Logger._logger = Log;
             Logger.Info("Loading Mods");
             ModLoader.LoadAll();
@@ -101,30 +112,6 @@ namespace SynapseClient
             {
                 Logger.Error(e);
             }
-            
-            Events.OnCreateCreditsEvent += delegate(CreditsHook ev)
-            {
-                // Synapse Client Credits
-                ev.CreateCreditsCategory("Synapse Client");
-                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Client", CreditColors.Red600);
-                ev.CreateCreditsEntry("Wholesome", "Developer", "Synapse Client", CreditColors.Blue100);
-                ev.CreateCreditsEntry("Dimenzio", "Developer", "Synapse Client", CreditColors.Blue100);
-                ev.CreateCreditsEntry("Mika", "Developer", "Synapse Client", CreditColors.Blue100);
-                ev.CreateCreditsEntry("Cubuzz", "Developer", "Synapse Client", CreditColors.Blue100);
-                ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", CreditColors.Blue100);
-                
-                // Synapse Server Credits
-                ev.CreateCreditsCategory(("Synapse Server"));
-                ev.CreateCreditsEntry("Dimenzio", "Creator, Maintainer", "Synapse Server", CreditColors.Red600);
-                ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Server", CreditColors.Red600);
-                ev.CreateCreditsEntry("MineTech13", "NuGet-Maintainer", "Synapse Server", CreditColors.Yellow300);
-                ev.CreateCreditsEntry("moelrobi", "Former-Maintainer", "Synapse Server", CreditColors.Gray);
-                ev.CreateCreditsEntry("Mika", "Contributor", "Synapse Server", CreditColors.Blue100);
-                ev.CreateCreditsEntry("AlmightyLks", "Contributor", "Synapse Server", CreditColors.Blue100);
-                ev.CreateCreditsEntry("TheVoidNebula", "Contributor", "Synapse Server", CreditColors.Blue100);
-                ev.CreateCreditsEntry("PintTheDragon", "Contributor", "Synapse Server", CreditColors.Blue100);
-
-            };
         }
 
         internal static void DoQueueTick()
@@ -200,12 +187,12 @@ namespace SynapseClient
                     QueryProcessor.Localplayer.ClientSalt = salt;
                     ClientPipeline.invoke(PipelinePacket.From(1, "Client connected successfully"));
                     ModLoader.ActivateForServer(clientMods); // Just activate for all for now
-                    Events.InvokeConnectionSuccessful();
+                    API.Events.SynapseEvents.InvokeConnectionSuccessful();
                     SharedBundleManager.LogLoaded();
                     break;
                 }
                 case RoundStartPacket.ID:
-                    Events.InvokeRoundStart();
+                    API.Events.SynapseEvents.InvokeRoundStart();
                     break;
                 case RedirectPacket.ID:
                     RedirectPacket.Decode(packet, out var target);
@@ -267,7 +254,7 @@ namespace SynapseClient
                             Logger.Info($"Changed current prefered name to {name}");
                         }
 
-                        SynapseCentral.ConnectCentralServer();
+                            SynapseCentral.Get.ConnectCentralServer();
                         break;
                     }
 
@@ -286,8 +273,8 @@ namespace SynapseClient
             {
                 Logger.Error(e.ToString());
             }
-            
-            Events.InvokeSceneLoad(scene);
+
+            API.Events.SynapseEvents.InvokeSceneLoad(scene);
         }
 
         public static string ApplicationDataDir()

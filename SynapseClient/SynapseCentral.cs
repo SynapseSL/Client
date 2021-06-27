@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MS.Internal.Xml.XPath;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
@@ -16,19 +13,22 @@ using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
-using Swan.Formatters;
+using SynapseClient.API;
 using SynapseClient.Models;
-using SynapseClient.Patches;
 
 namespace SynapseClient
 {
-    public static class SynapseCentral
+    public class SynapseCentral
     {
+        internal SynapseCentral() { }
+
+        public static SynapseCentral Get => Client.Get.Central;
+
         private const int RsaKeySize = 2048;
 
-        public static string CachedSession { get; internal set; }
+        public string CachedSession { get; internal set; }
         
-        private static AsymmetricCipherKeyPair GetKeyPair()
+        private AsymmetricCipherKeyPair GetKeyPair()
         {
             var randomGenerator = new CryptoApiRandomGenerator();
             var secureRandom = new SecureRandom(randomGenerator);
@@ -39,7 +39,7 @@ namespace SynapseClient
             return keyPairGenerator.GenerateKeyPair();
         }
         
-        public static void ConnectCentralServer()
+        public async void ConnectCentralServer()
         {
             Logger.Info("Connecting to Synapse Central-Server");
             var cert = Path.Combine(Client.ApplicationDataDir(), "certificate.pub");
@@ -50,16 +50,16 @@ namespace SynapseClient
                 {
                     //Logged in
                     Logger.Info(File.ReadAllText(cert));
-                    Client.isLoggedIn = true;
+                    Client.IsLoggedIn = true;
                 }
                 else if (File.Exists(user))
                 {
-                    SynapseCentral.Certificate();
-                    Client.isLoggedIn = true;
+                    await Certificate();
+                    Client.IsLoggedIn = true;
                 }
                 else
                 {
-                    Client.isLoggedIn = false;
+                    Client.IsLoggedIn = false;
                     var thread = new Thread(DoRegisterAsync);
                     thread.Start();
                 }
@@ -70,13 +70,13 @@ namespace SynapseClient
             }
         }
 
-        public static void DoRegisterAsync()
+        public async void DoRegisterAsync()
         {
             try
             {
-                SynapseCentral.Register();
-                SynapseCentral.Certificate();
-                Client.isLoggedIn = true;
+                await Register();
+                await Certificate();
+                Client.IsLoggedIn = true;
                 Logger.Info("Central-Authentication / Registration complete");
             }
             catch (Exception e)
@@ -85,7 +85,7 @@ namespace SynapseClient
             }
         }
 
-        private static void Generate()
+        private void Generate()
         {    
             var idf = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
             var pubf = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
@@ -106,7 +106,7 @@ namespace SynapseClient
             File.WriteAllText(pubf, pub);
         }
 
-        private static string[] Read()
+        private string[] Read()
         {
             var id = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
             var pub = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
@@ -123,31 +123,31 @@ namespace SynapseClient
         }
 
 
-        public static void Register()
+        public async Task Register()
         {
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = webClient.UploadString(Client.CentralServer + "/user/register",
+            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/register",
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
                         name = Client.name,
                         publicKey = Read()[0],
-                        mac = GetMac(),
-                        pcName = GetPcName()
+                        mac = Computer.Get.GetMac(),
+                        pcName =  Computer.Get.GetPcName()
                     }));
 
             var registrationResponse = JsonConvert.DeserializeObject<RegistrationResponse>(responseString);
             File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"), registrationResponse.uuid);
         }
 
-        public static void Certificate()
+        public async Task Certificate()
         {
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = webClient.UploadString(Client.CentralServer + "/user/certificate",
+            var responseString = await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + "/user/certificate"),
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
@@ -155,58 +155,50 @@ namespace SynapseClient
                         uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
                         publicKey = Read()[0],
                         privateKey = Read()[1],
-                        mac = GetMac(),
-                        pcName = GetPcName()
+                        mac = Computer.Get.GetMac(),
+                        pcName = Computer.Get.GetPcName()
                     }));
             File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"), responseString);
         }
 
-        public static string Session(string targetAddress)
+        public async Task<string> Session(string targetAddress)
         {
             var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);
-            var responseString = webClient.UploadString(Client.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/session", cert);
             CachedSession = responseString;
             return responseString;
         }
 
         //Yes, just a session with admin audience which is not cached
-        public static string AdminSession()
+        public async Task<string> AdminSession()
         {
             var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", "Admin");
-            var responseString = webClient.UploadString(Client.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/session", cert);
             return responseString;
         }
 
-        public static async System.Threading.Tasks.Task Report(string targetId, string reason)
+        /// <summary>
+        /// Sends a Report in the name of the Player to the Central Server
+        /// </summary>
+        /// <param name="targetUserId">The UserID (123@Synapse) of the Player that should be reported</param>
+        /// <param name="reason">The Reason for reporting this player</param>
+        /// <returns></returns>
+        public async Task Report(string targetUserId, string reason)
         {
             var adminSession = AdminSession();
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Authorization", $"Bearer {adminSession}"); 
-            await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + $"/public/{targetId}/report"), reason);
-        }
-        
-        private static string GetMac()
-        {
-            return NetworkInterface
-                .GetAllNetworkInterfaces()
-                .Where( nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                .Select( nic => nic.GetPhysicalAddress().ToString())
-                .FirstOrDefault() ?? "Unknown";
+            await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + $"/public/{targetUserId}/report"), reason);
         }
 
-        private static string GetPcName()
-        {
-            return Environment.MachineName ?? "Unknown";
-        }
-
-        public static async Task<StrippedUser> Resolve(string uid)
+        public async Task<StrippedUser> Resolve(string uid)
         {
             var webclient = new WebClient();
             webclient.Headers["Authorization"] = $"Bearer {CachedSession}";

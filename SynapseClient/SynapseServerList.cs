@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using SynapseClient.Patches;
+using SynapseClient.API;
 
 namespace SynapseClient
 {
     public class SynapseServerList
     {
-
         private WebClient _webClient = new WebClient();
         
         public List<SynapseServerEntry> ServerCache { get; internal set; }= new List<SynapseServerEntry>();

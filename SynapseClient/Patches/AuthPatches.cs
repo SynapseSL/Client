@@ -61,13 +61,13 @@ namespace SynapseClient.Patches
             {
                 Logger.Info("Beginning own Body");
 
-                while (!Client.isLoggedIn)
+                while (!Client.IsLoggedIn)
                 {
                     Thread.Sleep(5); //Not pretty but works
                 }
                 
                 Logger.Info("Starting session");
-                synapseSessionToken = SynapseCentral.Session(targetAddress);
+                synapseSessionToken = SynapseCentral.Get.Session(targetAddress).GetAwaiter().GetResult();
                 
                 var str = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"));
                 var random = new Random();

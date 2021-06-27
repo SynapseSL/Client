@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Org.BouncyCastle.Utilities;
 using UnityEngine;
 
 namespace SynapseClient.Pipeline.Packets
