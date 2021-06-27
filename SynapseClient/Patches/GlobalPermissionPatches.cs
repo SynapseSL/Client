@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System.Collections.Generic;
 
 namespace SynapseClient.Patches
 {
     public static class GlobalPermissionPatches
     {
+        private readonly static List<ServerRoles> requestBadge = new List<ServerRoles>();
+
         [HarmonyPatch(typeof(ServerRoles), nameof(ServerRoles.Update))]
         [HarmonyPrefix]
         public static bool OnUpdate(ServerRoles __instance)
@@ -38,39 +40,16 @@ namespace SynapseClient.Patches
                     return false;
                 }
 
-                Logger.Info(__instance._hub.characterClassManager.UserId);
-
-                var group = GetGlobalBadge(__instance).Result;
-
-                if(group == null)
-                {
-                    __instance._bgc = null;
-                    __instance._bgt = null;
-                    __instance._authorizeBadge = false;
-                    __instance._prevColor += ".";
-                    __instance._prevText += ".";
-                    return false;
-                }
-
-                if (group.Color == "(none)" || group.Name == "(none)")
-                {
-                    __instance._bgc = null;
-                    __instance._bgt = null;
-                    __instance._authorizeBadge = false;
-                }
-                else
-                {
-                    __instance.NetworkMyText = group.Name;
-                    __instance._bgt = group.Name;
-
-                    __instance.NetworkMyColor = group.Color;
-                    __instance._bgc = group.Color;
-
-                    __instance._authorizeBadge = true;
-                }
+                requestBadge.Add(__instance);
+                AsyncGlobalBadge(__instance);
             }
 
             if (__instance._prevColor == __instance.MyColor && __instance._prevText == __instance.MyText) return false;
+
+            if (requestBadge.Contains(__instance))
+            {
+                return false;
+            }
 
             if (__instance.CurrentColor.Restricted &&
                 (__instance.MyText != __instance._bgt || __instance.MyColor != __instance._bgc))
@@ -110,16 +89,41 @@ namespace SynapseClient.Patches
             return false;
         }
 
-        private static async Task<GlobalSynapseGroup> GetGlobalBadge(ServerRoles ply)
+        private static async void AsyncGlobalBadge(ServerRoles ply)
         {
             var su = await SynapseCentral.Resolve(ply._hub.characterClassManager.UserId);
 
             if (su.Groups == null || su.Groups.Count < 1)
             {
-                return null;
+                ply._bgc = null;
+                ply._bgt = null;
+                ply._authorizeBadge = false;
+                ply._prevColor += ".";
+                ply._prevText += ".";
+                requestBadge.Remove(ply);
+                return;
             }
 
-            return su.Groups[0];
+            var group = su.Groups[0];
+
+            if (group.Color == "(none)" || group.Name == "(none)")
+            {
+                ply._bgc = null;
+                ply._bgt = null;
+                ply._authorizeBadge = false;
+            }
+            else
+            {
+                ply.NetworkMyText = group.Name;
+                ply._bgt = group.Name;
+
+                ply.NetworkMyColor = group.Color;
+                ply._bgc = group.Color;
+
+                ply._authorizeBadge = true;
+            }
+
+            requestBadge.Remove(ply);
         }
     }
 }
