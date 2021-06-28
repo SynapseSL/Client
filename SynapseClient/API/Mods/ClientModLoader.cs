@@ -14,6 +14,8 @@ namespace SynapseClient.API.Mods
 
         public void LoadAll()
         {
+            Logger.Info("Loading Mods");
+
             if (!Directory.Exists("mods")) Directory.CreateDirectory("mods");
 
             foreach (var file in Directory.GetFiles("mods", "*.dll")) 
@@ -54,6 +56,7 @@ namespace SynapseClient.API.Mods
 
         public void EnableAll()
         {
+            Logger.Info("Loaded Mods. Enabling mods");
             Mods.ForEach(data => data.MainEnable());
         }
 

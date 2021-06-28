@@ -73,9 +73,8 @@ namespace SynapseClient
         {
             Get = this;
             Logger._logger = Log;
-            Logger.Info("Loading Mods");
+
             ModLoader.LoadAll();
-            Logger.Info("Loaded Mods. Enabling mods");
             ModLoader.EnableAll();
             
             Logger.Info("Registering Types for Il2Cpp use...");
@@ -85,12 +84,14 @@ namespace SynapseClient
             ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
             ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
             ClassInjector.RegisterTypeInIl2Cpp<CreditsHook>();
+
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
-            Logger.Info("Patching client...");
+
             Patcher.PatchAll();
-            Logger.Info("All patches applied!");
+            
             SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
+
             Logger.Info("Registered Scene Loaded Listener");
             /*
             PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));

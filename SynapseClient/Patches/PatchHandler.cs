@@ -24,8 +24,12 @@ namespace SynapseClient.Patches
 
         public void PatchAll()
         {
+            Logger.Info("Patching client...");
+
             foreach (var type in DefaultTypesToPatch)
                 PatchType(type);
+
+            Logger.Info("All patches applied!");
         }
 
         public void PatchType(Type type)
