@@ -53,6 +53,8 @@ namespace SynapseClient
 
         public SynapseCentral Central { get; } = new SynapseCentral();
 
+        public PatchHandler Patcher { get; } = new PatchHandler();
+
         public API.Events.EventHandlers EventHandlers { get; } = new API.Events.EventHandlers();
 
         public Computer Computer { get; } = new Computer();
@@ -86,14 +88,7 @@ namespace SynapseClient
             Logger.Info("Loading Prefabs");
             if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
             Logger.Info("Patching client...");
-            Harmony.CreateAndPatchAll(typeof(SmallPatches));
-            Harmony.CreateAndPatchAll(typeof(AuthPatches));
-            Harmony.CreateAndPatchAll(typeof(PipelinePatches));
-            Harmony.CreateAndPatchAll(typeof(ServerListPatches));
-            Harmony.CreateAndPatchAll(typeof(CommandLinePatch));
-            Harmony.CreateAndPatchAll(typeof(CreditsHookPatch));
-            Harmony.CreateAndPatchAll(typeof(GlobalPermissionPatches));
-            Harmony.CreateAndPatchAll(typeof(ReportPatches));
+            Patcher.PatchAll();
             Logger.Info("All patches applied!");
             SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
             Logger.Info("Registered Scene Loaded Listener");
