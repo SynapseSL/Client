@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using HarmonyLib;
+using SynapseClient.Components;
 using UnityEngine;
 using UnityEngine.UI;
-using SynapseClient.API;
-using SynapseClient.Components;
 
 namespace SynapseClient.Patches
 {
@@ -11,7 +10,7 @@ namespace SynapseClient.Patches
     {
         [HarmonyPatch(typeof(NewMainMenu), nameof(NewMainMenu.Start))]
         [HarmonyPrefix]
-        public static bool OnMainMenuStart(NewMainMenu __instance)
+        public static bool OnMainMenuStart()
         {
             Logger.Info("Main Menu hooked!");
             var obj = new GameObject();

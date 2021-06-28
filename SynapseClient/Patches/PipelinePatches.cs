@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Mirror;
 using SynapseClient.Pipeline;
 using UnhollowerBaseLib;
 
@@ -20,11 +19,11 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(GameConsoleTransmission), nameof(GameConsoleTransmission.CallTargetPrintOnConsole))]
         [HarmonyPrefix]
-        public static bool OnConsolePrint(GameConsoleTransmission __instance, NetworkConnection connection, Il2CppStructArray<byte> data, bool encrypted)
+        public static bool OnConsolePrint(Il2CppStructArray<byte> data, bool encrypted)
         {
             if (data == null) return false;
-            if (encrypted || !DataUtils.isData(data)) return true;
-            ClientPipeline.receive(DataUtils.unpack(data));
+            if (encrypted || !DataUtils.IsData(data)) return true;
+            ClientPipeline.Receive(DataUtils.Unpack(data));
             return false;
         }
     }

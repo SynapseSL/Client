@@ -10,15 +10,15 @@ namespace SynapseClient.Pipeline
     {
         public static event DataEvent<PipelinePacket> DataReceivedEvent;
         
-        public static void receive(PipelinePacket data)
+        public static void Receive(PipelinePacket data)
         {
-            Logger.Info($"=pipeline=>  {data.ToString()}");
+            Logger.Info($"=pipeline=>  {data}");
             DataReceivedEvent?.Invoke(data);
         }
 
-        public static void invoke(PipelinePacket packet)
+        public static void Invoke(PipelinePacket packet)
         {
-            var packed = DataUtils.pack(packet);
+            var packed = DataUtils.Pack(packet);
             Logger.Info($"<=pipeline=  {Base64.ToBase64String(packed)}");
            PipelinePatches.Transmission.CmdCommandToServer(packed, false);
         }
@@ -28,7 +28,7 @@ namespace SynapseClient.Pipeline
     
     public static class DataUtils
     {
-        public static byte[] pack(PipelinePacket packet)
+        public static byte[] Pack(PipelinePacket packet)
         {
             var data = packet.Data;
             var buffer = new byte[data.Length + 7];
@@ -44,7 +44,7 @@ namespace SynapseClient.Pipeline
             return buffer;
         }
         
-        public static PipelinePacket unpack(byte[] encoded)
+        public static PipelinePacket Unpack(byte[] encoded)
         {
             var packetId = BitConverter.ToUInt32(encoded, 2);
             var buffer = new byte[encoded.Length - 7];
@@ -60,7 +60,7 @@ namespace SynapseClient.Pipeline
             };
         }
 
-        public static bool isData(byte[] bytes)
+        public static bool IsData(byte[] bytes)
         {
             if (bytes.Length < 2) return false;
             return bytes[0] == byte.MinValue && bytes[1] == byte.MaxValue;

@@ -132,14 +132,14 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
-                        name = Client.name,
-                        publicKey = Read()[0],
-                        mac = Computer.Get.GetMac(),
-                        pcName =  Computer.Get.GetPcName()
+                        Name = Client.name,
+                        PublicKey = Read()[0],
+                        Mac = Computer.Get.GetMac(),
+                        PcName =  Computer.Get.GetPcName()
                     }));
 
             var registrationResponse = JsonConvert.DeserializeObject<RegistrationResponse>(responseString);
-            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"), registrationResponse.uuid);
+            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"), registrationResponse.Uuid);
         }
 
         public async Task Certificate()
@@ -151,12 +151,12 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
-                        name = Client.name,
-                        uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
-                        publicKey = Read()[0],
-                        privateKey = Read()[1],
-                        mac = Computer.Get.GetMac(),
-                        pcName = Computer.Get.GetPcName()
+                        Name = Client.name,
+                        Uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
+                        PublicKey = Read()[0],
+                        PrivateKey = Read()[1],
+                        Mac = Computer.Get.GetMac(),
+                        PcName = Computer.Get.GetPcName()
                     }));
             File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"), responseString);
         }

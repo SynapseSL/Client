@@ -19,9 +19,8 @@ namespace SynapseClient.API
                 .FirstOrDefault() ?? "Unknown";
         }
 
-        public string GetPcName()
-        {
-            return Environment.MachineName ?? "Unknown";
-        }
+        public string GetPcName() => Environment.MachineName ?? "Unknown";
+
+        public string GetUserName() => Environment.UserName ?? "Unknown";
     }
 }

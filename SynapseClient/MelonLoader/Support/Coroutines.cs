@@ -20,7 +20,7 @@ namespace MelonLoader.Support
         private static readonly List<IEnumerator> ourWaitForEndOfFrameCoroutines = new List<IEnumerator>();
         private static readonly List<IEnumerator> tempList = new List<IEnumerator>();
         private delegate float GetDeltaTimeDelegate();
-        private static GetDeltaTimeDelegate GetDeltaTimeDelegateField;
+        private readonly static GetDeltaTimeDelegate GetDeltaTimeDelegateField;
 
         static Coroutines() => GetDeltaTimeDelegateField = IL2CPP.ResolveICall<GetDeltaTimeDelegate>("UnityEngine.Time::get_deltaTime");
 

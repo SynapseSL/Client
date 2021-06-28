@@ -2,6 +2,7 @@
 {
     public class RegistrationResponse
     {
-        public string uuid { get; set; }
+        [Newtonsoft.Json.JsonProperty("uuid")]
+        public string Uuid { get; set; }
     }
 }

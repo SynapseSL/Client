@@ -14,18 +14,29 @@ namespace SynapseClient.API.Mods
         public void Load(byte[] assembly, string name)
         {
             Logger.Info($"Loading Assembly '{name}'");
+
             ModAssembly = Assembly.Load(assembly);
+
             foreach (var assemblyName in ModAssembly.GetReferencedAssemblies())
             {
                 Logger.Info(assemblyName.ToString());
             }
+
             var main = ModAssembly.GetTypes().FirstOrDefault(x => x.IsSubclassOf(typeof(ClientMod)));
             if (main == null)
             {
                 Logger.Error($"ClientMod at '{name}' doesn't have a main class.");
                 return;
             }
+
             Details = main.GetCustomAttribute<ClientModDetails>();
+
+            if(Details == null)
+            {
+                Logger.Error($"ClientMod at '{name}' doesn't have a ClientModDetails attribute");
+                return;
+            }
+
             Logger.Info($"ClientMod '{Details.Name}' found, proceeding with Initialization");
             var mainInstance = main.GetConstructor(new Type[0])?.Invoke(new object[0]);
             if (mainInstance == null)
@@ -33,6 +44,7 @@ namespace SynapseClient.API.Mods
                 Logger.Error($"Can't instantiate main class of '{Details.Name}'.");
                 return;
             }
+
             ClientMod = mainInstance as ClientMod;
         }
 

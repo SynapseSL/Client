@@ -43,7 +43,7 @@ namespace SynapseClient.API
                             var spawned = SynapseSpawned.ForObject(obj);
                             spawned.TweenTo(pos, rot);
                         }
-                        catch (Exception e)
+                        catch
                         {
                             var transform = obj.transform;
                             transform.position = pos;
@@ -135,8 +135,7 @@ namespace SynapseClient.API
 
         public virtual string GetBlueprint()
         {
-            var blueprint = GetType().GetCustomAttribute(typeof(Blueprint)) as Blueprint;
-            if (blueprint == null)
+            if (!(GetType().GetCustomAttribute(typeof(Blueprint)) is Blueprint blueprint))
             {
                 throw new Exception("SpawnHandler subclass is not annotated with [Blueprint]");
             }

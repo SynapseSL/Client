@@ -130,7 +130,7 @@ namespace UnityEngine
 
 	public class Il2CppAssetBundle
     {
-        private System.IntPtr bundleptr = System.IntPtr.Zero;
+        private readonly System.IntPtr bundleptr = System.IntPtr.Zero;
         public Il2CppAssetBundle(System.IntPtr ptr) { bundleptr = ptr; }
         static Il2CppAssetBundle()
         {
@@ -146,7 +146,7 @@ namespace UnityEngine
             UnloadDelegateField = IL2CPP.ResolveICall<UnloadDelegate>("UnityEngine.AssetBundle::Unload");
         }
 
-		public bool isStreamedSceneAssetBundle
+		public bool IsStreamedSceneAssetBundle
 		{
 			get
 			{
@@ -158,7 +158,7 @@ namespace UnityEngine
 			}
 		}
 		
-		public Object mainAsset
+		public Object MainAsset
         {
             get
             {

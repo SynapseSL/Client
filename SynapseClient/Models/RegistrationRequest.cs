@@ -2,9 +2,16 @@
 {
     public class RegistrationRequest
     {
-        public string name { get; set; }
-        public string publicKey { get; set; }
-        public string pcName { get; set; }
-        public string mac { get; set; }
+        [Newtonsoft.Json.JsonProperty("name")]
+        public string Name { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("publicKey")]
+        public string PublicKey { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("pcName")]
+        public string PcName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("mac")]
+        public string Mac { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using SynapseClient.API;
 using UnityEngine;
 
 namespace SynapseClient.Patches
@@ -10,7 +9,7 @@ namespace SynapseClient.Patches
 
         [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.Refresh))]
         [HarmonyPrefix]
-        public static bool OnServerListRefresh(NewServerBrowser __instance)
+        public static bool OnServerListRefresh()
         {
             Client.Get.SynapseServerList.Download();
             return true;
@@ -18,7 +17,7 @@ namespace SynapseClient.Patches
  
         [HarmonyPatch(typeof(ServerFilter), nameof(ServerFilter.ReapplyFilters))]
         [HarmonyPrefix]
-        public static bool OnReapply(ServerFilter __instance, bool forceCleanup)
+        public static bool OnReapply(ServerFilter __instance)
         {
             ListSingleton = __instance;
             Composite(__instance);
@@ -27,7 +26,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(ServerFilter), nameof(ServerFilter.ChangeTab), typeof(int))]
         [HarmonyPrefix]
-        public static bool OnReapply(ServerFilter __instance, int tab)
+        public static bool OnReapplyWithInt(ServerFilter __instance)
         {
             ListSingleton = __instance;
             Composite(__instance);
@@ -36,7 +35,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(ServerFilter), nameof(ServerFilter.ChangeTab), typeof(ServerTab))]
         [HarmonyPrefix]
-        public static bool OnReapply(ServerFilter __instance, ServerTab tab)
+        public static bool OnReapplyWithTab(ServerFilter __instance)
         {
             ListSingleton = __instance;
             Composite(__instance);
@@ -82,7 +81,7 @@ namespace SynapseClient.Patches
         public static bool OnPlayButton(ServerElementButton __instance)
         {
             var entry = Client.Get.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
-            var resolved = Client.GetConnection(entry.address);
+            var resolved = Client.GetConnection(entry.Address);
             var allow = API.Events.SynapseEvents.InvokeServerConnect(resolved);
             if (!allow) return false;
             Client.Connect(resolved);

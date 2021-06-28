@@ -8,10 +8,12 @@ namespace SynapseClient.Patches
     {
         [HarmonyPatch(typeof(NewCredits), nameof(NewCredits.OnEnable))]
         [HarmonyPrefix]
-        public static bool InjectCreditsHook(NewCredits __instance)
+        public static bool InjectCreditsHook()
         {
-            GameObject creditsHookObject = new GameObject();
-            creditsHookObject.name = "Credits Hook";
+            GameObject creditsHookObject = new GameObject
+            {
+                name = "Credits Hook"
+            };
             creditsHookObject.AddComponent<CreditsHook>();
             
             return true;

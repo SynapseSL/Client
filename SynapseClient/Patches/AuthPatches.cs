@@ -16,7 +16,6 @@ namespace SynapseClient.Patches
 {
     public class AuthPatches
     {
-        
         private static int injectionStep = 0;
         private static bool hasInjectedByte = false;
         private static bool isAuth = false;
@@ -100,7 +99,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(NetDataWriter), nameof(NetDataWriter.Put), typeof(Il2CppStructArray<byte>))]
         [HarmonyPrefix]
-        public static bool OnNetDataWriterByteArray(NetDataWriter __instance, Il2CppStructArray<byte> data)
+        public static bool OnNetDataWriterByteArray(Il2CppStructArray<byte> data)
         {
             if (hasInjectedByte) return false;
             Logger.Info("NetWriter Write: ByteArray " + Base64.ToBase64String(data));
@@ -127,19 +126,21 @@ namespace SynapseClient.Patches
             CentralAuthManager.AuthStatusType = AuthStatusType.Success;
             CentralAuthManager.Nonce = "MadeByTheAnomalousCoders";
             CentralAuthManager.Platform = DistributionPlatform.Dedicated;
-            CentralAuthManager.PreauthToken = new CentralAuthPreauthToken();
-            CentralAuthManager.PreauthToken.Country = "";
-            CentralAuthManager.PreauthToken.Expiration = DateTimeOffset.Now.ToUnixTimeSeconds() + 1000;
-            CentralAuthManager.PreauthToken.Flags = Byte.MinValue;
-            CentralAuthManager.PreauthToken.Signature = "";
-            CentralAuthManager.PreauthToken.UserId = "";
+            CentralAuthManager.PreauthToken = new CentralAuthPreauthToken
+            {
+                Country = "",
+                Expiration = DateTimeOffset.Now.ToUnixTimeSeconds() + 1000,
+                Flags = Byte.MinValue,
+                Signature = "",
+                UserId = ""
+            };
 
             return true;
         }
 
         [HarmonyPatch(typeof(NetworkClient), nameof(NetworkClient.Connect))]
         [HarmonyPrefix]
-        public static bool OnClientConnect(NetworkClient __instance, string address)
+        public static bool OnClientConnect(string address)
         {
             Logger.Info($"Connecting via Network Client with address {address}");
             isAuth = true;
@@ -149,7 +150,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(NetworkClient), nameof(NetworkClient.OnConnected))]
         [HarmonyPrefix]
-        public static bool OnClientConnected(NetworkClient __instance)
+        public static bool OnClientConnected()
         {
             Logger.Info("Finished Connecting");
             return true;

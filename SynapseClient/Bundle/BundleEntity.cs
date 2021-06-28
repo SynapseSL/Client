@@ -46,8 +46,7 @@ namespace UnityEngine
             _cachedAssetEntries = new List<AssetEntry>();
             foreach (var field in GetType().GetFields())
             {
-                var ad = field.GetCustomAttribute(typeof(AssetDescriptor)) as AssetDescriptor;
-                if (ad == null) continue;
+                if (!(field.GetCustomAttribute(typeof(AssetDescriptor)) is AssetDescriptor ad)) continue;
                 switch (ad.Type)
                 {
                     case AssetType.Prefab:
@@ -74,8 +73,7 @@ namespace UnityEngine
             var bundleName = descriptor.BundleName;
             foreach (var field in GetType().GetFields())
             {
-                var ad = field.GetCustomAttribute(typeof(AssetDescriptor)) as AssetDescriptor;
-                if (ad == null) continue;
+                if (!(field.GetCustomAttribute(typeof(AssetDescriptor)) is AssetDescriptor ad)) continue;
                 var obj = field.GetValue(this);
                 list.Add(new AssetEntry()
                 {

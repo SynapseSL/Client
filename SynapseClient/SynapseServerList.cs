@@ -9,7 +9,7 @@ namespace SynapseClient
 {
     public class SynapseServerList
     {
-        private WebClient _webClient = new WebClient();
+        private readonly WebClient _webClient = new WebClient();
         
         public List<SynapseServerEntry> ServerCache { get; internal set; }= new List<SynapseServerEntry>();
 
@@ -23,24 +23,26 @@ namespace SynapseClient
         public SynapseServerEntry ResolveIdAddress(string address)
         {
             var uid = address.Replace(":0", "");
-            return ServerCache.First(x => x.id == uid);
+            return ServerCache.First(x => x.Id == uid);
         }
         
         public static void AddServer(ServerFilter filter, SynapseServerEntry entry)
         {
-            var leakingObject = new LeakingObject<ServerListItem>();
-            leakingObject.decorated = new ServerListItem
+            var leakingObject = new LeakingObject<ServerListItem>
             {
-                ip = (String) entry.id,
-                port = 0000,
-                players = (String) (entry.onlinePlayers + "/" + entry.maxPlayers),
-                info = (String) entry.info,
-                pastebin = (String) entry.pastebin,
-                version = (String) entry.version,
-                whitelist = entry.whitelist,
-                modded = entry.modded,
-                friendlyFire = entry.friendlyFire,
-                officialCode = entry.officialCode
+                decorated = new ServerListItem
+                {
+                    ip = (String)entry.Id,
+                    port = 0000,
+                    players = (String)(entry.OnlinePlayers + "/" + entry.MaxPlayers),
+                    info = (String)entry.Info,
+                    pastebin = (String)entry.Pastebin,
+                    version = (String)entry.Version,
+                    whitelist = entry.Whitelist,
+                    modded = entry.Modded,
+                    friendlyFire = entry.FriendlyFire,
+                    officialCode = entry.OfficialCode
+                }
             };
             filter.FilteredListItems.Add(leakingObject.decorated);
             leakingObject.Dispose();
@@ -51,17 +53,27 @@ namespace SynapseClient
     
     public class SynapseServerEntry
     {
-        public string id { get; set; }
-        public string address { get; set; }
-        public int onlinePlayers { get; set; }
-        public int maxPlayers { get; set; }
-        public string info { get; set; }
-        public string pastebin { get; set; }
-        public string version { get; set; }
-        public bool whitelist { get; set; } = false;
-        public bool modded { get; set; } = true;
-        public bool friendlyFire { get; set; } = true;
-        public byte officialCode { get; set; } = byte.MinValue;
-            
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("address")]
+        public string Address { get; set; }
+        [JsonProperty("onlinePlayers")]
+        public int OnlinePlayers { get; set; }
+        [JsonProperty("maxPlayers")]
+        public int MaxPlayers { get; set; }
+        [JsonProperty("info")]
+        public string Info { get; set; }
+        [JsonProperty("pastebin")]
+        public string Pastebin { get; set; }
+        [JsonProperty("version")]
+        public string Version { get; set; }
+        [JsonProperty("whitelist")]
+        public bool Whitelist { get; set; } = false;
+        [JsonProperty("modded")]
+        public bool Modded { get; set; } = true;
+        [JsonProperty("friendlyFire")]
+        public bool FriendlyFire { get; set; } = true;
+        [JsonProperty("officialCode")]
+        public byte OfficialCode { get; set; } = byte.MinValue;
     }
 }

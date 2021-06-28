@@ -27,10 +27,9 @@ namespace SynapseClient.Components
         
         public RaycastHit? Raycast()
         {
-            RaycastHit hit;
             var mousePos = Input.mousePosition;
             var ray = Camera.ScreenPointToRay(mousePos);
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 return hit;
             }
@@ -58,10 +57,9 @@ namespace SynapseClient.Components
             Coroutines.Process();
             Client.DoQueueTick();
             if (Camera == null) ResetCamera();
-            RaycastHit hit;
             var mousePos = Input.mousePosition;
             var ray = Camera.ScreenPointToRay(mousePos);
-            if (Physics.Raycast(ray, out hit)) {
+            if (Physics.Raycast(ray, out RaycastHit hit)) {
                 if (Input.GetKey(KeyCode.Keypad0)) _lookingAtCube.transform.position = hit.point;
                 _lookingAt = hit.transform.gameObject;
                 if (_lookingAt.GetInstanceID() != lastInvalidTraceId)

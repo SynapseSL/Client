@@ -8,31 +8,38 @@ namespace SynapseClient.API.Mods
 {
     public class ClientModLoader
     {
+        internal ClientModLoader() { }
+
         public List<ModRuntimeData> Mods { get; private set; } = new List<ModRuntimeData>();
 
         public void LoadAll()
         {
             if (!Directory.Exists("mods")) Directory.CreateDirectory("mods");
-            foreach (var file in Directory.GetFiles("mods"))
+
+            foreach (var file in Directory.GetFiles("mods", "*.dll")) 
             {
-                Logger.Info($"Loading mod from file {file}");
-                var fileStream = File.OpenRead(file);
-                var memStream = new MemoryStream();
-                fileStream.CopyToAsync(memStream).GetAwaiter().GetResult();
-                var bytes = memStream.ToArray();
-                memStream.Dispose();
-                fileStream.Dispose();
-                Logger.Info($"Loading mod...");
                 try
                 {
-                    var run = LoadMod(bytes, file.Replace(".dll", ""));
+                    Logger.Info($"Loading mod from file {file}");
+
+                    var fileStream = File.OpenRead(file);
+                    var memStream = new MemoryStream();
+                    fileStream.CopyToAsync(memStream).GetAwaiter().GetResult();
+                    var bytes = memStream.ToArray();
+                    memStream.Dispose();
+                    fileStream.Dispose();
+
+                    Logger.Info($"Loading mod...");
+
+                    var run = LoadMod(bytes, Path.GetFileNameWithoutExtension(file));
+
                     Logger.Info($"Enabling mod...");
+
                     run.MainEnable();
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e.ToString());
-                    throw;
+                    Logger.Error($"Synapse-Mods: Error while Loading File:\n{file}\n{e}");
                 }
             }
         }

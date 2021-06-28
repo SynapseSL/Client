@@ -3,11 +3,11 @@ using Il2CppSystem.Collections.Generic;
 
 namespace SynapseClient.API
 {
-    public class LeakingObject<K> : Il2CppSystem.Object
+    public class LeakingObject<T> : Il2CppSystem.Object
     {
         private List<Object> List = new Il2CppSystem.Collections.Generic.List<Object>();
 
-        public K decorated;
+        public T decorated;
 
         /// <summary>
         /// Creates an self referencing object usable for integration in il2cpp domain

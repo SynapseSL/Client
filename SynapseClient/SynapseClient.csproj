@@ -238,29 +238,17 @@
     <Reference Include="Unity.TextMeshPro, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.AccessibilityModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.AIModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.AIModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.AIModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.AndroidJNIModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.AndroidJNIModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.AndroidJNIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.AnimationModule.dll</HintPath>
@@ -268,14 +256,8 @@
     <Reference Include="UnityEngine.ARModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.ARModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.AssetBundleModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.AssetBundleModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.AudioModule.dll</HintPath>
@@ -289,17 +271,11 @@
     <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.ClusterRendererModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.CrashReportingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.DirectorModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.DirectorModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.DirectorModule.dll</HintPath>
@@ -310,35 +286,20 @@
     <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.GameCenterModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.GridModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.GridModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.GridModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.HotReloadModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.ImageConversionModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.InputLegacyModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.InputModule.dll</HintPath>
@@ -349,23 +310,14 @@
     <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.LocalizationModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.ParticleSystemModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.PerformanceReportingModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.Physics2DModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.Physics2DModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.Physics2DModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.PhysicsModule.dll</HintPath>
@@ -373,14 +325,8 @@
     <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.ProfilerModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.ScreenCaptureModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.ScreenCaptureModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.ScreenCaptureModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.SharedInternalsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SharedInternalsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.SharedInternalsModule.dll</HintPath>
@@ -397,38 +343,20 @@
     <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.SubstanceModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.SubsystemsModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.SubsystemsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.SubsystemsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.TerrainModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TerrainModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.TerrainModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.TerrainPhysicsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.TextCoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.TextCoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.TilemapModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TilemapModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.TilemapModule.dll</HintPath>
@@ -439,14 +367,8 @@
     <Reference Include="UnityEngine.UI, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UIElementsModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UIElementsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UIElementsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UIModule.dll</HintPath>
@@ -454,14 +376,8 @@
     <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.UmbraModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UNETModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UNETModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UNETModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UnityAnalyticsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityAnalyticsModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
@@ -475,20 +391,11 @@
     <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UnityWebRequestModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UnityWebRequestModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
@@ -499,29 +406,17 @@
     <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.VehiclesModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.VFXModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VFXModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.VFXModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.VideoModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VideoModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.VideoModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.VRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\UnityEngine.WindModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Refs\UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XRModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Refs\unhollowed\UnityEngine.XRModule.dll</HintPath>
@@ -530,6 +425,7 @@
   <ItemGroup>
     <Compile Include="API\Mods\ClientMod.cs" />
     <Compile Include="API\Computer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MelonLoader\Support\Coroutines.cs" />
     <Compile Include="API\Mods\ClientModLoader.cs" />
     <Compile Include="API\Mods\ModRuntimeData.cs" />

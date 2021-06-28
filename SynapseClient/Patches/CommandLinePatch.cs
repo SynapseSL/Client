@@ -2,7 +2,6 @@
 using HarmonyLib;
 using RemoteAdmin;
 using SynapseClient.Components;
-using UnhollowerBaseLib;
 using UnityEngine;
 using File = Il2CppSystem.IO.File;
 
@@ -14,7 +13,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(GameCore.Console), nameof(GameCore.Console.TypeCommand))]
         [HarmonyPrefix]
-        public static bool OnStart(GameCore.Console __instance, string cmd, CommandSender sender)
+        public static bool OnStart(string cmd)
         {
             if (cmd.StartsWith("redirect "))
             {
@@ -57,7 +56,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(GameCore.Console), nameof(GameCore.Console.Awake))]
         [HarmonyPrefix]
-        public static bool OnStart(GameCore.Console __instance)
+        public static bool OnStart()
         {
             Logger.Info("Starting GameConsole");
             return true;
@@ -65,7 +64,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(QueryProcessor), nameof(QueryProcessor.CmdSendEncryptedQuery))]
         [HarmonyPrefix]
-        public static bool OnCmdQuery(QueryProcessor __instance, Il2CppStructArray<byte> query)
+        public static bool OnCmdQuery()
         {
             Logger.Info("Sending Encrypted Query");
             return true;
@@ -73,7 +72,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(QueryProcessor), nameof(QueryProcessor.EcdsaSign))]
         [HarmonyPrefix]
-        public static bool OnStart(QueryProcessor __instance, string message, int counter)
+        public static bool OnSign()
         {
             Logger.Info("ECDSA Sign");
             return true;
@@ -81,7 +80,7 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(QueryProcessor), nameof(QueryProcessor.CallCmdSendEncryptedQuery))]
         [HarmonyPrefix]
-        public static bool OnCmdQueryCall(QueryProcessor __instance, Il2CppStructArray<byte> query)
+        public static bool OnCmdQueryCall()
         {
             Logger.Info("Encrypted Query Call");
             return true;

@@ -7,7 +7,7 @@ namespace SynapseClient.Patches
     {
         [HarmonyPatch(typeof(CheaterReport),nameof(CheaterReport.Report))]
         [HarmonyPrefix]
-        public static bool OnReport(CheaterReport __instance,int playerId, string reason, bool notifyGm)
+        public static bool OnReport(int playerId, string reason, bool notifyGm)
         {
             if (!notifyGm) return true;
 

@@ -15,7 +15,7 @@ namespace SynapseClient.Components
         private bool _objectsCreated;
         public bool IsCreditsHookReadyToUse => _creditsReadyToUse;
 
-        private Dictionary<string, CreditsCategoryInfo> _categoryInfos = new Dictionary<string, CreditsCategoryInfo>();
+        private readonly Dictionary<string, CreditsCategoryInfo> _categoryInfos = new Dictionary<string, CreditsCategoryInfo>();
 
         private GameObject _titleGameObject;
         private GameObject _roleGameObject;
@@ -101,8 +101,10 @@ namespace SynapseClient.Components
             if (_categoryInfos.ContainsKey(catName))
                 return false;
 
-            CreditsCategoryInfo catInfo = new CreditsCategoryInfo();
-            catInfo.CategoryName = catName;
+            CreditsCategoryInfo catInfo = new CreditsCategoryInfo
+            {
+                CategoryName = catName
+            };
             catInfo.GameObjects.CategoryObject = GenerateCategoryObject(catName);
             
             _categoryInfos.Add(catName, catInfo);

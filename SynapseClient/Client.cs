@@ -42,6 +42,9 @@ namespace SynapseClient
         public const int ClientMinor = 0;
         public const int ClientPatch = 0;
 
+        public static string CentralServer = "https://central.synapsesl.xyz";
+        public static string ServerListServer = "https://servers.synapsesl.xyz";
+
         public static string name = "SynapsePlayer";
         
         public static Client Get { get; private set; }
@@ -63,9 +66,6 @@ namespace SynapseClient
         public SpawnController SpawnController { get; internal set; } = new SpawnController();
 
         public ClientModLoader ModLoader { get; } = new ClientModLoader();
-
-        public static string CentralServer = "https://central.synapsesl.xyz";
-        public static string ServerListServer = "https://servers.synapsesl.xyz";
 
         public override void Load()
         {
@@ -175,7 +175,7 @@ namespace SynapseClient
                     var salt = new byte[32];
                     for (var i = 0; i < 32; i++) salt[i] = 0x00;
                     var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
-                    var sessionBytes = Encoding.UTF8.GetBytes(jwt.session);
+                    var sessionBytes = Encoding.UTF8.GetBytes(jwt.Session);
                     var key = new byte[32];
                     for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
                     for (var i = 24; i < 32; i++) key[i] = 0x00;
@@ -185,7 +185,7 @@ namespace SynapseClient
                     QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
                     QueryProcessor.Localplayer.Salt = salt;
                     QueryProcessor.Localplayer.ClientSalt = salt;
-                    ClientPipeline.invoke(PipelinePacket.From(1, "Client connected successfully"));
+                    ClientPipeline.Invoke(PipelinePacket.From(1, "Client connected successfully"));
                     ModLoader.ActivateForServer(clientMods); // Just activate for all for now
                     API.Events.SynapseEvents.InvokeConnectionSuccessful();
                     SharedBundleManager.LogLoaded();
