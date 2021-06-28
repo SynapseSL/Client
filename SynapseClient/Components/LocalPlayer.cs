@@ -1,5 +1,6 @@
 ﻿using System;
 using MelonLoader.Support;
+using SynapseClient.API;
 using SynapseClient.Patches;
 using UnityEngine;
 
@@ -55,7 +56,7 @@ namespace SynapseClient.Components
         private void Update()
         {
             Coroutines.Process();
-            ClientBepInExPlugin.DoQueueTick();
+            Client.Get.DoQueueTick();
             if (Camera == null) ResetCamera();
             var mousePos = Input.mousePosition;
             var ray = Camera.ScreenPointToRay(mousePos);

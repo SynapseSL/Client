@@ -22,7 +22,7 @@ namespace SynapseClient
     {
         internal SynapseCentral() { }
 
-        public static SynapseCentral Get => ClientBepInExPlugin.Get.Central;
+        public static SynapseCentral Get => Client.Get.Central;
 
         private const int RsaKeySize = 2048;
 
@@ -50,16 +50,16 @@ namespace SynapseClient
                 {
                     //Logged in
                     Logger.Info(File.ReadAllText(cert));
-                    ClientBepInExPlugin.IsLoggedIn = true;
+                    Client.Get.IsLoggedIn = true;
                 }
                 else if (File.Exists(user))
                 {
                     await Certificate();
-                    ClientBepInExPlugin.IsLoggedIn = true;
+                    Client.Get.IsLoggedIn = true;
                 }
                 else
                 {
-                    ClientBepInExPlugin.IsLoggedIn = false;
+                    Client.Get.IsLoggedIn = false;
                     var thread = new Thread(DoRegisterAsync);
                     thread.Start();
                 }
@@ -76,7 +76,7 @@ namespace SynapseClient
             {
                 await Register();
                 await Certificate();
-                ClientBepInExPlugin.IsLoggedIn = true;
+                Client.Get.IsLoggedIn = true;
                 Logger.Info("Central-Authentication / Registration complete");
             }
             catch (Exception e)
@@ -132,7 +132,7 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
-                        Name = ClientBepInExPlugin.name,
+                        Name = Client.Get.PlayerName,
                         PublicKey = Read()[0],
                         Mac = Computer.Get.Mac,
                         PcName =  Computer.Get.PcName
@@ -151,7 +151,7 @@ namespace SynapseClient
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
-                        Name = ClientBepInExPlugin.name,
+                        Name = Client.Get.PlayerName,
                         Uuid = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "user.dat")),
                         PublicKey = Read()[0],
                         PrivateKey = Read()[1],

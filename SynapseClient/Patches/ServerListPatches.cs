@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using SynapseClient.API;
 using UnityEngine;
 
 namespace SynapseClient.Patches
@@ -11,7 +12,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnServerListRefresh()
         {
-            ClientBepInExPlugin.Get.SynapseServerList.Download();
+            SynapseServerList.Get.Download();
             return true;
         }
  
@@ -56,7 +57,7 @@ namespace SynapseClient.Patches
         private static void Composite(ServerFilter filter)
         {
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
-            foreach (var serverEntry in ClientBepInExPlugin.Get.SynapseServerList.ServerCache)
+            foreach (var serverEntry in SynapseServerList.Get.ServerCache)
             {
                 SynapseServerList.AddServer(filter, serverEntry);
             }
@@ -71,7 +72,7 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnServerListAwake()
         {
-            ClientBepInExPlugin.Get.SynapseServerList.Download();
+            SynapseServerList.Get.Download();
             Composite(ListSingleton);
             return false;
         }
@@ -80,11 +81,11 @@ namespace SynapseClient.Patches
         [HarmonyPrefix]
         public static bool OnPlayButton(ServerElementButton __instance)
         {
-            var entry = ClientBepInExPlugin.Get.SynapseServerList.ResolveIdAddress(__instance.IpAddress);
-            var resolved = ClientBepInExPlugin.GetConnection(entry.Address);
+            var entry = SynapseServerList.Get.ResolveIdAddress(__instance.IpAddress);
+            var resolved = NetworkingUtils.GetConnection(entry.Address);
             var allow = API.Events.SynapseEvents.InvokeServerConnect(resolved);
             if (!allow) return false;
-            ClientBepInExPlugin.Connect(resolved);
+            Client.Get.Connect(resolved);
             return false;
         }
     }

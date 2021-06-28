@@ -9,10 +9,13 @@ namespace SynapseClient
 {
     public class SynapseServerList
     {
+        public static SynapseServerList Get => Client.Get.SynapseServerList;
+
+        internal SynapseServerList() { }
+
         private readonly WebClient _webClient = new WebClient();
         
         public List<SynapseServerEntry> ServerCache { get; internal set; }= new List<SynapseServerEntry>();
-
 
         public void Download()
         {

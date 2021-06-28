@@ -1,19 +1,20 @@
 ﻿using BepInEx.Logging;
 using UnityEngine;
+using SynapseClient;
 using Console = GameCore.Console;
 
 public class Logger
 {
-    internal static ManualLogSource _logger;
+    private static ManualLogSource BeepInExLogger => ClientBepInExPlugin.Get.Log;
 
     public static void Info(object s)
     {
-        _logger.LogInfo(s);
+        BeepInExLogger.LogInfo(s);
     }
 
     public static void Error(object s)
     {
-        _logger.LogError(s);
+        BeepInExLogger.LogError(s);
     }
 
     public static void AddGCLog(object s)

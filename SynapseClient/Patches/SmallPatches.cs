@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using HarmonyLib;
+using SynapseClient.API;
 using SynapseClient.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,10 +21,10 @@ namespace SynapseClient.Patches
             ImageConversion.LoadImage(texture, File.ReadAllBytes("synapse.png"), false);
             GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
 
-            if (ClientBepInExPlugin._redirectCallback != null)
+            if (Client.Get._redirectCallback != null)
             {
-                ClientBepInExPlugin._redirectCallback.Invoke();
-                ClientBepInExPlugin._redirectCallback = null;
+                Client.Get._redirectCallback.Invoke();
+                Client.Get._redirectCallback = null;
             }
             
             return true;

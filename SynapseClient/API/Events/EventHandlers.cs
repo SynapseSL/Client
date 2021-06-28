@@ -64,8 +64,8 @@ namespace SynapseClient.API.Events
                         {
                             if (SteamClient.IsLoggedOn)
                             {
-                                ClientBepInExPlugin.name = SteamClient.Name;
-                                Logger.Info($"Changed current prefered name to {ClientBepInExPlugin.name}");
+                                Client.Get.PlayerName = SteamClient.Name;
+                                Logger.Info($"Changed current prefered name to {Client.Get.PlayerName}");
                             }
 
                             SynapseCentral.Get.ConnectCentralServer();
@@ -125,7 +125,7 @@ namespace SynapseClient.API.Events
 
                 case RedirectPacket.ID:
                     RedirectPacket.Decode(packet, out var target);
-                    ClientBepInExPlugin.Redirect(target);
+                    Client.Get.Redirect(target);
                     break;
             }
         }

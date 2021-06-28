@@ -11,14 +11,14 @@ namespace SynapseClient.API
         public void Register(SpawnHandler handler)
         {
             Handlers.Add(handler);
-            ClientBepInExPlugin.Get.SpawnController.Register(handler);
+            Client.Get.SpawnController.Register(handler);
         }
 
         public void UnregisterAll()
         {
             foreach (var spawnHandler in Handlers)
             {
-                ClientBepInExPlugin.Get.SpawnController.Unregister(spawnHandler);
+                Client.Get.SpawnController.Unregister(spawnHandler);
             }
             Handlers.Clear();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using MelonLoader.Support;
+using SynapseClient.API;
 using UnityEngine;
 
 namespace SynapseClient.Components
@@ -11,7 +12,7 @@ namespace SynapseClient.Components
         //ReferenceHub.LocalHub.nicknameSync.UpdateNickname("Helight");
         public void Update()
         {
-            ClientBepInExPlugin.DoQueueTick();
+            Client.Get.DoQueueTick();
             Coroutines.Process();
         }
 

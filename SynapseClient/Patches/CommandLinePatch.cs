@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
 using RemoteAdmin;
+using SynapseClient.API;
 using SynapseClient.Components;
 using UnityEngine;
 using File = Il2CppSystem.IO.File;
@@ -18,7 +19,7 @@ namespace SynapseClient.Patches
             if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
-                ClientBepInExPlugin.Redirect(target);
+                Client.Get.Redirect(target);
                 return false;
             } else if (cmd.StartsWith("bundle load "))
             {

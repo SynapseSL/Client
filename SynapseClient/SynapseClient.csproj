@@ -423,8 +423,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Client.cs" />
     <Compile Include="API\Mods\ClientMod.cs" />
     <Compile Include="API\Computer.cs" />
+    <Compile Include="API\NetworkingUtils.cs" />
+    <Compile Include="API\SynapseCoroutine.cs" />
+    <Compile Include="Components\ComponentHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MelonLoader\Support\Coroutines.cs" />
     <Compile Include="API\Mods\ClientModLoader.cs" />
