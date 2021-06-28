@@ -16,6 +16,7 @@ using MelonLoader.Support;
 using RemoteAdmin;
 using Steamworks;
 using SynapseClient.API;
+using SynapseClient.API.Events;
 using SynapseClient.API.Mods;
 using SynapseClient.Components;
 using SynapseClient.Models;
@@ -55,7 +56,7 @@ namespace SynapseClient
 
         public PatchHandler Patcher { get; } = new PatchHandler();
 
-        public API.Events.EventHandlers EventHandlers { get; } = new API.Events.EventHandlers();
+        public API.Events.EventHandlers EventHandlers { get; } = new EventHandlers();
 
         public Computer Computer { get; } = new Computer();
 
