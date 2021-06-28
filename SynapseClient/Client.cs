@@ -74,39 +74,35 @@ namespace SynapseClient
             Get = this;
             Logger._logger = Log;
 
-            ModLoader.LoadAll();
-            ModLoader.EnableAll();
-            
-            Logger.Info("Registering Types for Il2Cpp use...");
-            UnhollowerSupport.Initialize();
-            ClassInjector.RegisterTypeInIl2Cpp<SynapseMenuWorker>();
-            ClassInjector.RegisterTypeInIl2Cpp<LocalPlayer>();
-            ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
-            ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
-            ClassInjector.RegisterTypeInIl2Cpp<CreditsHook>();
-
-            Logger.Info("Loading Prefabs");
-            if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
-
-            Patcher.PatchAll();
-            
-            SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
-
-            Logger.Info("Registered Scene Loaded Listener");
-            /*
-            PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));
-            Logger.Info("Registered Settings Refresh Listener");
-            */
-            
-            Logger.Info("====================");
             try
             {
-                ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
+                ModLoader.LoadAll();
+                ModLoader.EnableAll();
+
+                Logger.Info("Registering Types for Il2Cpp use...");
+                UnhollowerSupport.Initialize();
+                ClassInjector.RegisterTypeInIl2Cpp<SynapseMenuWorker>();
+                ClassInjector.RegisterTypeInIl2Cpp<LocalPlayer>();
+                ClassInjector.RegisterTypeInIl2Cpp<SynapseSpawned>();
+                ClassInjector.RegisterTypeInIl2Cpp<LookReceiver>();
+                ClassInjector.RegisterTypeInIl2Cpp<CreditsHook>();
+
+                Logger.Info("Loading Prefabs");
+                if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
+
+                Patcher.PatchAll();
+
+                /*
+                PlayerPrefsSl.add_SettingsRefreshed(new System.Action(t));
+                Logger.Info("Registered Settings Refresh Listener");
+                */
+
+                Logger.Info("====================");
                 SpawnController.Subscribe();
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                Logger.Error(e);
+                Logger.Error("SynapseClient: Startup failed:\n" + e);
             }
         }
 
@@ -159,43 +155,6 @@ namespace SynapseClient
                 return null;
             }
         }
-        
-        public void MainReceivePipelineData(PipelinePacket packet)
-        {
-            switch (packet.PacketId)
-            {
-                case ConnectionSuccessfulPacket.ID:
-                {
-                    ConnectionSuccessfulPacket.Decode(packet, out var clientMods);
-                    Logger.Info("WelcomePacket: " + packet.AsString());
-                    var salt = new byte[32];
-                    for (var i = 0; i < 32; i++) salt[i] = 0x00;
-                    var jwt = JsonWebToken.DecodeToObject<ClientConnectionData>(AuthPatches.synapseSessionToken, "", false);
-                    var sessionBytes = Encoding.UTF8.GetBytes(jwt.Session);
-                    var key = new byte[32];
-                    for (var i = 0; i < 24; i++) key[i] = sessionBytes[i];
-                    for (var i = 24; i < 32; i++) key[i] = 0x00;
-
-                    QueryProcessor.Localplayer.Key = key;
-                    QueryProcessor.Localplayer.CryptoManager.ExchangeRequested = true;
-                    QueryProcessor.Localplayer.CryptoManager.EncryptionKey = key;
-                    QueryProcessor.Localplayer.Salt = salt;
-                    QueryProcessor.Localplayer.ClientSalt = salt;
-                    ClientPipeline.Invoke(PipelinePacket.From(1, "Client connected successfully"));
-                    ModLoader.ActivateForServer(clientMods); // Just activate for all for now
-                    API.Events.SynapseEvents.InvokeConnectionSuccessful();
-                    SharedBundleManager.LogLoaded();
-                    break;
-                }
-                case RoundStartPacket.ID:
-                    API.Events.SynapseEvents.InvokeRoundStart();
-                    break;
-                case RedirectPacket.ID:
-                    RedirectPacket.Decode(packet, out var target);
-                    Redirect(target);
-                    break;
-            }
-        }
 
         public static object StartCoroutine(IEnumerator enumerator)
         {
@@ -226,58 +185,6 @@ namespace SynapseClient
                     });
             };
    
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            Logger.Info($"Scene changed to {scene.name}");
-            try
-            {
-                switch (scene.name)
-                {
-                    case "Facility":
-                    {
-                        //var gameObject = new GameObject();
-                        //gameObject.AddComponent<SynapseBackgroundWorker>();
-                        break;
-                    }
-                    
-                    case "Loader":
-                    {
-                        if (SteamClient.IsLoggedOn)
-                        {
-                            name = SteamClient.Name;
-                            Logger.Info($"Changed current prefered name to {name}");
-                        }
-
-                            SynapseCentral.Get.ConnectCentralServer();
-                        break;
-                    }
-
-                    case "NewGameMenu":
-                    {
-                        Logger.Info("Changed to Game-Menu");
-                        CentralAuthManager.InitAuth();
-                        CentralAuthManager.Authentication();
-                        break;
-                    }
-
-                    default: break;
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
-
-            API.Events.SynapseEvents.InvokeSceneLoad(scene);
-        }
-
-        public static string ApplicationDataDir()
-        {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Synapse Client");
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path;
         }
     }
 }

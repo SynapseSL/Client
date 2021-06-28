@@ -1,7 +1,7 @@
 ﻿using System;
 
 //Change this to SynapseClient.API.Mods later with Ambience SL
-namespace SynapseClient.API
+namespace SynapseClient.API.Mods
 {
     public abstract class ClientMod
     {

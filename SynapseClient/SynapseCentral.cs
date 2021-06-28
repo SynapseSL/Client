@@ -42,8 +42,8 @@ namespace SynapseClient
         public async void ConnectCentralServer()
         {
             Logger.Info("Connecting to Synapse Central-Server");
-            var cert = Path.Combine(Client.ApplicationDataDir(), "certificate.pub");
-            var user = Path.Combine(Client.ApplicationDataDir(), "user.dat");
+            var cert = Path.Combine(Computer.Get.ApplicationDataDir, "certificate.pub");
+            var user = Path.Combine(Computer.Get.ApplicationDataDir, "user.dat");
             try
             {
                 if (File.Exists(user) && File.Exists(cert))
@@ -87,8 +87,8 @@ namespace SynapseClient
 
         private void Generate()
         {    
-            var idf = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
-            var pubf = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
+            var idf = Path.Combine(Computer.Get.ApplicationDataDir, "id_rsa");
+            var pubf = Path.Combine(Computer.Get.ApplicationDataDir, "id_rsa.pub");
             var pair = GetKeyPair();
             TextWriter textWriter1 = new StringWriter();
             var pemWriter1 = new PemWriter(textWriter1);
@@ -108,8 +108,8 @@ namespace SynapseClient
 
         private string[] Read()
         {
-            var id = Path.Combine(Client.ApplicationDataDir(), "id_rsa");
-            var pub = Path.Combine(Client.ApplicationDataDir(), "id_rsa.pub");
+            var id = Path.Combine(Computer.Get.ApplicationDataDir, "id_rsa");
+            var pub = Path.Combine(Computer.Get.ApplicationDataDir, "id_rsa.pub");
             if (!File.Exists(id) || !File.Exists(pub))
             {
                 Generate();
@@ -134,12 +134,12 @@ namespace SynapseClient
                     {
                         Name = Client.name,
                         PublicKey = Read()[0],
-                        Mac = Computer.Get.GetMac(),
-                        PcName =  Computer.Get.GetPcName()
+                        Mac = Computer.Get.Mac,
+                        PcName =  Computer.Get.PcName
                     }));
 
             var registrationResponse = JsonConvert.DeserializeObject<RegistrationResponse>(responseString);
-            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"), registrationResponse.Uuid);
+            File.WriteAllText(Path.Combine(Computer.Get.ApplicationDataDir, "user.dat"), registrationResponse.Uuid);
         }
 
         public async Task Certificate()
@@ -152,18 +152,18 @@ namespace SynapseClient
                     new CertificateRequest()
                     {
                         Name = Client.name,
-                        Uuid = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat")),
+                        Uuid = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "user.dat")),
                         PublicKey = Read()[0],
                         PrivateKey = Read()[1],
-                        Mac = Computer.Get.GetMac(),
-                        PcName = Computer.Get.GetPcName()
+                        Mac = Computer.Get.Mac,
+                        PcName = Computer.Get.PcName
                     }));
-            File.WriteAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"), responseString);
+            File.WriteAllText(Path.Combine(Computer.Get.ApplicationDataDir, "certificate.dat"), responseString);
         }
 
         public async Task<string> Session(string targetAddress)
         {
-            var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
+            var cert = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "certificate.dat"));
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);
@@ -175,7 +175,7 @@ namespace SynapseClient
         //Yes, just a session with admin audience which is not cached
         public async Task<string> AdminSession()
         {
-            var cert = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "certificate.dat"));
+            var cert = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "certificate.dat"));
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", "Admin");

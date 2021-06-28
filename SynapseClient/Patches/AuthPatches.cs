@@ -5,6 +5,7 @@ using HarmonyLib;
 using LiteNetLib.Utils;
 using Mirror;
 using Org.BouncyCastle.Utilities.Encoders;
+using SynapseClient.API;
 using UnhollowerBaseLib;
 using Byte = System.Byte;
 using DateTimeOffset = System.DateTimeOffset;
@@ -68,7 +69,7 @@ namespace SynapseClient.Patches
                 Logger.Info("Starting session");
                 synapseSessionToken = SynapseCentral.Get.Session(targetAddress).GetAwaiter().GetResult();
                 
-                var str = File.ReadAllText(Path.Combine(Client.ApplicationDataDir(), "user.dat"));
+                var str = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "user.dat"));
                 var random = new Random();
                 byte[] bytes = new byte[16];
                 for (int i = 0; i < 16; i++)
