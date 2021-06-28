@@ -429,6 +429,7 @@
     <Compile Include="API\NetworkingUtils.cs" />
     <Compile Include="API\SynapseCoroutine.cs" />
     <Compile Include="Components\ComponentHandler.cs" />
+    <Compile Include="Components\SynapseSpawned.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MelonLoader\Support\Coroutines.cs" />
     <Compile Include="API\Mods\ClientModLoader.cs" />

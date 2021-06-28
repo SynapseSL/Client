@@ -181,7 +181,7 @@ namespace SynapseClient.Pipeline.Packets
     {
 
         public const ushort ID = 21;
-        public static PipelinePacket Encode(string name, Vector3 pos, string blueprint)
+        public static PipelinePacket Encode(string name, Vector3 pos)
         {
             return PipelinePacket.From(ID, new Pack
             {

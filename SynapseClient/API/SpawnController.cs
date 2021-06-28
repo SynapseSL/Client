@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using SynapseClient.Components;
 using SynapseClient.Pipeline;
 using SynapseClient.Pipeline.Packets;
 using UnityEngine;
@@ -84,47 +85,6 @@ namespace SynapseClient.API
             SpawnedObjects.Remove(gameObject);
             var handler = Blueprints[blueprint];
             handler.Destroy(gameObject);
-        }
-    }
-
-    public class SynapseSpawned : MonoBehaviour
-    {
-        public SynapseSpawned(IntPtr intPtr) : base(intPtr) {}
-        public Il2CppSystem.String Blueprint { get; internal set; }
-
-        private Transform _transform;
-
-        private Vector3 _targetPos;
-        private Quaternion _targetRot;
-
-        public void Awake()
-        {
-            _transform = transform;
-            _targetPos = _transform.position;
-            _targetRot = _transform.rotation;
-        }
-
-        public void Update()
-        {
-           
-        }
-
-        //Reserved
-        public void TweenTo(Vector3 vector3, Quaternion quaternion)
-        {
-            _transform.position = vector3;
-            _transform.rotation = quaternion;   
-        }
-        
-        public static SynapseSpawned ForObject(GameObject gameObject)
-        { 
-            var ss = gameObject.GetComponent<SynapseSpawned>();
-            if (ss == null)
-            {
-                throw new Exception("GameObject is not spawned via Synapse");
-            }
-
-            return ss;
         }
     }
 

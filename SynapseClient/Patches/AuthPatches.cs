@@ -19,7 +19,6 @@ namespace SynapseClient.Patches
     {
         private static int injectionStep = 0;
         private static bool hasInjectedByte = false;
-        private static bool isAuth = false;
         private static string targetAddress = "";
         public static string synapseSessionToken = "";
         
@@ -88,7 +87,6 @@ namespace SynapseClient.Patches
                 __instance.Put(Encoding.UTF8.GetBytes(nonce));
                 Logger.Info("==> Body complete");
                 PlayerPrefsSl.Set("nickname", nonce);
-                isAuth = false;
                 Logger.Info("==> Updated NickName to include nonce");
                 return false;
             }
@@ -144,7 +142,6 @@ namespace SynapseClient.Patches
         public static bool OnClientConnect(string address)
         {
             Logger.Info($"Connecting via Network Client with address {address}");
-            isAuth = true;
             targetAddress = address;
             return true;
         }
