@@ -20,10 +20,10 @@ namespace SynapseClient.Patches
             ImageConversion.LoadImage(texture, File.ReadAllBytes("synapse.png"), false);
             GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
 
-            if (Client._redirectCallback != null)
+            if (ClientBepInExPlugin._redirectCallback != null)
             {
-                Client._redirectCallback.Invoke();
-                Client._redirectCallback = null;
+                ClientBepInExPlugin._redirectCallback.Invoke();
+                ClientBepInExPlugin._redirectCallback = null;
             }
             
             return true;

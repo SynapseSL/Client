@@ -22,7 +22,7 @@ namespace SynapseClient
     {
         internal SynapseCentral() { }
 
-        public static SynapseCentral Get => Client.Get.Central;
+        public static SynapseCentral Get => ClientBepInExPlugin.Get.Central;
 
         private const int RsaKeySize = 2048;
 
@@ -50,16 +50,16 @@ namespace SynapseClient
                 {
                     //Logged in
                     Logger.Info(File.ReadAllText(cert));
-                    Client.IsLoggedIn = true;
+                    ClientBepInExPlugin.IsLoggedIn = true;
                 }
                 else if (File.Exists(user))
                 {
                     await Certificate();
-                    Client.IsLoggedIn = true;
+                    ClientBepInExPlugin.IsLoggedIn = true;
                 }
                 else
                 {
-                    Client.IsLoggedIn = false;
+                    ClientBepInExPlugin.IsLoggedIn = false;
                     var thread = new Thread(DoRegisterAsync);
                     thread.Start();
                 }
@@ -76,7 +76,7 @@ namespace SynapseClient
             {
                 await Register();
                 await Certificate();
-                Client.IsLoggedIn = true;
+                ClientBepInExPlugin.IsLoggedIn = true;
                 Logger.Info("Central-Authentication / Registration complete");
             }
             catch (Exception e)
@@ -128,11 +128,11 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/register",
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/register",
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
-                        Name = Client.name,
+                        Name = ClientBepInExPlugin.name,
                         PublicKey = Read()[0],
                         Mac = Computer.Get.Mac,
                         PcName =  Computer.Get.PcName
@@ -147,11 +147,11 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + "/user/certificate"),
+            var responseString = await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.CentralServer + "/user/certificate"),
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
-                        Name = Client.name,
+                        Name = ClientBepInExPlugin.name,
                         Uuid = File.ReadAllText(Path.Combine(Computer.Get.ApplicationDataDir, "user.dat")),
                         PublicKey = Read()[0],
                         PrivateKey = Read()[1],
@@ -167,7 +167,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);
-            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/session", cert);
             CachedSession = responseString;
             return responseString;
         }
@@ -179,7 +179,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", "Admin");
-            var responseString = await webClient.UploadStringTaskAsync(Client.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/session", cert);
             return responseString;
         }
 
@@ -195,14 +195,14 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Authorization", $"Bearer {adminSession}"); 
-            await webClient.UploadStringTaskAsync(new Uri(Client.CentralServer + $"/public/{targetUserId}/report"), reason);
+            await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.CentralServer + $"/public/{targetUserId}/report"), reason);
         }
 
         public async Task<StrippedUser> Resolve(string uid)
         {
             var webclient = new WebClient();
             webclient.Headers["Authorization"] = $"Bearer {CachedSession}";
-            var url = Client.CentralServer + $"/public/{uid}";
+            var url = ClientBepInExPlugin.CentralServer + $"/public/{uid}";
             Logger.Info(url);
             var response = await webclient.DownloadStringTaskAsync(url);
             Logger.Info(response);

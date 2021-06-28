@@ -8,27 +8,16 @@ using BepInEx;
 using BepInEx.IL2CPP;
 using DnsClient;
 using DnsClient.Protocol;
-using HarmonyLib;
-using Il2CppSystem;
-using Jwt;
 using MelonLoader;
 using MelonLoader.Support;
-using RemoteAdmin;
-using Steamworks;
 using SynapseClient.API;
 using SynapseClient.API.Events;
 using SynapseClient.API.Mods;
 using SynapseClient.Components;
-using SynapseClient.Models;
 using SynapseClient.Patches;
-using SynapseClient.Pipeline;
-using SynapseClient.Pipeline.Packets;
 using UnhollowerRuntimeLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using Action = System.Action;
 using Console = GameCore.Console;
-using Encoding = Il2CppSystem.Text.Encoding;
 using Exception = System.Exception;
 using Random = System.Random;
 using String = Il2CppSystem.String;
@@ -36,7 +25,7 @@ using String = Il2CppSystem.String;
 namespace SynapseClient
 {
     [BepInPlugin("xyz.synapse.client.plugin", "SynapseClient", "0.0.0.1")]
-    public class Client : BasePlugin
+    public class ClientBepInExPlugin : BasePlugin
     {
         public const string ClientVersion = "1.0.0";
         public const int ClientMajor = 1;
@@ -48,7 +37,7 @@ namespace SynapseClient
 
         public static string name = "SynapsePlayer";
         
-        public static Client Get { get; private set; }
+        public static ClientBepInExPlugin Get { get; private set; }
 
         public SynapseServerList SynapseServerList { get; } = new SynapseServerList();
 

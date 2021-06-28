@@ -64,8 +64,8 @@ namespace SynapseClient.API.Events
                         {
                             if (SteamClient.IsLoggedOn)
                             {
-                                Client.name = SteamClient.Name;
-                                Logger.Info($"Changed current prefered name to {Client.name}");
+                                ClientBepInExPlugin.name = SteamClient.Name;
+                                Logger.Info($"Changed current prefered name to {ClientBepInExPlugin.name}");
                             }
 
                             SynapseCentral.Get.ConnectCentralServer();
@@ -113,7 +113,7 @@ namespace SynapseClient.API.Events
                         QueryProcessor.Localplayer.Salt = salt;
                         QueryProcessor.Localplayer.ClientSalt = salt;
                         ClientPipeline.Invoke(PipelinePacket.From(1, "Client connected successfully"));
-                        Client.Get.ModLoader.ActivateForServer(clientMods); // Just activate for all for now
+                        ClientBepInExPlugin.Get.ModLoader.ActivateForServer(clientMods); // Just activate for all for now
                         SynapseEvents.InvokeConnectionSuccessful();
                         SharedBundleManager.LogLoaded();
                         break;
@@ -125,7 +125,7 @@ namespace SynapseClient.API.Events
 
                 case RedirectPacket.ID:
                     RedirectPacket.Decode(packet, out var target);
-                    Client.Redirect(target);
+                    ClientBepInExPlugin.Redirect(target);
                     break;
             }
         }

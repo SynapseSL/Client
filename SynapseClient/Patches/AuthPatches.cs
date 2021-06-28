@@ -61,7 +61,7 @@ namespace SynapseClient.Patches
             {
                 Logger.Info("Beginning own Body");
 
-                while (!Client.IsLoggedIn)
+                while (!ClientBepInExPlugin.IsLoggedIn)
                 {
                     Thread.Sleep(5); //Not pretty but works
                 }

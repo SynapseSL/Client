@@ -463,7 +463,7 @@
     <Compile Include="Pipeline\Packets.cs" />
     <Compile Include="Components\SynapseMenuWorker.cs" />
     <Compile Include="SynapseCentral.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="ClientBepInExPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\LocalPlayer.cs" />
     <Compile Include="SynapseServerList.cs" />

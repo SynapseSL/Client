@@ -55,7 +55,7 @@ namespace SynapseClient.Components
         private void Update()
         {
             Coroutines.Process();
-            Client.DoQueueTick();
+            ClientBepInExPlugin.DoQueueTick();
             if (Camera == null) ResetCamera();
             var mousePos = Input.mousePosition;
             var ray = Camera.ScreenPointToRay(mousePos);
@@ -96,7 +96,7 @@ namespace SynapseClient.Components
         {
             Logger.Info("Round has ended");
             API.Events.SynapseEvents.InvokeRoundEnd();
-            Client.Get.ModLoader.ServerConnectionEnd();
+            ClientBepInExPlugin.Get.ModLoader.ServerConnectionEnd();
         }
 
         private void ResetCamera()

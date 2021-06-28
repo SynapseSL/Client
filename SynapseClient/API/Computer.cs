@@ -9,7 +9,7 @@ namespace SynapseClient.API
     {
         internal Computer() { }
 
-        public static Computer Get => Client.Get.Computer;
+        public static Computer Get => ClientBepInExPlugin.Get.Computer;
 
         public string Mac => NetworkInterface
                 .GetAllNetworkInterfaces()

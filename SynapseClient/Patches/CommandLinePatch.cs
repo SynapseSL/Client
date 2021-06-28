@@ -18,7 +18,7 @@ namespace SynapseClient.Patches
             if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");
-                Client.Redirect(target);
+                ClientBepInExPlugin.Redirect(target);
                 return false;
             } else if (cmd.StartsWith("bundle load "))
             {
