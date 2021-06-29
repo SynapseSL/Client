@@ -128,7 +128,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/register",
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.Get.CentralServer + "/user/register",
                 JsonConvert.SerializeObject(
                     new RegistrationRequest
                     {
@@ -147,7 +147,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Content-Type", "application/json");
-            var responseString = await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.CentralServer + "/user/certificate"),
+            var responseString = await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.Get.CentralServer + "/user/certificate"),
                 JsonConvert.SerializeObject(
                     new CertificateRequest()
                     {
@@ -167,7 +167,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", targetAddress);
-            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.Get.CentralServer + "/user/session", cert);
             CachedSession = responseString;
             return responseString;
         }
@@ -179,7 +179,7 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("X-Target-Server", "Admin");
-            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.CentralServer + "/user/session", cert);
+            var responseString = await webClient.UploadStringTaskAsync(ClientBepInExPlugin.Get.CentralServer + "/user/session", cert);
             return responseString;
         }
 
@@ -195,14 +195,14 @@ namespace SynapseClient
             var webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "SynapseClient");
             webClient.Headers.Add("Authorization", $"Bearer {adminSession}"); 
-            await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.CentralServer + $"/public/{targetUserId}/report"), reason);
+            await webClient.UploadStringTaskAsync(new Uri(ClientBepInExPlugin.Get.CentralServer + $"/public/{targetUserId}/report"), reason);
         }
 
         public async Task<StrippedUser> Resolve(string uid)
         {
             var webclient = new WebClient();
             webclient.Headers["Authorization"] = $"Bearer {CachedSession}";
-            var url = ClientBepInExPlugin.CentralServer + $"/public/{uid}";
+            var url = ClientBepInExPlugin.Get.CentralServer + $"/public/{uid}";
             Logger.Info(url);
             var response = await webclient.DownloadStringTaskAsync(url);
             Logger.Info(response);

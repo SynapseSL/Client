@@ -455,6 +455,7 @@
     <Compile Include="Models\CertificateRequest.cs" />
     <Compile Include="Models\RegistrationRequest.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />
+    <Compile Include="Models\UsedAPIs.cs" />
     <Compile Include="Patches\AuthPatches.cs" />
     <Compile Include="Patches\CommandLinePatch.cs" />
     <Compile Include="Patches\CreditsHookPatch.cs" />

@@ -15,7 +15,11 @@ namespace SynapseClient.API.Events
 {
     public class EventHandlers
     {
-        internal EventHandlers()
+        public static EventHandlers Get => Client.Get.EventHandlers;
+
+        internal EventHandlers() { }
+
+        public void RegisterEvents()
         {
             ClientPipeline.DataReceivedEvent += MainReceivePipelineData;
             SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));

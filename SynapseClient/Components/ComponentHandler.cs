@@ -12,6 +12,7 @@ namespace SynapseClient.Components
 
         public void RegisterTypes()
         {
+            Logger.Info("Registering Types for Il2Cpp use...");
             UnhollowerSupport.Initialize();
             ClassInjector.RegisterTypeInIl2Cpp<SynapseMenuWorker>();
             ClassInjector.RegisterTypeInIl2Cpp<LocalPlayer>();

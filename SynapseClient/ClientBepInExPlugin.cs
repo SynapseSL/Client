@@ -2,9 +2,13 @@
 using System.IO;
 using BepInEx;
 using BepInEx.IL2CPP;
+using Newtonsoft.Json;
 using SynapseClient.API;
+using SynapseClient.API.Events;
 using SynapseClient.API.Mods;
 using SynapseClient.Components;
+using SynapseClient.Models;
+using SynapseClient.Patches;
 
 namespace SynapseClient
 {
@@ -17,8 +21,8 @@ namespace SynapseClient
         public const int ClientPatch = 0;
 
         //Change this Later to get it from the json
-        public const string CentralServer = "https://central.synapsesl.xyz";
-        public const string ServerListServer = "https://servers.synapsesl.xyz";
+        public string CentralServer { get; private set; } = "https://central.synapsesl.xyz";
+        public string ServerListServer { get; private set; } = "https://servers.synapsesl.xyz";
         
         public static ClientBepInExPlugin Get { get; private set; }
 
@@ -32,23 +36,34 @@ namespace SynapseClient
 
             try
             {
+                LoadServersFromJson();
+
                 ModLoader.LoadAll();
                 ModLoader.EnableAll();
 
-                Logger.Info("Registering Types for Il2Cpp use...");
                 ComponentHandler.Get.RegisterTypes();
+                PatchHandler.Get.PatchAll();
+                EventHandlers.Get.RegisterEvents();
 
-                Logger.Info("Loading Prefabs");
                 if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
-
-                Client.Patcher.PatchAll();
-
                 Client.SpawnController.Subscribe();
             }
             catch(Exception e)
             {
                 Logger.Error("SynapseClient: Startup failed:\n" + e);
             }
+        }
+
+        public void LoadServersFromJson()
+        {
+            var path = Path.Combine(Computer.Get.ApplicationDataDir, "apis.json");
+
+            if (!File.Exists(path)) return;
+
+            var usedAPIs = JsonConvert.DeserializeObject<UsedAPIs>(File.ReadAllText(path));
+
+            CentralServer = usedAPIs.CentralServer;
+            ServerListServer = usedAPIs.ServerList;
         }
     }
 }

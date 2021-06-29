@@ -19,7 +19,7 @@ namespace SynapseClient
 
         public void Download()
         {
-            var response = _webClient.DownloadString(ClientBepInExPlugin.ServerListServer + "/serverlist");
+            var response = _webClient.DownloadString(ClientBepInExPlugin.Get.ServerListServer + "/serverlist");
             ServerCache = JsonConvert.DeserializeObject<List<SynapseServerEntry>>(response);
         }
 

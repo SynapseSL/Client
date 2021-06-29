@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using SynapseClient.API;
 
 namespace SynapseClient.Patches
 {
     public class PatchHandler
     {
+        public static PatchHandler Get => Client.Get.Patcher;
+
         internal PatchHandler() { }
 
         public List<Type> PatchedTypes { get; } = new List<Type>();
