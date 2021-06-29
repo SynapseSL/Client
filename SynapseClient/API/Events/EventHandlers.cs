@@ -39,15 +39,29 @@ namespace SynapseClient.API.Events
             ev.CreateCreditsEntry("Flo0205", "Developer", "Synapse Client", CreditColors.Blue100);
 
             // Synapse Server Credits
-            ev.CreateCreditsCategory(("Synapse Server"));
+            ev.CreateCreditsCategory("Synapse Server");
             ev.CreateCreditsEntry("Dimenzio", "Creator, Maintainer", "Synapse Server", CreditColors.Red600);
             ev.CreateCreditsEntry("Helight", "Maintainer", "Synapse Server", CreditColors.Red600);
             ev.CreateCreditsEntry("MineTech13", "Useless Sys Admin", "Synapse Server", CreditColors.Yellow300);
             ev.CreateCreditsEntry("moelrobi", "Former-Maintainer", "Synapse Server", CreditColors.Gray);
             ev.CreateCreditsEntry("Mika", "Contributor", "Synapse Server", CreditColors.Blue100);
             ev.CreateCreditsEntry("AlmightyLks", "Contributor", "Synapse Server", CreditColors.Blue100);
-            ev.CreateCreditsEntry("TheVoidNebula", "Contributor", "Synapse Server", CreditColors.Blue100);
-            ev.CreateCreditsEntry("PintTheDragon", "Contributor", "Synapse Server", CreditColors.Blue100);
+
+            ev.CreateCreditsCategory("Synapse Client - Honorable Mentions");
+            ev.CreateCreditsEntry("Bepis", "BepInEx", "Synapse Client - Honorable Mentions", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("Ghorsington", "Executable, Support, BepInEx", "Synapse Client - Honorable Mentions", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("Herp Derpinstine", "Lava Gang, Il2CppAssetBundleManager", "Synapse Client - Honorable Mentions", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("Knah", "Il2CppAssemblyUnhollower", "Synapse Client - Honorable Mentions", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("Pardeike", "Harmony", "Synapse Client - Honorable Mentions", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("Sinai", "Support, BundleManager", "Synapse Client - Honorable Mentions", CreditColors.Green100);
+            ev.CreateCreditsEntry("Zasbszk", "Northwood Communications", "Synapse Client - Honorable Mentions", CreditColors.Purple100);
+            
+            
+            ev.CreateCreditsCategory("Synapse Client - Organisations");
+            ev.CreateCreditsEntry("AnomalousCoders", "Synapse Umbrella, SLS", "Synapse Client - Organisations", CreditColors.Red600);
+            ev.CreateCreditsEntry("BepInEx", "BepInEx", "Synapse Client - Organisations", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("LavaGang", "RuntimeLibs, MelonLoader", "Synapse Client - Organisations", CreditColors.Yellow100);
+            ev.CreateCreditsEntry("NorthwoodStudios", "SCP:SL, Not banning us for this :)", "Synapse Client - Organisations", CreditColors.Purple100);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

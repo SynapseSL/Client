@@ -13,6 +13,7 @@ namespace SynapseClient.Patches
         public static bool OnServerListRefresh()
         {
             SynapseServerList.Get.Download();
+            Composite(ListSingleton);
             return true;
         }
  
