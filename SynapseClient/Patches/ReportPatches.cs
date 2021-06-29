@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using SynapseClient.API;
 
 namespace SynapseClient.Patches
 {

@@ -59,7 +59,7 @@ namespace SynapseClient.Patches
             filter.FilteredListItems = new Il2CppSystem.Collections.Generic.List<ServerListItem>();
             foreach (var serverEntry in SynapseServerList.Get.ServerCache)
             {
-                SynapseServerList.AddServer(filter, serverEntry);
+                SynapseServerList.Get.AddServer(filter, serverEntry);
             }
             filter.DisplayServers();
             try

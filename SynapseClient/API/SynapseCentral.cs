@@ -16,7 +16,7 @@ using Org.BouncyCastle.Utilities.Encoders;
 using SynapseClient.API;
 using SynapseClient.Models;
 
-namespace SynapseClient
+namespace SynapseClient.API
 {
     public class SynapseCentral
     {

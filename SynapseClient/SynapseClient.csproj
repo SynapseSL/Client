@@ -455,6 +455,7 @@
     <Compile Include="Models\CertificateRequest.cs" />
     <Compile Include="Models\RegistrationRequest.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />
+    <Compile Include="Models\SynapseServerEntry.cs" />
     <Compile Include="Models\UsedAPIs.cs" />
     <Compile Include="Patches\AuthPatches.cs" />
     <Compile Include="Patches\CommandLinePatch.cs" />
@@ -468,11 +469,11 @@
     <Compile Include="Pipeline\ClientPipeline.cs" />
     <Compile Include="Pipeline\Packets.cs" />
     <Compile Include="Components\SynapseMenuWorker.cs" />
-    <Compile Include="SynapseCentral.cs" />
+    <Compile Include="API\SynapseCentral.cs" />
     <Compile Include="ClientBepInExPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\LocalPlayer.cs" />
-    <Compile Include="SynapseServerList.cs" />
+    <Compile Include="API\SynapseServerList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

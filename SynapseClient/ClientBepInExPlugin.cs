@@ -20,7 +20,6 @@ namespace SynapseClient
         public const int ClientMinor = 0;
         public const int ClientPatch = 0;
 
-        //Change this Later to get it from the json
         public string CentralServer { get; private set; } = "https://central.synapsesl.xyz";
         public string ServerListServer { get; private set; } = "https://servers.synapsesl.xyz";
         
