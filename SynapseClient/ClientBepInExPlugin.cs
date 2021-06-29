@@ -2,7 +2,10 @@
 using System.IO;
 using BepInEx;
 using BepInEx.IL2CPP;
+using CommandSystem.Commands;
+using Newtonsoft.Json;
 using SynapseClient.API;
+using SynapseClient.API.Events;
 using SynapseClient.API.Mods;
 using SynapseClient.Components;
 using SynapseClient.Models;
@@ -30,27 +33,40 @@ namespace SynapseClient
 
         public override void Load()
         {
-            Get = this;
-
             try
             {
+                Get = this;
+                CustomNetworkManager.Modded = true;
+                BuildInfoCommand.ModDescription = $"\n=====ClientMod=====\nClient: Synapse\nClient Version: {ClientVersion}\nDescription: {ClientDescription}";
+
+                LoadServersFromJson();
+
                 ModLoader.LoadAll();
                 ModLoader.EnableAll();
 
-                Logger.Info("Registering Types for Il2Cpp use...");
                 ComponentHandler.Get.RegisterTypes();
+                PatchHandler.Get.PatchAll();
+                EventHandlers.Get.RegisterEvents();
 
-                Logger.Info("Loading Prefabs");
                 if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
-
-                Client.Patcher.PatchAll();
-
                 Client.SpawnController.Subscribe();
             }
             catch(Exception e)
             {
                 Logger.Error("SynapseClient: Startup failed:\n" + e);
             }
+        }
+
+        public void LoadServersFromJson()
+        {
+            var path = Path.Combine(Computer.Get.ApplicationDataDir, "apis.json");
+
+            if (!File.Exists(path)) return;
+
+            var usedAPIs = JsonConvert.DeserializeObject<UsedAPIs>(File.ReadAllText(path));
+
+            CentralServer = usedAPIs.CentralServer;
+            ServerListServer = usedAPIs.ServerList;
         }
     }
 }
