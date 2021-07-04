@@ -116,30 +116,20 @@ namespace SynapseClient.API.UI
         }
 
 
-        public void ShowSnackbar(string title, string message, Color? color = null, bool fullWidth = false,
-            int duration = 5)
+        public void ShowSnackbar(string title, string message, Color? color = null, bool fullWidth = false, int duration = 5)
         {
-            Logger.Info("1");
             SynapseCoroutine.Synchronize(delegate
             {
-                Logger.Info("2");
                 var root = CreateRoot(TextAnchor.UpperCenter);
-                Logger.Info("3");
                 var popup = new Snackbar
                 {
                     Color = color, Message = message, Title = title, FullWidth = fullWidth
                 };
-                Logger.Info("4");
                 root.WithChild(popup).Build(null);
-                Logger.Info("5");
                 root.Show();
-                Logger.Info("6");
                 SynapseCoroutine.Delay(delegate
                 {
-                    
-                    Logger.Info("7");
                     root.Destroy();
-                    Logger.Info("8");
                 }, TimeSpan.FromSeconds(duration));
             });
         }
