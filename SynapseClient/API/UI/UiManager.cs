@@ -32,19 +32,6 @@ namespace SynapseClient.API.UI
             {
                 UIAssetBundle.LoadBundle();
                 UIAssetBundle.LoadPrefabs();
-
-                SynapseCoroutine.Delay(delegate
-                {
-                    try
-                    {
-                        ShowSnackbar("Test", "buiefubiesbuiesfbuiesfuibsefbbuisef");
-                        //ShowLoadingScreen();
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Error(e);
-                    }
-                }, TimeSpan.FromSeconds(1));
             };
             
             SynapseEvents.OnConnectionSuccessful += delegate

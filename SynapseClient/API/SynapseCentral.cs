@@ -43,7 +43,7 @@ namespace SynapseClient.API
         public async void ConnectCentralServer()
         {
             Logger.Info("Connecting to Synapse Central-Server");
-            //var handle = Client.Get.UiManager.ShowLoadingScreen();
+            var handle = Client.Get.UiManager.ShowLoadingScreen();
             for (int i = 0; i < 5; i++)
             {
                 try
@@ -78,8 +78,8 @@ namespace SynapseClient.API
                         
                     }
                     Logger.Info("Central-Authentication / Registration complete");
-                    //SynapseCoroutine.StopCoroutine(handle);
-                    //Client.Get.UiManager.HideLoadingScreen();
+                    SynapseCoroutine.StopCoroutine(handle);
+                    Client.Get.UiManager.HideLoadingScreen();
                     return;
                 }
                 catch (Exception e)
