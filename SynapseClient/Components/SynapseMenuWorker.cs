@@ -12,18 +12,39 @@ namespace SynapseClient.Components
         //ReferenceHub.LocalHub.nicknameSync.UpdateNickname("Helight");
         public void Update()
         {
-            Client.Get.DoQueueTick();
-            Coroutines.Process();
+            try
+            {
+                Client.Get.DoQueueTick();
+                Coroutines.Process();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         public void FixedUpdate()
         {
-            Coroutines.ProcessWaitForFixedUpdate();
+            try
+            {
+                Coroutines.ProcessWaitForFixedUpdate();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         public void LateUpdate()
         {
-            Coroutines.ProcessWaitForEndOfFrame();
+            try
+            {
+                Coroutines.ProcessWaitForEndOfFrame();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         public void OnEnable()

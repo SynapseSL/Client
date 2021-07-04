@@ -428,6 +428,25 @@
     <Compile Include="API\Computer.cs" />
     <Compile Include="API\NetworkingUtils.cs" />
     <Compile Include="API\SynapseCoroutine.cs" />
+    <Compile Include="API\UI\Abstract\AbstractComponent.cs" />
+    <Compile Include="API\UI\Abstract\AbstractMultiChildComponent.cs" />
+    <Compile Include="API\UI\Abstract\AbstractSingleChildComponent.cs" />
+    <Compile Include="API\UI\Components\Column.cs" />
+    <Compile Include="API\UI\Components\Container.cs" />
+    <Compile Include="API\UI\Components\Row.cs" />
+    <Compile Include="API\UI\Components\Stack.cs" />
+    <Compile Include="API\UI\Components\Button.cs" />
+    <Compile Include="API\UI\Components\ColorBox.cs" />
+    <Compile Include="API\UI\Components\UiImage.cs" />
+    <Compile Include="API\UI\Components\LegacyButton.cs" />
+    <Compile Include="API\UI\Components\UiText.cs" />
+    <Compile Include="API\UI\Components\TextField.cs" />
+    <Compile Include="API\UI\Components\WrapComponent.cs" />
+    <Compile Include="API\UI\Presets\LoadingScreenComponent.cs" />
+    <Compile Include="API\UI\Presets\Snackbar.cs" />
+    <Compile Include="API\UI\RootComponent.cs" />
+    <Compile Include="API\UI\UIAssetBundle.cs" />
+    <Compile Include="API\UI\UiManager.cs" />
     <Compile Include="Components\ComponentHandler.cs" />
     <Compile Include="Components\SynapseSpawned.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -478,7 +497,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

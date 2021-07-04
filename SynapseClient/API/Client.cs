@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using SynapseClient.API.Events;
+using SynapseClient.API.UI;
 using SynapseClient.Patches;
 using SynapseClient.Components;
 using Console = GameCore.Console;
@@ -28,12 +29,14 @@ namespace SynapseClient.API
         public PatchHandler Patcher { get; } = new PatchHandler();
 
         public ComponentHandler ComponentHandler { get; } = new ComponentHandler();
+
+        public UiManager UiManager { get; } = new UiManager();
         #endregion
 
 
         public string PlayerName { get; internal set; }
 
-        public bool IsLoggedIn { get; set; } = false;
+        public bool CredentialsValid { get; set; } = false;
 
 
         public void Connect(string address) => Console.singleton.TypeCommand("connect " + address);

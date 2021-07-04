@@ -90,11 +90,10 @@ namespace SynapseClient.API.Events
                             break;
                         }
 
-                    case "NewGameMenu":
+                    case "NewMainMenu":
                         {
                             Logger.Info("Changed to Game-Menu");
-                            CentralAuthManager.InitAuth();
-                            CentralAuthManager.Authentication();
+                            SynapseEvents.InvokeMenuLoaded();
                             break;
                         }
 

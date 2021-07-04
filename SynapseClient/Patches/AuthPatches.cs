@@ -60,7 +60,7 @@ namespace SynapseClient.Patches
             {
                 Logger.Info("Beginning own Body");
 
-                while (!Client.Get.IsLoggedIn)
+                while (!Client.Get.CredentialsValid)
                 {
                     Thread.Sleep(5); //Not pretty but works
                 }
