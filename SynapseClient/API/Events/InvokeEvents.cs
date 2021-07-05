@@ -26,5 +26,7 @@ namespace SynapseClient.API.Events
         internal static void InvokeSceneLoad(Scene scene) => OnSceneLoad?.Invoke(scene);
 
         internal static void InvokeRoundEnd() => OnRoundEnd?.Invoke();
+
+        internal static void InvokeMenuLoaded() => OnMenuLoaded?.Invoke();
     }
 }

@@ -15,6 +15,7 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
 using SynapseClient.API;
 using SynapseClient.Models;
+using UnityEngine;
 
 namespace SynapseClient.API
 {
@@ -42,49 +43,54 @@ namespace SynapseClient.API
         public async void ConnectCentralServer()
         {
             Logger.Info("Connecting to Synapse Central-Server");
-            var cert = Path.Combine(Computer.Get.ApplicationDataDir, "certificate.pub");
-            var user = Path.Combine(Computer.Get.ApplicationDataDir, "user.dat");
-            try
+            var handle = Client.Get.UiManager.ShowLoadingScreen();
+            for (int i = 0; i < 5; i++)
             {
-                if (File.Exists(user) && File.Exists(cert))
+                try
                 {
-                    //Logged in
-                    Logger.Info(File.ReadAllText(cert));
-                    Client.Get.IsLoggedIn = true;
-                }
-                else if (File.Exists(user))
-                {
-                    await Certificate();
-                    Client.Get.IsLoggedIn = true;
-                }
-                else
-                {
-                    Client.Get.IsLoggedIn = false;
-                    var thread = new Thread(DoRegisterAsync);
-                    thread.Start();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
-        }
+                    var isAvailable = await Ping();
+                    Logger.Info($"CentralServer available: {isAvailable.ToString()}");
 
-        public async void DoRegisterAsync()
-        {
-            try
-            {
-                await Register();
-                await Certificate();
-                Client.Get.IsLoggedIn = true;
-                Logger.Info("Central-Authentication / Registration complete");
+                    if (!isAvailable)
+                    {
+                        Logger.Error("Can't connect to central server. Retrying in 5 seconds!");
+                        await Task.Delay(TimeSpan.FromSeconds(5));
+                        Client.Get.UiManager.ShowError("Can't connect to central server.\nTrying again in 5 seconds.");
+                        continue;
+                    } 
+                
+                    var health = await CheckUserHealth();
+                    if (!health.UserNotFound && !health.CertificateExpired)
+                    {
+                        //Everything seems to be alright
+                        Client.Get.CredentialsValid = true;
+                    }
+                    else if (health.CertificateExpired)
+                    {
+                        await Certificate();
+                        Client.Get.CredentialsValid = true;
+                    }
+                    else
+                    {
+                        await Register();
+                        await Certificate();
+                        Client.Get.CredentialsValid = true;
+                        
+                    }
+                    Logger.Info("Central-Authentication / Registration complete");
+                    SynapseCoroutine.StopCoroutine(handle);
+                    Client.Get.UiManager.HideLoadingScreen();
+                    return;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.ToString());
+                }
             }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
+            Logger.Error("Central Server not available");
+            Application.Quit(69);
         }
-
+        
         private void Generate()
         {    
             var idf = Path.Combine(Computer.Get.ApplicationDataDir, "id_rsa");
@@ -209,6 +215,47 @@ namespace SynapseClient.API
             var user = JsonConvert.DeserializeObject<StrippedUser>(response);
             return user;
         }
+        
+        public async Task<UserHealth> CheckUserHealth()
+        {
+            var certPath = Path.Combine(Computer.Get.ApplicationDataDir, "certificate.dat");
+            var uidPath = Path.Combine(Computer.Get.ApplicationDataDir, "user.dat");
+            var cert = "None";
+            var uid = "None";
+            if (File.Exists(certPath)) cert = File.ReadAllText(certPath);
+            if (File.Exists(uidPath)) uid = File.ReadAllText(uidPath);
+            var webclient = new WebClient();
+            var url = ClientBepInExPlugin.Get.CentralServer + $"/user/health?userId={uid}";
+            var response = await webclient.UploadStringTaskAsync(url, cert);
+            return JsonConvert.DeserializeObject<UserHealth>(response);
+        }
+
+        public async Task<bool> Ping()
+        {
+            try
+            {
+                var webclient = new WebClient();
+                var url = ClientBepInExPlugin.Get.CentralServer + $"/health";
+                await webclient.DownloadStringTaskAsync(new Uri(url));
+            }
+            catch (Exception _)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+    }
+    
+    public class UserHealth {
+        
+        [Newtonsoft.Json.JsonProperty("userNotFound")]
+        public bool UserNotFound { get; set; }
+        
+        [Newtonsoft.Json.JsonProperty("certificateExpired")]
+        public bool CertificateExpired { get; set; }
+        
     }
     
     public class StrippedUser {

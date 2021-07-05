@@ -32,19 +32,26 @@ namespace MelonLoader.Support
 
         internal static void Stop(IEnumerator enumerator)
         {
-            if (ourNextFrameCoroutines.Contains(enumerator)) // the coroutine is running itself
-                ourNextFrameCoroutines.Remove(enumerator);
-            else
+            try
             {
-                int coroTupleIndex = ourCoroutinesStore.FindIndex(c => c.Coroutine == enumerator);
-                if (coroTupleIndex != -1) // the coroutine is waiting for a subroutine
+                if (ourNextFrameCoroutines.Contains(enumerator)) // the coroutine is running itself
+                    ourNextFrameCoroutines.Remove(enumerator);
+                else
                 {
-                    object waitCondition = ourCoroutinesStore[coroTupleIndex].WaitCondition;
-                    if (waitCondition is IEnumerator waitEnumerator)
-                        Stop(waitEnumerator);
+                    int coroTupleIndex = ourCoroutinesStore.FindIndex(c => c.Coroutine == enumerator);
+                    if (coroTupleIndex != -1) // the coroutine is waiting for a subroutine
+                    {
+                        object waitCondition = ourCoroutinesStore[coroTupleIndex].WaitCondition;
+                        if (waitCondition is IEnumerator waitEnumerator)
+                            Stop(waitEnumerator);
 
-                    ourCoroutinesStore.RemoveAt(coroTupleIndex);
+                        ourCoroutinesStore.RemoveAt(coroTupleIndex);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.Info("Ignoring exception thrown while stopping a coroutine");
             }
         }
 

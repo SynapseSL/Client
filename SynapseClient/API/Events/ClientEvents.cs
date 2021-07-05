@@ -14,5 +14,10 @@ namespace SynapseClient.API.Events
         /// Invokes when a new Scene is loaded
         /// </summary>
         public static event ClientEvent<Scene> OnSceneLoad;
+
+        /// <summary>
+        /// Invokes when the Menu is loaded
+        /// </summary>
+        public static event ClientEvent OnMenuLoaded;
     }
 }

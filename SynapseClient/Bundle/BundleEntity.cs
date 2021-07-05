@@ -37,7 +37,6 @@ namespace UnityEngine
             var stream = File.OpenRead(loc);
             bundle = Il2CppAssetBundleManager.LoadFromStream(stream);
             _cachedAssetEntries = new List<AssetEntry>();
-            
             SharedBundleManager.Singleton.Bundles[descriptor.BundleName] = this;
         }
 
