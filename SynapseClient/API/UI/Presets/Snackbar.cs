@@ -1,8 +1,6 @@
-﻿using SynapseClient.API.UI.Abstract;
-using SynapseClient.API.UI.Components;
+﻿using SynapseClient.API.UI.Components;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SynapseClient.API.UI.Presets
 {

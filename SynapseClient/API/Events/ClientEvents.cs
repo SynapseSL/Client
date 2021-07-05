@@ -1,5 +1,5 @@
-﻿using UnityEngine.SceneManagement;
-using SynapseClient.Components;
+﻿using SynapseClient.Components;
+using UnityEngine.SceneManagement;
 
 namespace SynapseClient.API.Events
 {

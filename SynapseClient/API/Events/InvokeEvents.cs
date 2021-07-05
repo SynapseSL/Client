@@ -1,6 +1,6 @@
 ﻿using SynapseClient.API.Events.EventArguments;
-using UnityEngine.SceneManagement;
 using SynapseClient.Components;
+using UnityEngine.SceneManagement;
 
 namespace SynapseClient.API.Events
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SynapseClient.API.UI.Abstract;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SynapseClient.API.UI.Abstract;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace SynapseClient.API.UI.Components
 {

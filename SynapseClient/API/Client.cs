@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using SynapseClient.API.Events;
 using SynapseClient.API.UI;
-using SynapseClient.Patches;
 using SynapseClient.Components;
+using SynapseClient.Patches;
 using Console = GameCore.Console;
 
 namespace SynapseClient.API
@@ -14,6 +14,7 @@ namespace SynapseClient.API
         public static Client Get => ClientBepInExPlugin.Get.Client;
 
         internal Client() { }
+
 
         #region API Controllers
         public SpawnController SpawnController { get; internal set; } = new SpawnController();

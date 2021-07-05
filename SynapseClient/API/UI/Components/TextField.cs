@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SynapseClient.API.UI.Abstract;
 using TMPro;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace SynapseClient.API.UI.Components

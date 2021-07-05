@@ -2,21 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Il2CppSystem.Linq;
 using SynapseClient.API.Events;
 using SynapseClient.API.UI.Components;
 using SynapseClient.API.UI.Presets;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Button = SynapseClient.API.UI.Components.Button;
-using Input = BepInEx.IL2CPP.UnityEngine.Input;
-using Object = System.Object;
-using Stack = SynapseClient.API.UI.Components.Stack;
 
 namespace SynapseClient.API.UI
 {
