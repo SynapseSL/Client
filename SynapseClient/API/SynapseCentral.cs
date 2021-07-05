@@ -49,7 +49,7 @@ namespace SynapseClient.API
                 try
                 {
                     var isAvailable = await Ping();
-                    Logger.Info($"CentralServer available: {isAvailable.ToString()}");
+                    Logger.Info($"CentralServer available: {isAvailable}");
 
                     if (!isAvailable)
                     {
