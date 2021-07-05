@@ -127,10 +127,7 @@ namespace SynapseClient.API.UI
                 };
                 root.WithChild(popup).Build(null);
                 root.Show();
-                SynapseCoroutine.Delay(delegate
-                {
-                    root.Destroy();
-                }, TimeSpan.FromSeconds(duration));
+                SynapseCoroutine.CallDelayed(TimeSpan.FromSeconds(duration), () => root.Destroy());
             });
         }
     }
