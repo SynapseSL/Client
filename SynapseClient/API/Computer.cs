@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.IO;
+using UnityEngine;
 
 namespace SynapseClient.API
 {
@@ -30,5 +31,7 @@ namespace SynapseClient.API
                 return path;
             }
         }
+
+        public void OpenUrl(string url) => Application.OpenURL(url);
     }
 }

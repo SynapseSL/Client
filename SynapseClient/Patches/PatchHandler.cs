@@ -22,7 +22,8 @@ namespace SynapseClient.Patches
             typeof(CommandLinePatch),
             typeof(CreditsHookPatch),
             typeof(GlobalPermissionPatches),
-            typeof(ReportPatches)
+            typeof(ReportPatches),
+            typeof(NewsPatch)
         };
 
         public void PatchAll()

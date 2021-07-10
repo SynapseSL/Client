@@ -480,6 +480,7 @@
     <Compile Include="Patches\CommandLinePatch.cs" />
     <Compile Include="Patches\CreditsHookPatch.cs" />
     <Compile Include="Patches\GlobalPermissionPatches.cs" />
+    <Compile Include="Patches\NewsPatch.cs" />
     <Compile Include="Patches\PatchHandler.cs" />
     <Compile Include="Patches\PipelinePatches.cs" />
     <Compile Include="Patches\ReportPatches.cs" />
