@@ -2,6 +2,7 @@
 using HarmonyLib;
 using RemoteAdmin;
 using SynapseClient.API;
+using SynapseClient.Command;
 using SynapseClient.Components;
 using UnityEngine;
 using File = Il2CppSystem.IO.File;
@@ -14,8 +15,10 @@ namespace SynapseClient.Patches
         
         [HarmonyPatch(typeof(GameCore.Console), nameof(GameCore.Console.TypeCommand))]
         [HarmonyPrefix]
-        public static bool OnStart(string cmd)
+        public static bool OnCommand(string cmd)
         {
+            return !SynapseCommandHandler.Get.ExecuteCommand(cmd);
+
             if (cmd.StartsWith("redirect "))
             {
                 var target = cmd.Replace("redirect ", " ");

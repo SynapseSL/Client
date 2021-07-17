@@ -10,6 +10,7 @@ using SynapseClient.API.Mods;
 using SynapseClient.Components;
 using SynapseClient.Models;
 using SynapseClient.Patches;
+using SynapseClient.Command;
 
 namespace SynapseClient
 {
@@ -47,6 +48,7 @@ namespace SynapseClient
                 ComponentHandler.Get.RegisterTypes();
                 PatchHandler.Get.PatchAll();
                 EventHandlers.Get.RegisterEvents();
+                SynapseCommandHandler.Get.RegisterSynapseCommands();
 
                 if (!Directory.Exists("bundles")) Directory.CreateDirectory("bundles");
                 Client.SpawnController.Subscribe();

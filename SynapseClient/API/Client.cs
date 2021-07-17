@@ -5,6 +5,7 @@ using SynapseClient.API.Events;
 using SynapseClient.API.UI;
 using SynapseClient.Components;
 using SynapseClient.Patches;
+using SynapseClient.Command;
 using Console = GameCore.Console;
 
 namespace SynapseClient.API
@@ -32,6 +33,8 @@ namespace SynapseClient.API
         public ComponentHandler ComponentHandler { get; } = new ComponentHandler();
 
         public UiManager UiManager { get; } = new UiManager();
+
+        public SynapseCommandHandler CommandHandler { get; } = new SynapseCommandHandler();
         #endregion
 
 

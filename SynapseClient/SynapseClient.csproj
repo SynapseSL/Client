@@ -447,6 +447,14 @@
     <Compile Include="API\UI\RootComponent.cs" />
     <Compile Include="API\UI\UIAssetBundle.cs" />
     <Compile Include="API\UI\UiManager.cs" />
+    <Compile Include="Command\CommandResult.cs" />
+    <Compile Include="Command\DefaultCommands\RedirectCommand.cs" />
+    <Compile Include="Command\FullCommand.cs" />
+    <Compile Include="Command\ISynapseCommand.cs" />
+    <Compile Include="Command\SynapseCmdInformation.cs" />
+    <Compile Include="Command\SynapseCommandContext.cs" />
+    <Compile Include="Command\SynapseCommandHandler.cs" />
+    <Compile Include="Command\SynapseCommandResult.cs" />
     <Compile Include="Components\ComponentHandler.cs" />
     <Compile Include="Components\SynapseSpawned.cs" />
     <Compile Include="GlobalSuppressions.cs" />
