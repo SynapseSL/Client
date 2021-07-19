@@ -115,6 +115,10 @@ namespace SynapseClient.Command
         internal void RegisterSynapseCommands()
         {
             RegisterSynapseCommand(new RedirectCommand());
+
+#if DEBUG
+            RegisterSynapseCommand(new TestCommand());
+#endif
         }
     }
 }

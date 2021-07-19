@@ -449,6 +449,7 @@
     <Compile Include="API\UI\UiManager.cs" />
     <Compile Include="Command\CommandResult.cs" />
     <Compile Include="Command\DefaultCommands\RedirectCommand.cs" />
+    <Compile Include="Command\DefaultCommands\TestCommand.cs" />
     <Compile Include="Command\FullCommand.cs" />
     <Compile Include="Command\ISynapseCommand.cs" />
     <Compile Include="Command\SynapseCmdInformation.cs" />

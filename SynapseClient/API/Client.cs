@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Mirror.LiteNetLib4Mirror;
 using SynapseClient.API.Events;
 using SynapseClient.API.UI;
+using SynapseClient.Command;
 using SynapseClient.Components;
 using SynapseClient.Patches;
-using SynapseClient.Command;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using Console = GameCore.Console;
 
 namespace SynapseClient.API
 {
     public class Client
     {
+        private NewMainMenu MainMenu => UnityEngine.Object.FindObjectOfType<NewMainMenu>();
+
         public static Client Get => ClientBepInExPlugin.Get.Client;
 
         internal Client() { }
-
 
         #region API Controllers
         public SpawnController SpawnController { get; internal set; } = new SpawnController();
@@ -42,14 +46,38 @@ namespace SynapseClient.API
 
         public bool CredentialsValid { get; set; } = false;
 
+        public string CurrentSceneName => SceneManager.GetActiveScene().name;
 
-        public void Connect(string address) => Console.singleton.TypeCommand("connect " + address);
+        public string ServerIp => LiteNetLib4MirrorTransport.Singleton.clientAddress;
 
-        public void Disconnect() => Console.singleton.TypeCommand("disconnect");
+        public ushort ServerPort => LiteNetLib4MirrorTransport.Singleton.port;
+
+        public bool IsConnected => CurrentSceneName == "Facility";
+
+        public void QuitGame() => Application.Quit();
+
+        public void Connect(string address)
+        {
+            if(!IsConnected)
+                MainMenu.Connect(address);
+        }
+
+        public void Disconnect()
+        {
+            if(IsConnected)
+                Console.singleton.TypeCommand("disconnect");
+        }
+
+        public void Reconnect()
+        {
+            Disconnect();
+
+            SynapseCoroutine.CallDelayed(0.5f, () => Connect(ServerIp + ":" + ServerPort));
+        }
 
         public void Redirect(string address)
         {
-            Console.singleton.TypeCommand("disconnect");
+            Disconnect();
             _redirectCallback = delegate
             {
                 CallbackQueue.Enqueue(
@@ -57,7 +85,7 @@ namespace SynapseClient.API
                     {
                         Logger.Info("Trying to connect again");
                         Thread.Sleep(500);
-                        Console.singleton.TypeCommand("connect " + address);
+                        Connect(address);
                     });
             };
 
