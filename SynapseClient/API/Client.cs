@@ -65,7 +65,10 @@ namespace SynapseClient.API
         public void Disconnect()
         {
             if(IsConnected)
+            {
                 Console.singleton.TypeCommand("disconnect");
+                Console.singleton._clientCommandLogs.RemoveAt(Console.singleton._clientCommandLogs.Count - 1);
+            }
         }
 
         public void Reconnect()
