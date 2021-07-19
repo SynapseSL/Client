@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SynapseClient.API;
+using SynapseClient.API.Mods;
 using SynapseClient.Command.DefaultCommands;
 using Console = GameCore.Console;
 
@@ -16,14 +17,32 @@ namespace SynapseClient.Command
 
         public List<FullCommand> AllCommands { get; } = new List<FullCommand>();
 
-        public void RegisterISynapseCommand(ISynapseCommand cmd)
+        public FullCommand RegisterSynapseCommand(Type cmdtype, Type modtype = null, ClientMod mod = null)
+        {
+            if (cmdtype.IsSubclassOf(typeof(ISynapseCommand)) || cmdtype == typeof(ISynapseCommand)) return null;
+
+            var constructor = modtype == null ? null : cmdtype.GetConstructor(new Type[] { modtype });
+
+            if(constructor == null)
+            {
+                var cmd = (ISynapseCommand)Activator.CreateInstance(cmdtype);
+                return RegisterSynapseCommand(cmd);
+            }
+            else
+            {
+                var cmd = (ISynapseCommand)Activator.CreateInstance(cmdtype,new object[] { mod });
+                return RegisterSynapseCommand(cmd);
+            }
+        }
+
+        public FullCommand RegisterSynapseCommand(ISynapseCommand cmd)
         {
             var attribute = cmd.GetType().GetCustomAttribute<SynapseCmdInformation>();
 
             if(attribute == null)
             {
                 Logger.Error($"Synapse-Command: {cmd.GetType()} does not contain SynapseCmdInformations an therefore can't be registered as Command");
-                return;
+                return null;
             }
 
             var names = new List<string> { attribute.Name };
@@ -39,6 +58,7 @@ namespace SynapseClient.Command
 
             AllCommands.Add(fullcmd);
             Logger.Info($"Successfully registered {attribute.Name} - Command");
+            return fullcmd;
         }
 
         public bool ExecuteCommand(string commandline)
@@ -94,7 +114,7 @@ namespace SynapseClient.Command
 
         internal void RegisterSynapseCommands()
         {
-            RegisterISynapseCommand(new RedirectCommand());
+            RegisterSynapseCommand(new RedirectCommand());
         }
     }
 }
