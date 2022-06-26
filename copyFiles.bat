@@ -1,0 +1,2 @@
+xcopy "D:\Projects\SynapseClient\SynapseClient.ClientModule\bin\Debug\netstandard2.1\SynapseClient.ClientModule.dll" "D:\Steam\steamapps\common\SCP Secret Laboratory - Copy\Synapse\Modules\SynapseClient.ClientModule.dll" /Y
+"D:\Steam\steamapps\common\SCP Secret Laboratory - Copy\SCPSL.exe"

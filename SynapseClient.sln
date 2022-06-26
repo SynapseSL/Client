@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynapseClient.ClientModule", "SynapseClient.ClientModule\SynapseClient.ClientModule.csproj", "{AD1D764A-6CAB-485E-8CD5-75D7B54A5988}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynapseClient.Platform", "SynapseClient.Platform\SynapseClient.Platform.csproj", "{1E64639B-C2AC-4131-83A9-7A0C195E00AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityProtocol", "IdentityProtocol\IdentityProtocol.csproj", "{B272855E-EEA3-46BD-B72C-326467EFE497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD1D764A-6CAB-485E-8CD5-75D7B54A5988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD1D764A-6CAB-485E-8CD5-75D7B54A5988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD1D764A-6CAB-485E-8CD5-75D7B54A5988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1D764A-6CAB-485E-8CD5-75D7B54A5988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E64639B-C2AC-4131-83A9-7A0C195E00AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E64639B-C2AC-4131-83A9-7A0C195E00AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E64639B-C2AC-4131-83A9-7A0C195E00AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E64639B-C2AC-4131-83A9-7A0C195E00AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B272855E-EEA3-46BD-B72C-326467EFE497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B272855E-EEA3-46BD-B72C-326467EFE497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B272855E-EEA3-46BD-B72C-326467EFE497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B272855E-EEA3-46BD-B72C-326467EFE497}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,246 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
+        <LangVersion>10.0</LangVersion>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <OutputType>Library</OutputType>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <RootNamespace>SynapseClient.ClientModule</RootNamespace>
+        <PackageId>SynapseClient.ClientModule</PackageId>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <DebugType>Portable</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="0Harmony">
+            <HintPath>..\Refs\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\Refs\unhollowed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="BepInEx.Core">
+            <HintPath>..\Refs\BepInEx.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="BepInEx.IL2CPP">
+            <HintPath>..\Refs\BepInEx.IL2CPP.dll</HintPath>
+        </Reference>
+        <Reference Include="CommandSystem.Core">
+            <HintPath>..\Refs\unhollowed\CommandSystem.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Cpp2IL.Core">
+            <HintPath>..\Refs\Cpp2IL.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppMono.Security">
+            <HintPath>..\Refs\unhollowed\Il2CppMono.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2Cppmscorlib">
+            <HintPath>..\Refs\unhollowed\Il2Cppmscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Buffers">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Collections">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Collections.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Configuration">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Configuration.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Core">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Diagnostics.Debug">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Diagnostics.Debug.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Diagnostics.StackTrace">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Diagnostics.StackTrace.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Globalization">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Globalization.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Globalization.Extensions">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Globalization.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.IO.Compression">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.IO.Compression.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Linq">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Linq.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Memory">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Net.Http">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Net.Http.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Net.Primitives">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Net.Primitives.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Runtime">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Runtime.CompilerServices.Unsafe">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Runtime.Extensions">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Runtime.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Runtime.Serialization">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Runtime.Serialization.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Text.RegularExpressions">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Text.RegularExpressions.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Threading">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Threading.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Threading.Tasks">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Threading.Tasks.dll</HintPath>
+        </Reference>
+        <Reference Include="Il2CppSystem.Xml">
+            <HintPath>..\Refs\unhollowed\Il2CppSystem.Xml.dll</HintPath>
+        </Reference>
+        <Reference Include="LibCpp2IL">
+            <HintPath>..\Refs\LibCpp2IL.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.6.0.0\lib\net461\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Caching.Memory, Version=6.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.6.0.1\lib\net461\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.6.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\lib\net461\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Options, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.Options.6.0.0\lib\net461\Microsoft.Extensions.Options.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Primitives, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Extensions.Primitives.6.0.0\lib\net461\Microsoft.Extensions.Primitives.dll</HintPath>
+        </Reference>
+        <Reference Include="Mirror">
+            <HintPath>..\Refs\unhollowed\Mirror.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Cecil">
+            <HintPath>..\Refs\Mono.Cecil.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Cecil.Mdb">
+            <HintPath>..\Refs\Mono.Cecil.Mdb.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Cecil.Pdb">
+            <HintPath>..\Refs\Mono.Cecil.Pdb.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Cecil.Rocks">
+            <HintPath>..\Refs\Mono.Cecil.Rocks.dll</HintPath>
+        </Reference>
+        <Reference Include="MonoMod.RuntimeDetour">
+            <HintPath>..\Refs\MonoMod.RuntimeDetour.dll</HintPath>
+        </Reference>
+        <Reference Include="MonoMod.Utils">
+            <HintPath>..\Refs\MonoMod.Utils.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib" />
+        <Reference Include="netstandard">
+            <HintPath>..\Refs\unhollowed\netstandard.dll</HintPath>
+        </Reference>
+        <Reference Include="Neuron.Core, Version=1.0.0.1, Culture=neutral, processorArchitecture=Amd64">
+            <HintPath>..\packages\NeuronModding.Core.1.0.0.1\lib\netstandard2.0\Neuron.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Ninject, Version=3.3.6.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+            <HintPath>..\packages\Ninject.3.3.6\lib\net45\Ninject.dll</HintPath>
+        </Reference>
+        <Reference Include="SYML, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\SYML.1.0.1\lib\netstandard2.0\SYML.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml" />
+        <Reference Include="UnhollowerBaseLib">
+            <HintPath>..\Refs\UnhollowerBaseLib.dll</HintPath>
+        </Reference>
+        <Reference Include="UnhollowerRuntimeLib">
+            <HintPath>..\Refs\UnhollowerRuntimeLib.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+          <HintPath>..\Refs\unhollowed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine">
+            <HintPath>..\Refs\unhollowed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule">
+          <HintPath>..\Refs\unhollowed\UnityEngine.AssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>..\Refs\unhollowed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>..\Refs\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputModule">
+            <HintPath>..\Refs\unhollowed\UnityEngine.InputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+            <HintPath>..\Refs\unhollowed\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextCoreModule">
+            <HintPath>..\Refs\unhollowed\UnityEngine.TextCoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>..\Refs\unhollowed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+            <HintPath>..\packages\YamlDotNet.11.2.1\lib\net45\YamlDotNet.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BouncyCastle" Version="1.8.9" />
+        <PackageReference Include="NeuronModding.Core" Version="1.0.0.1" />
+        <PackageReference Include="NeuronModding.Modules.Commands" Version="1.0.0.1" />
+        <PackageReference Include="NeuronModding.Modules.Configs" Version="1.0.0.1" />
+        <PackageReference Include="NeuronModding.Modules.Patcher" Version="1.0.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Menu" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+
+    </PropertyGroup>
+
+</Project>
